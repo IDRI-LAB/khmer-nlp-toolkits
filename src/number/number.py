@@ -35,9 +35,27 @@ DIGIT_LEVEL = {
 }
 
 
-def Num2Text(num: Union[int, float], style: Literal["normal", "3"] = "normal", is_split: bool = False):
+def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", is_split: bool = False):
     """
     Generate number to text in various style for khmer lanugage.
+
+    Parameters
+    ==========
+    num: Union[int, float]
+        Number to convert to text.
+    style: Literal["normal", "3"], default="normal"
+        The style of reading number that will use to convert to text.
+        "normal" mean read number one digit at a time with their value range.
+        Ex: 100123 => "មួយសែនមួយរយម្ភៃបី"
+        "3" mean read number 3 digit at a time (read in thousand).
+        Ex: 100123 => "មួយរយពាន់មួយរយម្ភៃបី"
+    is_split: bool, default=False
+        If True, the return will be a list of text in each digit.
+        Ex: 100123 => ["មួយសែន", "មួយរយ", "ម្ភៃ", "បី"]
+    
+    Return
+    ======
+    Union["str", "list[str]"]
     """
     # validated parameter
     if style not in ["normal", "3"]:
@@ -57,7 +75,7 @@ def Num2Text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
             text = []
             if style in ("normal", "3"):
                 grouped_num_str = split_num_str(num_str, 3)
-                print(grouped_num_str)
+                # print(grouped_num_str)
                 for group in grouped_num_str:
                     if len(group) == 0:
                         continue
@@ -138,5 +156,7 @@ def Num2Text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         if is_split:
             return gen_text
         return "".join(gen_text)
-    
-    
+
+
+if __name__ == "__main__":
+    print(num2text(100123, "3", is_split=True))
