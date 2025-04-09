@@ -5,6 +5,8 @@ from src.text import clean
 """
 enclosing_symbol_consistency
 """
+
+
 @pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["Pa(rent)hes)es"], "Pa(rent)heses"),
@@ -20,6 +22,8 @@ def test_enclosing_symbol_consistency(input_str, output_str):
 """
 repetitive_punctuation
 """
+
+
 @pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["Hello!!!"], "Hello!"),
@@ -34,6 +38,8 @@ def test_repetitive_punctuation(input_str, output_str):
 """
 Space handler
 """
+
+
 @pytest.mark.parametrize("input_str, output_str", [
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8\u0020"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
@@ -50,6 +56,8 @@ def test_space_handler(input_str, output_str):
 """
 Remove emoji.
 """
+
+
 @pytest.mark.parametrize("input_str, output_str", [
     (["Hello, world! 🌍✨"], "Hello, world!"),
     (["Coding is fun! 💻🚀"], "Coding is fun!"),
@@ -61,4 +69,3 @@ Remove emoji.
 ])
 def test_remvoe_emoji(input_str, output_str):
     assert clean.remove_emoji(*input_str) == output_str
-
