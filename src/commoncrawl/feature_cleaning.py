@@ -16,9 +16,9 @@ def cleaning_kh_data(data: Union[dict, list]):
         khmer data
     """
 
-    cleaned_sentens = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
-    cleaned_sentens = check_quality_warning(cleaned_sentens, data['metadata']['quality_warnings'])
-    return cleaned_sentens
+    cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
+    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'])
+    return cleaned_sents
 
 
 def filter_kh_lng(contents, sent_idens):
