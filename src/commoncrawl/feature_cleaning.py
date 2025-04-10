@@ -6,7 +6,7 @@ from typing import Union
 
 def cleaning_kh_data(data: Union[dict, list]):
     """
-        Cleaning all khmer data 
+        Cleaning all khmer data
         Parameter
         ============
         data: Union[dict, list]
@@ -17,7 +17,6 @@ def cleaning_kh_data(data: Union[dict, list]):
     """
 
     cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
-    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'])
     return cleaned_sents
 
 
@@ -36,6 +35,9 @@ def filter_kh_lng(contents, sent_idens):
     return list_data_kh
 
 
-def check_quality_warning(sentents, qua_warning):
+def check_quality_warning(sentents):
+    """
+        check quality warninng data
+    """
 
-    return
+    return sentents
