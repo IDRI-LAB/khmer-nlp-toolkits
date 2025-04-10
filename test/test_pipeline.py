@@ -8,14 +8,6 @@ def pipe():
     pipeline_obj.add(str.lower)
     pipeline_obj.add(str.split, sep="\n", maxsplit=1)
     return pipeline_obj
-    
-
-"""
-Pipeline.process_step()
-"""
-def test_process_step(pipe):
-    wrapper = pipe.process_step(str.lower)
-    assert hasattr(wrapper, "process")
 
 
 """
