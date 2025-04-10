@@ -34,7 +34,7 @@ def __remove_repitive_whitespace(text: str):
 
 
 SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
-def __space_between_km(text:str, clean:bool=True):
+def __space_between_km(text: str, clean: bool = True):
     """
     Add space between khmer and other language.
     """
@@ -44,7 +44,7 @@ def __space_between_km(text:str, clean:bool=True):
 
 
 SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
-def __space_after_punc(text: str, clean:bool=True):
+def __space_after_punc(text: str, clean: bool = True):
     """
     Add space after punctuation if there aren't exist any whitespace after it.
     """
