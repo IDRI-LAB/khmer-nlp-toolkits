@@ -8,11 +8,14 @@ import pytest
 """
 
 
-@pytest.mark.parametrize('exp_content_input, exp_sent_iden_input, exp_output', [
+@pytest.mark.parametrize('exp_input, exp_output', [
     (
-        " លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ៖ (Video inside)\nSearch ...\nFRESH NEWS+ English Chinese (中文)\nលោក តាន់\n2024-06-19 07:08pm",
         [
-            {'label': 'km', 'prob': 0.99024457}, {'label': 'En', 'prob': 0.923842}, None, {'label': 'km', 'prob': 0.99024457}, None
+            " លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ៖ (Video inside)\nSearch ...\nFRESH NEWS+ English Chinese (中文)\nលោក តាន់\n2024-06-19 07:08pm",
+            [
+                {'label': 'km', 'prob': 0.99024457}, {'label': 'En', 'prob': 0.923842}, None, {
+                    'label': 'km', 'prob': 0.99024457}, None
+            ]
         ],
         [
             ' លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ៖ (Video inside)',
@@ -21,6 +24,6 @@ import pytest
     )
 ]
 )
-def test_filter_data(exp_content_input, exp_sent_iden_input, exp_output):
-    output = filter_kh_lng(exp_content_input, exp_sent_iden_input)
+def test_filter_data(exp_input, exp_output):
+    output = filter_kh_lng(*exp_input)
     assert output == exp_output
