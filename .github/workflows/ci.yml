@@ -43,4 +43,4 @@ jobs:
     # Run pytest (unit tests)
     - name: Run pytest (unit tests)
       run: |
-        pytest tests/  # Replace 'tests/' with the directory of your test files if necessary
+        pytest test/
