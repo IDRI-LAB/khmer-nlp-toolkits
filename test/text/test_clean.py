@@ -5,12 +5,13 @@ from src.text import clean
 """
 repetitive_punctuation
 """
-@pytest.mark.skip(reason="Function not implemented yet")
+# @pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["Hello!!!"], "Hello!"),
     (["What???"], "What?"),
-    (["Ehhh ..."], "Ehh ."),
-    (["Mix!!! Punc,,,"], "Mix! Punc,")
+    (["Ehhh ..."], "Ehhh ."),
+    (["Mix!!! Punc,,,"], "Mix! Punc,"),
+    (["Mix!!???"], "Mix!?")
 ])
 def test_remove_repetitive_punc(input_str, output_str):
     assert clean.remove_repetitive_punc(*input_str) == output_str
@@ -40,7 +41,6 @@ def test_space_handler(input_str, output_str):
 """
 Remove emoji.
 """
-@pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["Hello, world! 🌍✨"], "Hello, world!"),
     (["Coding is fun! 💻🚀"], "Coding is fun!"),
@@ -50,8 +50,8 @@ Remove emoji.
     (["specific with emojis? 😃"], "specific with emojis?"),
     (["🎂🎈Happy Birthday! 🎂🎈"], "Happy Birthday!"),
 ])
-def test_remvoe_emoji(input_str, output_str):
-    assert clean.remove_emoji(*input_str) == output_str
+def test_remove_misc_symbols(input_str, output_str):
+    assert clean.remove_misc_symbols(*input_str) == output_str
 
 
 """
