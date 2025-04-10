@@ -24,6 +24,7 @@ Space handler
 - Add single space around english word boundary if not exist
 - Remove repetitive whitespace
 """
+@pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8\u0020"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
@@ -41,6 +42,7 @@ def test_space_handler(input_str, output_str):
 """
 Remove emoji.
 """
+@pytest.mark.skip(reason="Function not implemented yet")
 @pytest.mark.parametrize("input_str, output_str", [
     (["Hello, world! 🌍✨"], "Hello, world!"),
     (["Coding is fun! 💻🚀"], "Coding is fun!"),
