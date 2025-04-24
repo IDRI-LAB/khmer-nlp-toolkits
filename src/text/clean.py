@@ -6,6 +6,12 @@ from unicodedata import category
 import regex
 
 
+REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
+SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
+SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
+VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
+
+
 def space_handler(text: str):
     """
     Handle space cleaning and manipulation for khmer text.
@@ -25,7 +31,6 @@ def __kh_strip(text: str):
     return text.strip(" \t\n\r\v\f\u200b")
 
 
-REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
 def __remove_repitive_whitespace(text: str):
     """
     Remove any repetitive space with just one space.
@@ -33,7 +38,6 @@ def __remove_repitive_whitespace(text: str):
     return REPETITIVE_WHITESPACE.sub(" ", text)
 
 
-SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
 def __space_between_km(text: str, clean: bool = True):
     """
     Add space between khmer and other language.
@@ -43,7 +47,6 @@ def __space_between_km(text: str, clean: bool = True):
     return SPACE_BETWEEN_KM.sub(r" \1 ", text).replace("  ", " ").strip()
 
 
-SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
 def __space_after_punc(text: str, clean: bool = True):
     """
     Add space after punctuation if there aren't exist any whitespace after it.
@@ -54,11 +57,11 @@ def __space_after_punc(text: str, clean: bool = True):
     return SPACE_AFTER_PUNC.sub(r"\1 ", text).replace("  ", " ").strip()
 
 
-VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 def remove_misc_symbols(text: str):
     """
-    This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji) that are classify by unicodedata (So).
-    Unicodedata category symbol character into 4 types such as Math (Sm), Currency (Sc), Modifier (Sk), other (So).
+    This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji)
+    that are classify by unicodedata (So). Unicodedata category symbol character into 4 types
+    such as Math (Sm), Currency (Sc), Modifier (Sk), other (So).
 
     Return
     ------
