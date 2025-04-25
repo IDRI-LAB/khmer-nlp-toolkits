@@ -36,6 +36,9 @@ def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float
     if not contents or not sent_idens:
         raise ValueError("Missing contents or sentence identifications")
     content_split = contents.split('\n')
+    print(len(content_split), len(sent_idens))
+    if len(content_split) != len(sent_idens):
+        raise ValueError("List is not in equal lenght")
     list_data_kh = []
     for iden_data, con_data in zip(sent_idens, content_split):
         if iden_data is not None and iden_data['label'] == "km":

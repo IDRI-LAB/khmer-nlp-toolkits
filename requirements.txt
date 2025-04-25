@@ -1,1 +1,2 @@
 # This is dependency packages required for deploy phase
+regex==2024.11.6
