@@ -90,15 +90,3 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             if len(sent) > threshold and len(extract_numbers(sent)) / len(sent) < 0.5
         ]
     return sentences
-
-
-def remove_sentence_deduplicate(sentences: List[str], tlsh: str):
-    """
-        check duplicate sentence by tlsh value
-        Parameters
-        ==========
-        sentences: List[str]
-                   list of sentence for cleaning
-        tlsh: str
-            tlsh value to check duplicate sentence
-    """
