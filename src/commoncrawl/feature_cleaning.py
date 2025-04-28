@@ -2,17 +2,18 @@
 Module for apply feature cleaning on commoncrawl data structure.
 """
 from typing import Union, Optional, List, Dict
+from src.text.clean import __kh_strip
 
 
 def cleaning_kh_data(data: Union[dict, list]):
     """
         Cleaning all khmer data
         Parameter
-        ============
+        ==========
         data: Union[dict, list]
             List of json data for cleaning
         return
-        ============
+        =======
         khmer data
     """
 
@@ -26,7 +27,7 @@ def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float
         Filter data to get only the content with Khmer language label ("kh")
         and Identification data is not None.
         Parameters
-        ===================
+        ==========
         contents: List[str]
                   content for cleaning
         sent_idens: List[Optional[Dict[str, float]]]
@@ -75,7 +76,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
         """
             extract sentence that has number char
             Parameters
-            ===============================
+            ==========
             sent: str
                 sentence to get only number char
             EX: "សួស្ដី១២៣៤" -> "១២៣៤"
@@ -83,9 +84,8 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
         return ''.join(char for char in sent if char.isdigit())
 
     if sentences and qua_warning:
-        print("sentences::", sentences)
         return [
-            sent.replace('\u200b', '').strip()
+            __kh_strip(sent)
             for sent in sentences
             if len(sent) > threshold and len(extract_numbers(sent)) / len(sent) < 0.5
         ]
@@ -96,7 +96,7 @@ def remove_sentence_deduplicate(sentences: List[str], tlsh: str):
     """
         check duplicate sentence by tlsh value
         Parameters
-        ==========================
+        ==========
         sentences: List[str]
                    list of sentence for cleaning
         tlsh: str
