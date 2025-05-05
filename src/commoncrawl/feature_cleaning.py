@@ -32,6 +32,16 @@ def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float
                   content for cleaning
         sent_idens: List[Optional[Dict[str, float]]]
                    sentent identification to check label 'km'
+        Return
+        ======
+        contents: List[str]
+            list of content that has khmer language label 'km' and not None
+        Noted
+        =====
+        - if content is None, it will be removed.
+        - if content is not in Khmer language, it will be removed.
+        - if content is not in equal length with sentence identification, it will be raise.
+
     """
 
     if not contents or not sent_idens:
@@ -70,7 +80,6 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
     - if sentence has number char more than 50% of the sentence, it will be removed.
     - if sentence length is less than threshold, it will be removed.
     """
-    # print("sentences", len(sentences))
 
     def extract_numbers(sent: str):
         """
@@ -87,6 +96,8 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
         return [
             __kh_strip(sent)
             for sent in sentences
-            if len(sent) > threshold and len(extract_numbers(sent)) / len(sent) < 0.5
+            if len(sent) > threshold
+            and len(extract_numbers(sent)) / len(sent) < 0.5
+            and __kh_strip(sent) != ''
         ]
-    return sentences
+    return [__kh_strip(sent) for sent in sentences]
