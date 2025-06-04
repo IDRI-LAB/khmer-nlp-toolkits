@@ -22,9 +22,7 @@ def cleaning_kh_data(data: Union[dict, list]):
         =======
         khmer data
     """
-    is_adult = is_adult_url_filter(data["url"])
-    if is_adult:
-        return []
+    if is_adult_url_filter(data["url"]): return []
     cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
     cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'])
     return cleaned_sents
