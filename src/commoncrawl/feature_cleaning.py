@@ -3,9 +3,13 @@ Module for apply feature cleaning on commoncrawl data structure.
 """
 from typing import Union, Optional, List, Dict
 from src.text.clean import __kh_strip
+import tlsh
+from itertools import product
+
+final_data = []
 
 
-def cleaning_kh_data(data: Union[dict, list]):
+def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
         Cleaning all khmer data
         Parameter
@@ -18,7 +22,8 @@ def cleaning_kh_data(data: Union[dict, list]):
     """
 
     cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
-    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'])
+    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
+    cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
     return cleaned_sents
 
 
@@ -101,3 +106,43 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and __kh_strip(sent) != ''
         ]
     return [__kh_strip(sent) for sent in sentences]
+
+
+def remove_sentence_deduplicate(sentences: List[str], threshold: int = 100):
+    """
+        check duplicate sentence by tlsh value
+        Parameters
+        ==========
+        sentences: List[str]
+                   list of sentence for cleaning
+        threshold: int = 100
+                   threshold to compare with tlsh value
+        Return
+        ======
+        sentences: List[str]
+            list of sentence for cleaning if it has duplicate
+        Noted   
+        ======
+        - if tlsh value is less than threshold, it will be removed.
+        - if tlsh value is more than threshold, it will be added to final_data
+    """
+    def compute_tlsh_hash(text):
+        # if len(text) <= 50:
+        #     raise ValueError("Invalid TLSH hash")
+        t = tlsh.Tlsh()
+        t.update(text.encode('utf-8'))
+        t.final()
+        return t
+    if len(final_data) == 0:
+        final_data.extend(sentences)
+    else:
+        for (_, sentence), (i_data_comparing, data_comparing) in product(enumerate(sentences), enumerate(final_data)):
+            tlsh_sentence = compute_tlsh_hash(sentence)
+            tlsh2_data_comparing = compute_tlsh_hash(data_comparing)
+            # if hash1 and hash2:
+            score = tlsh_sentence.diff(data_comparing)
+            if score <= threshold:
+                break
+            elif i_data_comparing == len(final_data) - 1:
+                final_data.append(sentence)
+    return final_data
