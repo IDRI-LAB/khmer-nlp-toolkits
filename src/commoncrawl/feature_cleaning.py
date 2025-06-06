@@ -1,11 +1,15 @@
 """
 Module for apply feature cleaning on commoncrawl data structure.
 """
+from itertools import product
+import tlsh
+import re
 from typing import Union, Optional, List, Dict
 from src.text.clean import __kh_strip
-import tlsh
-from itertools import product
+from src.keywords import ALDULT_KW
 
+
+ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 final_data = []
 
 
@@ -15,12 +19,14 @@ def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
         Parameter
         ==========
         data: Union[dict, list]
-            List of json data for cleaning
-        return
+            Json data of common crawl format.
+
+        Return
         =======
         khmer data
     """
-
+    if is_adult_url_filter(data["url"]):
+        return []
     cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
     cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
     cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
@@ -31,16 +37,19 @@ def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float
     """
         Filter data to get only the content with Khmer language label ("kh")
         and Identification data is not None.
+
         Parameters
         ==========
         contents: List[str]
                   content for cleaning
         sent_idens: List[Optional[Dict[str, float]]]
                    sentent identification to check label 'km'
+
         Return
         ======
         contents: List[str]
             list of content that has khmer language label 'km' and not None
+
         Noted
         =====
         - if content is None, it will be removed.
@@ -106,6 +115,23 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and __kh_strip(sent) != ''
         ]
     return [__kh_strip(sent) for sent in sentences]
+
+
+def is_adult_url_filter(url: str):
+    """
+    Check if the url are appropriate content.
+
+    Parameters
+    ==========
+    url: str
+        url string to check for keyword.
+
+    Return
+    ======
+    bool
+        True if the url content keyword, vise versa.
+    """
+    return bool(ADULT_URL_FILTER.search(url))
 
 
 def remove_sentence_deduplicate(sentences: List[str], threshold: int = 100):

@@ -2,8 +2,8 @@
 Module for text cleaning.
 """
 import re
-from unicodedata import category
 import regex
+from unicodedata import category
 
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
