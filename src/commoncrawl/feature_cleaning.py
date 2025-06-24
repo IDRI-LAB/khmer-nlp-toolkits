@@ -1,8 +1,6 @@
 """
 Module for apply feature cleaning on commoncrawl data structure.
 """
-from itertools import product
-import tlsh
 import re
 from typing import Union, Optional, List, Dict
 from src.text.clean import __kh_strip
@@ -15,53 +13,58 @@ final_data = []
 
 def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
-        Cleaning all khmer data
-        Parameter
-        ==========
-        data: Union[dict, list]
-            Json data of common crawl format.
+    Cleaning all khmer data.
 
-        Return
-        =======
-        khmer data
+    Parameter
+    ==========
+    data: Union[dict, list]
+        Json data of common crawl format.
+
+    Return
+    =======
+    khmer data
     """
-    if is_adult_url_filter(data["url"]):
-        return []
-    cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
-    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
-    cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
-    return cleaned_sents
-
+    try:
+        url = data["url"] if data.get("url", False) else data["warc_headers"]["warc-target-uri"]
+        if is_adult_url_filter(url):
+            return []
+    except KeyError as err:
+        raise KeyError("Key ['url'] or ['warc_headers']['warc-target-uri']") from err
+    try:
+        cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
+        cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
+        # cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
+        return cleaned_sents
+    except KeyError as err:
+        raise err
 
 def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float]]]):
     """
-        Filter data to get only the content with Khmer language label ("kh")
-        and Identification data is not None.
+    Filter data to get only the content with Khmer language label ("kh")
+    and Identification data is not None.
 
-        Parameters
-        ==========
-        contents: List[str]
-                  content for cleaning
-        sent_idens: List[Optional[Dict[str, float]]]
-                   sentent identification to check label 'km'
+    Parameters
+    ==========
+    contents: List[str]
+                content for cleaning
+    sent_idens: List[Optional[Dict[str, float]]]
+                sentent identification to check label 'km'
 
-        Return
-        ======
-        contents: List[str]
-            list of content that has khmer language label 'km' and not None
+    Return
+    ======
+    contents: List[str]
+        list of content that has khmer language label 'km' and not None
 
-        Noted
-        =====
-        - if content is None, it will be removed.
-        - if content is not in Khmer language, it will be removed.
-        - if content is not in equal length with sentence identification, it will be raise.
-
+    Noted
+    =====
+    - if content is None, it will be removed.
+    - if content is not in Khmer language, it will be removed.
+    - if content is not in equal length with sentence identification, it will be raise.
     """
 
     if not contents or not sent_idens:
         raise ValueError("Missing contents or sentence identifications")
     content_split = contents.split('\n')
-    print(len(content_split), len(sent_idens))
     if len(content_split) != len(sent_idens):
         raise ValueError("List is not in equal lenght")
     list_data_kh = []
@@ -97,16 +100,17 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
 
     def extract_numbers(sent: str):
         """
-            extract sentence that has number char
-            Parameters
-            ==========
-            sent: str
-                sentence to get only number char
-            EX: "សួស្ដី១២៣៤" -> "១២៣៤"
+        extract sentence that has number char
+        Parameters
+        ==========
+        sent: str
+            sentence to get only number char
+        EX: "សួស្ដី១២៣៤" -> "១២៣៤"
         """
         return ''.join(char for char in sent if char.isdigit())
 
     if sentences and qua_warning:
+        
         return [
             __kh_strip(sent)
             for sent in sentences
@@ -114,7 +118,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and len(extract_numbers(sent)) / len(sent) < 0.5
             and __kh_strip(sent) != ''
         ]
-    return [__kh_strip(sent) for sent in sentences]
+    return [__kh_strip(sent) for sent in sentences if len(sent) > threshold]
 
 
 def is_adult_url_filter(url: str):
@@ -131,8 +135,7 @@ def is_adult_url_filter(url: str):
     bool
         True if the url content keyword, vise versa.
     """
-    return bool(ADULT_URL_FILTER.search(url))
-
+    return url and bool(ADULT_URL_FILTER.search(url))
 
 def remove_sentence_deduplicate(sentences: List[str], threshold: int = 100):
     """
@@ -147,28 +150,9 @@ def remove_sentence_deduplicate(sentences: List[str], threshold: int = 100):
         ======
         sentences: List[str]
             list of sentence for cleaning if it has duplicate
-        Noted   
+        Noted
         ======
         - if tlsh value is less than threshold, it will be removed.
         - if tlsh value is more than threshold, it will be added to final_data
     """
-    def compute_tlsh_hash(text):
-        # if len(text) <= 50:
-        #     raise ValueError("Invalid TLSH hash")
-        t = tlsh.Tlsh()
-        t.update(text.encode('utf-8'))
-        t.final()
-        return t
-    if len(final_data) == 0:
-        final_data.extend(sentences)
-    else:
-        for (_, sentence), (i_data_comparing, data_comparing) in product(enumerate(sentences), enumerate(final_data)):
-            tlsh_sentence = compute_tlsh_hash(sentence)
-            tlsh2_data_comparing = compute_tlsh_hash(data_comparing)
-            # if hash1 and hash2:
-            score = tlsh_sentence.diff(data_comparing)
-            if score <= threshold:
-                break
-            elif i_data_comparing == len(final_data) - 1:
-                final_data.append(sentence)
-    return final_data
+    
