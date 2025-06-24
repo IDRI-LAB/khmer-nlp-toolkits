@@ -9,7 +9,6 @@ from src.keywords import ALDULT_KW
 
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
-
 def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
     Cleaning all khmer data.
@@ -108,8 +107,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
         """
         return ''.join(char for char in sent if char.isdigit())
 
-    if sentences and qua_warning:
-        
+    if sentences and qua_warning:        
         return [
             __kh_strip(sent)
             for sent in sentences
@@ -135,23 +133,3 @@ def is_adult_url_filter(url: str):
         True if the url content keyword, vise versa.
     """
     return url and bool(ADULT_URL_FILTER.search(url))
-
-def remove_sentence_deduplicate(sentences: List[str], threshold: int = 100):
-    """
-        check duplicate sentence by tlsh value
-        Parameters
-        ==========
-        sentences: List[str]
-                   list of sentence for cleaning
-        threshold: int = 100
-                   threshold to compare with tlsh value
-        Return
-        ======
-        sentences: List[str]
-            list of sentence for cleaning if it has duplicate
-        Noted
-        ======
-        - if tlsh value is less than threshold, it will be removed.
-        - if tlsh value is more than threshold, it will be added to final_data
-    """
-    
