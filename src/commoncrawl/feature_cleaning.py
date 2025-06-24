@@ -9,6 +9,7 @@ from src.keywords import ALDULT_KW
 
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
+
 def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
     Cleaning all khmer data.
@@ -35,6 +36,7 @@ def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
         return cleaned_sents
     except KeyError as err:
         raise err
+
 
 def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float]]]):
     """
@@ -107,7 +109,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
         """
         return ''.join(char for char in sent if char.isdigit())
 
-    if sentences and qua_warning:        
+    if sentences and qua_warning:
         return [
             __kh_strip(sent)
             for sent in sentences
