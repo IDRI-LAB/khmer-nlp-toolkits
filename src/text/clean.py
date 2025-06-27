@@ -2,8 +2,8 @@
 Module for text cleaning.
 """
 import re
-import regex
 from unicodedata import category
+import regex
 
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
@@ -11,6 +11,30 @@ SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
 SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 REPLACE_URL = re.compile(r'(http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+(com|org|net|edu|gov|io|co|info|tv|me|ai|app)(/\S*)?)')
+
+
+def clean_text(texts: list[str]) -> list[str]:
+    """
+    Cleaning all text.
+
+    Parameter
+    ==========
+    texts: List[str]
+        List of string
+
+    Return
+    =======
+    list of string
+    """
+    final_clean = []
+    for text in texts:
+        text = replace_url(text)
+        text = remove_repetitive_punc(text)
+        # feature clean.enclosing_symbol_consistency
+        text = remove_misc_symbols(text)
+        text = space_handler(text)
+        final_clean.append(text)
+    return final_clean
 
 
 def space_handler(text: str):

@@ -6,9 +6,7 @@ from typing import Union, Optional, List, Dict
 from src.text.clean import __kh_strip
 from src.keywords import ALDULT_KW
 
-
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
-
 
 def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
@@ -117,7 +115,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and len(extract_numbers(sent)) / len(sent) < 0.5
             and __kh_strip(sent) != ''
         ]
-    return [__kh_strip(sent) for sent in sentences if len(sent) > threshold]
+    return [__kh_strip(sent) for sent in sentences]
 
 
 def is_adult_url_filter(url: str):
