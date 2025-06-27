@@ -31,6 +31,7 @@ def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     try:
         cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
         cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
+        # cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
         return cleaned_sents
     except KeyError as err:
         raise err
