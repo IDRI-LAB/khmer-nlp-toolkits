@@ -8,6 +8,7 @@ from src.keywords import ALDULT_KW
 
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
+
 def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
     Cleaning all khmer data.
