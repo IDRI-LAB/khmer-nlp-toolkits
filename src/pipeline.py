@@ -2,7 +2,6 @@
 Pipeline class
 """
 from typing import Callable, Any
-from commoncrawl.feature_cleaning import check_quality_warning
 
 
 class Pipeline:
@@ -85,8 +84,6 @@ if __name__ == "__main__":
     # Add func_a and func_b to the pipeline with its parameters
     pipeline.add(func_a, is_upper=True, desc="lower or upper text.")  # Pass `is_upper=True` to func_a
     pipeline.add(func_b, times=3)  # Pass `times=3` to func_b
-    # Assuming check_quality_warning is defined elsewhere
-    pipeline.add(check_quality_warning, threshold=75, desc="Check quality warning.")
 
     # List function added to pipeline.
     print(str(pipeline))
@@ -95,8 +92,3 @@ if __name__ == "__main__":
     INPUT_TEXT = "hello world"
     output_text = pipeline.run(INPUT_TEXT)
     print(output_text)
-    # Run the pipeline with input text
-    with open("cc_data_sample.jsonl", "r", encoding="utf-8") as file:
-        cc_data = file.read()
-    output_data = pipeline.run(cc_data)
-    print(output_data)
