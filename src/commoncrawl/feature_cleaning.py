@@ -116,7 +116,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and len(extract_numbers(sent)) / len(sent) < 0.5
             and __kh_strip(sent) != ''
         ]
-    return [__kh_strip(sent) for sent in sentences]
+    return [__kh_strip(sent) for sent in sentences if len(sent) > threshold]
 
 
 def is_adult_url_filter(url: str):
