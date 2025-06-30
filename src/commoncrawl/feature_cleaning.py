@@ -6,59 +6,64 @@ from typing import Union, Optional, List, Dict
 from src.text.clean import __kh_strip
 from src.keywords import ALDULT_KW
 
-
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
 
-def cleaning_kh_data(data: Union[dict, list]):
+def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
-        Cleaning all khmer data
-        Parameter
-        ==========
-        data: Union[dict, list]
-            Json data of common crawl format.
+    Cleaning all khmer data.
 
-        Return
-        =======
-        khmer data
+    Parameter
+    ==========
+    data: Union[dict, list]
+        Json data of common crawl format.
+
+    Return
+    =======
+    khmer data
     """
-    is_adult = is_adult_url_filter(data["url"])
-    if is_adult:
-        return []
-    cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
-    cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'])
-    return cleaned_sents
+    try:
+        url = data["url"] if data.get("url", False) else data["warc_headers"]["warc-target-uri"]
+        if is_adult_url_filter(url):
+            return []
+    except KeyError as err:
+        raise KeyError("Key ['url'] or ['warc_headers']['warc-target-uri']") from err
+    try:
+        cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
+        cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
+        # cleaned_sents = remove_sentence_deduplicate(cleaned_sents)
+        return cleaned_sents
+    except KeyError as err:
+        raise err
 
 
 def filter_kh_lng(contents: List[str], sent_idens: List[Optional[Dict[str, float]]]):
     """
-        Filter data to get only the content with Khmer language label ("kh")
-        and Identification data is not None.
+    Filter data to get only the content with Khmer language label ("kh")
+    and Identification data is not None.
 
-        Parameters
-        ==========
-        contents: List[str]
-                  content for cleaning
-        sent_idens: List[Optional[Dict[str, float]]]
-                   sentent identification to check label 'km'
+    Parameters
+    ==========
+    contents: List[str]
+                content for cleaning
+    sent_idens: List[Optional[Dict[str, float]]]
+                sentent identification to check label 'km'
 
-        Return
-        ======
-        contents: List[str]
-            list of content that has khmer language label 'km' and not None
+    Return
+    ======
+    contents: List[str]
+        list of content that has khmer language label 'km' and not None
 
-        Noted
-        =====
-        - if content is None, it will be removed.
-        - if content is not in Khmer language, it will be removed.
-        - if content is not in equal length with sentence identification, it will be raise.
-
+    Noted
+    =====
+    - if content is None, it will be removed.
+    - if content is not in Khmer language, it will be removed.
+    - if content is not in equal length with sentence identification, it will be raise.
     """
 
     if not contents or not sent_idens:
         raise ValueError("Missing contents or sentence identifications")
     content_split = contents.split('\n')
-    print(len(content_split), len(sent_idens))
     if len(content_split) != len(sent_idens):
         raise ValueError("List is not in equal lenght")
     list_data_kh = []
@@ -94,12 +99,12 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
 
     def extract_numbers(sent: str):
         """
-            extract sentence that has number char
-            Parameters
-            ==========
-            sent: str
-                sentence to get only number char
-            EX: "សួស្ដី១២៣៤" -> "១២៣៤"
+        extract sentence that has number char
+        Parameters
+        ==========
+        sent: str
+            sentence to get only number char
+        EX: "សួស្ដី១២៣៤" -> "១២៣៤"
         """
         return ''.join(char for char in sent if char.isdigit())
 
@@ -111,7 +116,7 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
             and len(extract_numbers(sent)) / len(sent) < 0.5
             and __kh_strip(sent) != ''
         ]
-    return [__kh_strip(sent) for sent in sentences]
+    return [__kh_strip(sent) for sent in sentences if len(sent) > threshold]
 
 
 def is_adult_url_filter(url: str):
@@ -128,4 +133,4 @@ def is_adult_url_filter(url: str):
     bool
         True if the url content keyword, vise versa.
     """
-    return bool(ADULT_URL_FILTER.search(url))
+    return url and bool(ADULT_URL_FILTER.search(url))

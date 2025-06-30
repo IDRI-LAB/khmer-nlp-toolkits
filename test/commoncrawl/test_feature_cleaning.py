@@ -1,7 +1,6 @@
 """
 Module for test feature cleaning on commoncrawl data structure.
 """
-
 import pytest
 from src.commoncrawl.feature_cleaning import filter_kh_lng, check_quality_warning, is_adult_url_filter
 
@@ -86,7 +85,7 @@ def test_filter_data_unequal_len(exp_input, exp_output):
     ),
     (
         [[
-            " ​​​​​​ ​​​​ ​​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​​ ​​ ​ ​ ​   "
+            " ​​​​​​ ​​​​ ​​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​ ​​ ​​ ​ "
         ], ["tiny", "noisy"]],
         []
     )

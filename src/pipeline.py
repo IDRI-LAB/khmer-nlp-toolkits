@@ -8,6 +8,7 @@ class Pipeline:
     """
     Pipeline class for setup continue function execution action.
     """
+
     def __init__(self):
         self.steps = []
         self.info = []
