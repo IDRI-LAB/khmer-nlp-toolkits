@@ -1,4 +1,4 @@
-# khmer-nlp-toolkits
+# khmer_nlp_toolkits
 
 This project is aimed to build and assemble all functionality of Natuaral Language Processing Toolkits for Khmer language. 
 

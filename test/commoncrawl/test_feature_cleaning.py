@@ -2,7 +2,7 @@
 Module for test feature cleaning on commoncrawl data structure.
 """
 import pytest
-from src.commoncrawl.feature_cleaning import filter_kh_lng, check_quality_warning, is_adult_url_filter
+from khmer_nlp_toolkits.commoncrawl.feature_cleaning import filter_kh_lng, check_quality_warning, is_adult_url_filter
 
 
 @pytest.mark.parametrize('exp_input, exp_output', [
