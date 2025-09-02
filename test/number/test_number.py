@@ -1,5 +1,5 @@
 import pytest 
-from src.number.number import num2text
+from khmer-nlp-toolkits.number.number import num2text
 
 
 @pytest.mark.parametrize("exp_input, exp_output", [

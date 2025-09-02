@@ -1,5 +1,5 @@
 import pytest
-from src import pipeline
+from khmer-nlp-toolkits import pipeline
 
 
 @pytest.fixture

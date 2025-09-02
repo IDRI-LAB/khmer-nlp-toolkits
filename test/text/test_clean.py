@@ -1,5 +1,5 @@
 import pytest
-from src.text import clean
+from khmer-nlp-toolkits.text import clean
 
 
 """
