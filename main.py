@@ -2,9 +2,9 @@
 This script is designed to clean Common Crawl data specifically for Khmer language text.
 """
 import jsonlines
-from khmer-nlp-toolkits.pipeline import Pipeline
-from khmer-nlp-toolkits.commoncrawl.feature_cleaning import cleaning_kh_data
-from khmer-nlp-toolkits.text.clean import clean_text
+from khmer_nlp_toolkits.pipeline import Pipeline
+from khmer_nlp_toolkits.commoncrawl.feature_cleaning import cleaning_kh_data
+from khmer_nlp_toolkits.text.clean import clean_text
 
 
 def main():

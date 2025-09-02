@@ -3,8 +3,8 @@ Module for apply feature cleaning on commoncrawl data structure.
 """
 import re
 from typing import Union, Optional, List, Dict
-from khmer-nlp-toolkits.text.clean import __kh_strip
-from khmer-nlp-toolkits.keywords import ALDULT_KW
+from khmer_nlp_toolkits.text.clean import __kh_strip
+from khmer_nlp_toolkits.keywords import ALDULT_KW
 
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 

@@ -33,14 +33,14 @@ jobs:
     # Run flake8 (linting)
     - name: Run flake8 (linting)
       run: |
-        flake8 khmer-nlp-toolkits/
+        flake8 khmer_nlp_toolkits/
 
     # Run pylint (static analysis)
     - name: Run pylint (static analysis)
       run: |
-        pylint khmer-nlp-toolkits/
+        pylint khmer_nlp_toolkits/
 
     # Run pytest (unit tests)
     - name: Run pytest (unit tests)
       run: |
-        pytest --cov=khmer-nlp-toolkits --cov-report=term-missing --cov-fail-under=70 test/
+        pytest --cov=khmer_nlp_toolkits --cov-report=term-missing --cov-fail-under=70 test/
