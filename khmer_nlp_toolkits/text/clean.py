@@ -13,6 +13,9 @@ VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 REPLACE_URL = re.compile(r'(http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+(com|org|net|edu|gov|io|co|info|tv|me|ai|app)(/\S*)?)')
 
 
+"""
+Main feature
+"""
 def clean_text(texts: list[str]) -> list[str]:
     """
     Cleaning all text.

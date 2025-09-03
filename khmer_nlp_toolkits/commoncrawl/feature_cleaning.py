@@ -2,6 +2,7 @@
 Module for apply feature cleaning on commoncrawl data structure.
 """
 import re
+import regex
 from typing import Union, Optional, List, Dict
 from khmer_nlp_toolkits.text.clean import __kh_strip
 from khmer_nlp_toolkits.keywords import ALDULT_KW
@@ -9,7 +10,10 @@ from khmer_nlp_toolkits.keywords import ALDULT_KW
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
 
-def cleaning_kh_data(data: Union[dict, list], threshold: int = 75) -> List[str]:
+"""
+Main Feature.
+"""
+def clean_cc(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
     Cleaning all khmer data.
 
@@ -97,24 +101,29 @@ def check_quality_warning(sentences: List[str], qua_warning: List[str], threshol
     - if sentence length is less than threshold, it will be removed.
     """
 
-    def extract_numbers(sent: str):
+    def count_khmer_chat(sent: str):
         """
-        extract sentence that has number char
+        Count existing Khmer char in context. It count only character in Khmer unicode block 1780-17FF.
+
         Parameters
         ==========
         sent: str
-            sentence to get only number char
-        EX: "សួស្ដី១២៣៤" -> "១២៣៤"
+            sentence to check
+
+        Returns
+        =======
+        int
+            Number of Khmer character.
         """
-        return ''.join(char for char in sent if char.isdigit())
+        # return ''.join(char for char in sent if char.isdigit())
+        return len(regex.findall(r"\p{khmer}", sent))
 
     if sentences and qua_warning:
         return [
-            __kh_strip(sent)
+            sent
             for sent in sentences
-            if len(sent) > threshold
-            and len(extract_numbers(sent)) / len(sent) < 0.5
-            and __kh_strip(sent) != ''
+            if len(__kh_strip(sent)) > threshold
+            and count_khmer_chat(sent) / len(sent) > 0.5
         ]
     return [__kh_strip(sent) for sent in sentences if len(sent) > threshold]
 
