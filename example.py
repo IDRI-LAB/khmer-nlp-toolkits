@@ -3,7 +3,7 @@ This script is designed to clean Common Crawl data specifically for Khmer langua
 """
 import jsonlines
 from khmer_nlp_toolkits.pipeline import Pipeline
-from khmer_nlp_toolkits.commoncrawl.feature_cleaning import cleaning_kh_data
+from khmer_nlp_toolkits.commoncrawl.feature_cleaning import clean_cc
 from khmer_nlp_toolkits.text.clean import clean_text
 
 
@@ -13,7 +13,7 @@ def main():
     It initializes the pipeline, reads input data from a JSONL file, processes it,
     and writes the cleaned output to another JSONL file.
     The pipeline consists of two steps:
-    1. `cleaning_kh_data`: Cleans Khmer data with a specified threshold for quality warnings.
+    1. `clean_cc`: Cleans Khmer data with a specified threshold for quality warnings.
     2. `clean_text`: Further cleans the text by removing URLs, repetitive punctuation,
     and miscellaneous symbols, and handles spaces appropriately.
     The cleaned data is written to 'final_data_cleaning.jsonl'.
@@ -32,7 +32,7 @@ def main():
       the text is cleaned according to the requirements of Khmer language processing.
     """
     pipeline = Pipeline()
-    pipeline.add(cleaning_kh_data, threshold=75, desc="Cleaning Khmer data with a threshold of 75%")
+    pipeline.add(clean_cc, threshold=75, desc="Cleaning Khmer data with a threshold of 75%")
     pipeline.add(clean_text, desc="Cleaning text")
 
     with jsonlines.open('cc_data_sample.jsonl', mode="r") as reader, \

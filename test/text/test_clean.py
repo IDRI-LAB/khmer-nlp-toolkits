@@ -85,3 +85,17 @@ Replace/Remove URL
 def test_replace_url(input_str, output_str):
     assert clean.replace_url(*input_str) == output_str
 
+
+
+"""
+Rmove invisible character.
+"""
+@pytest.mark.parametrize("input_str, output_str", [
+    ("1Hello\u2063\u202A\U000E007F\u200C\uFEFF\u202C\u200FWorld", "1HelloWorld"),
+    ("\uFE0E\U000E00672H\uFE0FelloWorld\u00AD\u202D\u180C\U000E0065", "2HelloWorld"),
+    ("3Hello\u200EWor\U000E01D3\u17B5\u180Bld\u206E\u200B\u180D", "3HelloWorld"),
+    ("4Hello\U000E0062\u202B\U000E006EWor\u2060\u17B4\u200Dl\u180E\u2061d", "4HelloWorld"),
+
+])
+def test_remove_invisible_chars(input_str, output_str):
+    assert clean.remove_invisible_chars(input_str) == output_str

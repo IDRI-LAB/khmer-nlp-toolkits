@@ -43,4 +43,4 @@ jobs:
     # Run pytest (unit tests)
     - name: Run pytest (unit tests)
       run: |
-        pytest --cov=khmer_nlp_toolkits --cov-report=term-missing --cov-fail-under=70 test/
+        pytest --cov=khmer_nlp_toolkits --cov-report=term-missing --cov-fail-under=75 test/
