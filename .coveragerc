@@ -1,5 +1,8 @@
 [run]
-omit = __init__.py, main.py
+omit = 
+    __init__.py,
+    main.py,
+    khnormal.py
 
 [report]
 exclude_lines =

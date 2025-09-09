@@ -7,15 +7,13 @@ from typing import Union, Optional, List, Dict
 from khmer_nlp_toolkits.text.clean import __kh_strip
 from khmer_nlp_toolkits.keywords import ALDULT_KW
 
+
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
 
-"""
-Main Feature.
-"""
 def clean_cc(data: Union[dict, list], threshold: int = 75) -> List[str]:
     """
-    Cleaning all khmer data.
+    Main Feature of Cleaning using metadata on CC to filtering out some doucments or sentences.
 
     Parameter
     ==========
