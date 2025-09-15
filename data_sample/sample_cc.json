@@ -1,0 +1,49 @@
+{
+  "content": "ម៉ូដែល Samsung Galaxy និងម៉ូដែល LG G Flex Round ទាំងពីរនេះគឺជាម៉ូដែលដែលបានច្នៃឲ្យមានអេក្រង់រាងកោងដំបូងគេនៅក្នុងចំណោមស្មាតហ្វូននៅក្នុងពិភពលោក ។ អ្នកប្រើប្រាស់ទូទៅតែងតែឆ្ងល់ថា ហេតុអ្វីបានជារោងចក្រផលិតទូរស័ព្ទមានរាងកោង ?\nដោយសារតែទីផ្សារស្មាតហ្វូនកំពុងតែមានសន្ទុះខ្លាំងក្លា ទាំងរោងចក្រនៅប្រទេសកូរ៉េក៏បានងប់ងល់នឹងបច្ចេកវិទ្យាថ្មីនេះដែរ ។ បើយោងតាមរបាយការណ៍ផ្សេងៗគ្នាបានឲ្យដឹងថា ម៉ូដែលដែលមានរាងកោង គេបានស្រម៉ៃគិតជាយូរហើយ ហើយឥលូវគឺគេបានឈានមកដល់ក្តីសុបិន្ត ដែលគេចង់បានបីការស្រមើស្រម៉ៃនោះហើយ ។\nកាលពីកំឡុងឆ្នាំមុន នៅប្រទេសកូរ៉េ ក្រុមហ៊ុន Samsung ក៏បានមានក្តីស្រមៃថានឹងបង្ហាញពីនាឡិការពាក់​ដៃដែល​អាចចាក់តន្រ្តី និងអាចហៅចេញដូចទូរស័ព្ទដែរ ទីបំផុតក្រុមហ៊ុនបានបង្ហាញពិតប្រាកដមែនកាលពីខែតុលាខែមុននេះ ។\nប្រភពៈ sohoa.vnexpress.net\nPost navigation\nSamsung's Full HD នឹងបញ្ចេញឆ្នាំក្រោយ\nបន្ថែមជូនពិសេសពេលទិញស្មាតហ្វូន\nLeave a Reply Cancel reply\nYour email address will not be published. Required fields are marked *\nComment *\nName *\nEmail *\nWebsite\nSave my name, email, and website in this browser for the next time I comment.\nΔ\nអត្ថបទថ្មីៗ\nផលិតផល\nXiaomi TV S Pro Mini LED 85-Inch ទូរទស្សន៍ជំនាន់ថ្មីកាន់តែឆ្លាតវៃ\nNovember 9, 2023\nphonecity\nផលិតផល\nApple iMac M3 Chip កុំព្យូទ័រលើតុជំនាន់ថ្មីសមត្ថភាពខ្លាំងក្លាដ៏អស្ចារ្យ\nNovember 9, 2023\nphonecity\nផលិតផល\nApple 14-inch, 16-inch MacBook Pro កុំព្យូទ័រជំនាន់ថ្មីបំពាក់នូវបន្ទះឈីប M3, M3 Pro, M3 Max chips ដ៏ខ្លាំងក្លា",
+  "warc_headers": {
+    "warc-block-digest": "sha1:NVYS62EKBLGQSP5CAFE3BRKF5GR6YZP6",
+    "warc-record-id": "<urn:uuid:85d3c9fb-23cd-4628-aa4e-55fc747d9534>",
+    "content-length": "3016",
+    "warc-type": "conversion",
+    "content-type": "text/plain",
+    "warc-identified-content-language": "khm,eng",
+    "warc-target-uri": "https://www.phonecity.com.kh/2013/11/10/race-screen-phones-started-contortionist/",
+    "warc-date": "2023-12-02T04:52:52Z",
+    "warc-refers-to": "<urn:uuid:770ce3ed-9deb-4693-b8b0-d059ec6a86a7>"
+  },
+  "metadata": {
+    "identification": { "label": "km", "prob": 0.87210315 },
+    "harmful_pp": null,
+    "tlsh": "tlsh:T162FD65510168A9332BEE3DFDC0B1247820BA43A6AF64A4EFBB10E270E8D016FC6957C92134405E887D79443A73C726DE2F884A9C9F76CD6828CB6C5C3DDE9996F52610544D",
+    "quality_warnings": ["short_sentences", "footer"],
+    "categories": null,
+    "sentence_identifications": [
+      { "label": "km", "prob": 0.9926711 },
+      { "label": "km", "prob": 0.9975189 },
+      { "label": "km", "prob": 0.9955791 },
+      null,
+      null,
+      { "label": "km", "prob": 0.97633314 },
+      { "label": "km", "prob": 0.957877 },
+      { "label": "en", "prob": 0.8027464 },
+      { "label": "en", "prob": 0.9563198 },
+      null,
+      null,
+      null,
+      null,
+      { "label": "en", "prob": 0.9106276 },
+      { "label": "ru", "prob": 0.8715653 },
+      { "label": "km", "prob": 0.9253559 },
+      { "label": "km", "prob": 0.9149843 },
+      { "label": "km", "prob": 0.8608221 },
+      { "label": "en", "prob": 0.9532202 },
+      null,
+      { "label": "km", "prob": 0.9149843 },
+      { "label": "km", "prob": 0.96975464 },
+      { "label": "en", "prob": 0.9532202 },
+      null,
+      { "label": "km", "prob": 0.9149843 },
+      { "label": "km", "prob": 0.85084915 }
+    ]
+  }
+}
