@@ -15,7 +15,7 @@ VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
 
 
-def clean_text(texts: list[str]) -> list[str]:
+def run(texts: list[str]) -> list[str]:
     """
     Main feature to clean text.
 

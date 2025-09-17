@@ -7,3 +7,5 @@ omit =
 [report]
 exclude_lines =
     if __name__ == "__main__":
+    def run
+    def __str__

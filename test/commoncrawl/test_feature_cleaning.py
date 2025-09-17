@@ -117,7 +117,7 @@ def test_is_adult_url_filter(exp_input, exp_output):
 def test_is_url_duplicated(exp_in, exp_ret, exp_out):
     mock_res = MagicMock()
     mock_res.returncode = exp_ret
-    with patch("subprocess.run", return_value=mock_res) as mock_run, \
+    with patch("subprocess.run", return_value=mock_res), \
         patch("builtins.open", mock_open()):
         assert fc.is_url_duplicated(*exp_in) == exp_out
 
@@ -125,7 +125,7 @@ def test_is_url_duplicated(exp_in, exp_ret, exp_out):
 @pytest.mark.parametrize("exp_in, exp_ret, exp_out", [
     (["https://t.me", "dedup"], 3, False)
 ])
-def test_is_url_duplicated(exp_in, exp_ret, exp_out):
+def test_is_url_duplicated_error(exp_in, exp_ret, exp_out):
     mock_res = MagicMock()
     mock_res.returncode = exp_ret
     with patch("subprocess.run", return_value=mock_res) as mock_run, \

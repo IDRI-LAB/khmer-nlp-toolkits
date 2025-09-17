@@ -4,7 +4,7 @@ import re
 REPLACE_URL = re.compile(r'(http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+(com|org|net|edu|gov|io|co|info|tv|me|ai|app)(/\S*)?)')
 
 
-def anonymize(text, url="[URL]"):
+def run(text, url="[URL]"):
     """
     Main feature for anonymize data such as entity or identities.
 

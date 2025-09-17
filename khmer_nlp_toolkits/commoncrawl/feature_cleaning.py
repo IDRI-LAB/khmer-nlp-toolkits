@@ -14,7 +14,7 @@ from khmer_nlp_toolkits.keywords import ALDULT_KW
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
 
 
-def clean_cc(data: Union[dict, list], threshold: int = 75, is_dedup: bool = True) -> List[str]:
+def run(data: Union[dict, list], threshold: int = 75, is_dedup: bool = True) -> List[str]:
     """
     Main Feature of Cleaning using metadata on CC to filtering out some doucments or sentences.
 
@@ -25,7 +25,7 @@ def clean_cc(data: Union[dict, list], threshold: int = 75, is_dedup: bool = True
 
     Return
     =======
-    khmer data
+    Oject data after cleaning.
     """
     try:
         # our scrape format
