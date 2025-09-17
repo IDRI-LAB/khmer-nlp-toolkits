@@ -12,7 +12,6 @@ REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
 SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
 SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
-REPLACE_URL = re.compile(r'(http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+(com|org|net|edu|gov|io|co|info|tv|me|ai|app)(/\S*)?)')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
 
 
@@ -31,7 +30,6 @@ def clean_text(texts: list[str]) -> list[str]:
     """
     final_clean = []
     for text in texts:
-        text = replace_url(text)
         text = remove_repetitive_punc(text)
         # feature clean.enclosing_symbol_consistency
         text = remove_misc_symbols(text)
@@ -121,11 +119,3 @@ def remove_repetitive_punc(text: str):
     # Then, remove extra punctuation if there are multiple distinct ones
     text = re.sub(r'([!?.,:;])\1*([!?.,:;])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
     return text
-
-
-def replace_url(text: str, replace: str = ""):
-    """
-    Replace any link in string with the placeholder. if the placeholder not provided, the url
-    will be replace with empty string.
-    """
-    return REPLACE_URL.sub(replace, text)
