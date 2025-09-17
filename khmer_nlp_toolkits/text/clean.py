@@ -3,20 +3,22 @@ Module for text cleaning.
 """
 import re
 import regex
-from unicodedata import category
+from unicodedata import category, normalize
 from khmer_nlp_toolkits.keywords import INVISIBLE_CHARS
 from khmer_nlp_toolkits.text.khnormal import khnormal
 
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
-SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}]+)')
-SPACE_AFTER_PUNC = re.compile(r"([៖។៕.,!?;:\}\]\)]+)")
+SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}\.\,\%0-9]+)')
+SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
-REPLACE_URL = re.compile(r'(http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+(com|org|net|edu|gov|io|co|info|tv|me|ai|app)(/\S*)?)')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
+APOSTROPHE = re.compile(r"([^ ])’([^ ])")
+SPACE_AROUND_BRACKET = re.compile(r'([\(\)\[\]\{\}\<\>«»‹›])')
+SMART_QUOTES = re.compile(r"[‘’“”]")
 
 
-def clean_text(texts: list[str]) -> list[str]:
+def run(texts: list[str]) -> list[str]:
     """
     Main feature to clean text.
 
@@ -31,15 +33,32 @@ def clean_text(texts: list[str]) -> list[str]:
     """
     final_clean = []
     for text in texts:
-        text = replace_url(text)
         text = remove_repetitive_punc(text)
+        # text = handle_apostrophe(text)    # no need to handle
+        text = add_space_around_bracket(text)
         # feature clean.enclosing_symbol_consistency
         text = remove_misc_symbols(text)
         text = space_handler(text)
         text = remove_invisible_chars(text)
         text = khnormal(text)
+        text = normalize("NFKD", text)
+        text = normalize_symbol(text)
         final_clean.append(text)
     return final_clean
+
+
+def normalize_symbol(text: str):
+    text = SMART_QUOTES.sub(lambda m: "'" if m.group() in "‘’" else '"', text)
+    text = text.replace("\u2013", "\u002d")
+    return text
+
+
+def handle_apostrophe(text: str):
+    """
+    Change misuse of right single quote to apostrophe.
+    Ex: Musée de l’Orangerie -> Musée de l'Orangerie
+    """
+    return APOSTROPHE.sub(r"\1'\2", text)
 
 
 def remove_invisible_chars(text: str):
@@ -123,9 +142,8 @@ def remove_repetitive_punc(text: str):
     return text
 
 
-def replace_url(text: str, replace: str = ""):
+def add_space_around_bracket(text: str):
     """
-    Replace any link in string with the placeholder. if the placeholder not provided, the url
-    will be replace with empty string.
+    Add space around open and close bracket.
     """
-    return REPLACE_URL.sub(replace, text)
+    return SPACE_AROUND_BRACKET.sub(r" \1 ", text)

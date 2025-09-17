@@ -2,7 +2,8 @@
 Module for test feature cleaning on commoncrawl data structure.
 """
 import pytest
-from khmer_nlp_toolkits.commoncrawl.feature_cleaning import filter_kh_lng, check_quality_warning, is_adult_url_filter
+from unittest.mock import patch, MagicMock, mock_open
+from khmer_nlp_toolkits.commoncrawl import feature_cleaning as fc
 
 
 @pytest.mark.parametrize('exp_input, exp_output', [
@@ -24,7 +25,7 @@ def test_filter_data_equal_len(exp_input, exp_output):
     """
     clean text data and remove sentences that are not in Khmer
     """
-    output = filter_kh_lng(*exp_input)
+    output = fc.filter_kh_lng(*exp_input)
     assert output == exp_output
 
 
@@ -43,7 +44,7 @@ def test_filter_data_equal_len(exp_input, exp_output):
 )
 def test_filter_data_unequal_len(exp_input, exp_output):
     with pytest.raises(ValueError, match="List is not in equal lenght"):
-        filter_kh_lng(*exp_input)
+        fc.filter_kh_lng(*exp_input)
 
 
 @pytest.mark.parametrize("exp_qua_input, exp_qua_output", [
@@ -95,7 +96,7 @@ def test_check_quality_warning(exp_qua_input, exp_qua_output):
     """
     clean data by check quality warning
     """
-    output = check_quality_warning(*exp_qua_input)
+    output = fc.check_quality_warning(*exp_qua_input)
     assert output == exp_qua_output
 
 
@@ -106,4 +107,28 @@ def test_check_quality_warning(exp_qua_input, exp_qua_output):
     ("https://www.cambopay.com.kh/km-kh/%E1%9E%94%E1%9E%91%E1%9E%96%E1%9E%B7%E1%9E%9F%E1%9F", False)
 ])
 def test_is_adult_url_filter(exp_input, exp_output):
-    assert is_adult_url_filter(exp_input) == exp_output
+    assert fc.is_adult_url_filter(exp_input) == exp_output
+
+
+@pytest.mark.parametrize("exp_in, exp_ret, exp_out", [
+    (["https://t.me", "dedup"], 0,  True),
+    (["https://t.me", "dedup"], 1, False)
+])
+def test_is_url_duplicated(exp_in, exp_ret, exp_out):
+    mock_res = MagicMock()
+    mock_res.returncode = exp_ret
+    with patch("subprocess.run", return_value=mock_res), \
+        patch("builtins.open", mock_open()):
+        assert fc.is_url_duplicated(*exp_in) == exp_out
+
+
+@pytest.mark.parametrize("exp_in, exp_ret, exp_out", [
+    (["https://t.me", "dedup"], 3, False)
+])
+def test_is_url_duplicated_error(exp_in, exp_ret, exp_out):
+    mock_res = MagicMock()
+    mock_res.returncode = exp_ret
+    with patch("subprocess.run", return_value=mock_res) as mock_run, \
+        patch("builtins.open", mock_open()):
+        with pytest.raises(RuntimeError):
+            fc.is_url_duplicated(*exp_in)
