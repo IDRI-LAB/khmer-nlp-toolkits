@@ -7,15 +7,14 @@ This project is aimed to build and assemble all functionality of Natuaral Langua
 - [x] Dynamic insertion pipeline
 - [ ] Text cleanning and normalization
     - [ ] Remove wrong enclosing symbol usage
-    - [ ] Remove hidden space and trimming
-    - [ ] Remove repetitive punctuation and space
-    - [ ] Single space around english word
-    - [ ] Remove emoji
-    - [ ] Remove Spacial Character
-    - [ ] Remove artifact
+    - [x] Remove hidden space and trimming
+    - [x] Remove repetitive punctuation and space
+    - [x] Single space around english word
+    - [x] Remove emoji and Spacial Character (MISC symbol)
+    - [x] Remove artifact 
     - [ ] Unicode order normalization
-- [ ] Number2Text and Text2Number
-- [ ] Word Segmentation
+- [x] Number2Text and Text2Number
+- [ ] Word Segmentation (khmer-nltk)
 - [ ] Sentence Segmentation
 - [ ] Part-of-Speech tagging
 - [ ] Name entity recognition

@@ -47,6 +47,8 @@ def run(data: Union[dict, list], threshold: int = 75, is_dedup: bool = True) -> 
     except KeyError as err:
         raise KeyError("Key ['url'] or ['warc_headers']['warc-target-uri']") from err
     try:
+        if not data["content"]:
+            return None
         cleaned_sents = filter_kh_lng(data['content'], data['metadata']['sentence_identifications'])
         del data['metadata']['sentence_identifications']
         cleaned_sents = check_quality_warning(cleaned_sents, data['metadata']['quality_warnings'], threshold=threshold)
