@@ -1,7 +1,14 @@
 """
 Pipeline class
 """
+import logging
 from typing import Callable, Any
+from collections.abc import Iterator
+
+import queue
+from itertools import islice
+from threading import Thread
+from multiprocessing import Process, Queue, cpu_count, Event
 
 
 class Pipeline:
@@ -13,6 +20,14 @@ class Pipeline:
         self.steps = []
         self.info = []
         self.desc = []
+        # For parallel running
+        self.num_process = []
+        self.queues = []
+        self.processes = []
+        self.count_data = 0
+        self.count_return = 0
+        self.qlogs = []
+        self.qsize = None
 
     def __str__(self):
         description = [
@@ -31,7 +46,7 @@ class Pipeline:
     def __len__(self):
         return len(self.info)
 
-    def add(self, step: Callable, desc: str = None, **step_params):
+    def add(self, step: Callable, num_process: int = 1, is_wrap: bool = False, desc: str = None, **step_params):
         """
         Add a step with its associated parameters.
 
@@ -39,6 +54,10 @@ class Pipeline:
         ----------
         step: Callable
             A function is added to pipeline.
+        is_wrap: bool
+            Set to true to wraped func in loop to execute as a batch. If False the data will pass to function directly.
+            This is use to with run_parallel(). Set False if use with run().
+            Ex: is_wrap=True => [func(obj) for obj in batch]
         **step_params: Any
             Any parameters are accepted by step.
         """
@@ -47,7 +66,9 @@ class Pipeline:
             Wraps any function to add a `.process()` method and includes custom parameters.
             """
             def wrapped(data: Any):
-                return func(data, **step_params)
+                if not is_wrap:
+                    return func(data, **step_params) if data else None
+                return [func(obj, **step_params) if obj else None for obj in data]
 
             wrapped.process = wrapped  # Adds the .process() method
             return wrapped
@@ -56,16 +77,150 @@ class Pipeline:
             raise TypeError(f"{step} is not a valid pipeline step (must be callable)")
         wrapped_step = process_step(step, **step_params)
         self.steps.append(wrapped_step)
+        self.num_process.append(num_process)
         self.info.append({step.__name__: step_params})
         self.desc.append(desc)
 
-    def run(self, data: Any, **kwargs):
+    def run(self, data: Any):
         """
         Pipeline execution function.
         """
         for step in self.steps:
-            data = step.process(data, **kwargs)  # Call .process() with the correct parameters
+            data = step.process(data)  # Call .process() with the correct parameters
         return data
+
+    def get_queue_status(self):
+        """
+        Return a list of queue capacity status at a time of function being called.
+
+        Example:
+        - Pipeline: in_q -> s1 -> q1 -> s2 -> q2 -> s3 -> out_q (4 queue in total)
+        - Result: [10, 10, 9, 0] (qsize=10)
+        """
+        if not self.queues:
+            logging.info("No parallel are running!")
+            return None
+        return [queue.qsize() for queue in self.queues]
+
+    def queue_backpressure(self):
+        """
+        Return a list of average percentage of queue fullness. This func should be call after run_parallel finished.
+        To check queue capacity in real-time, see get_queue_status() function.
+
+        Example
+        =======
+        - Pipeline: in_q -> s1 -> q1 -> s2 -> q2 -> s3 -> out_q (4 queue in total)
+        - Resual: [84.67, 94.67, 96.48, 0.95]
+        - Interpret: Most data Block in queue2 waiting for processed by state3.
+        - Feedback: Consider increase state3 process number to reduce wait time.
+        """
+        if not self.qlogs:
+            logging.info("No record of queue yet!")
+            return None
+        qlogs = [qlog for qlog in self.qlogs if sum(qlog) >= self.qsize]
+        if not qlogs:
+            return [0.0] * len(self.queues)
+        return [round(sum(qlog)/len(qlogs)/self.qsize*100, 2) for qlog in zip(*qlogs)]
+
+    def run_parallel(self, data: list | Iterator, batch_size: int = 100, qsize: int = 10, timeout: int = 10):
+        """
+        Data and State parallel processing function. This function use multiprocesser and threading to execute data
+        in parallel. Each state have a number of process to run independently on prarallel when data are available.
+
+        Parameters
+        ==========
+        data: list|Iterator
+            Data to process. It must be a list or Iterator, since the data are process in chuck of batch_size.
+        batch_size: int
+            Number of data being processed at a time.
+        qsize: int
+            Batch waiting queue capacity. If the queue full, the process corresponding to that queue will be on halt until
+            next state process pickup batch to free queue.
+        timeout: int (second)
+            Time waiting for return data. exceed this the pipeline will stop
+        """
+        self.qsize = qsize
+        try:
+            # check system available
+            logical_cpu = cpu_count()
+            if sum(self.num_process) > logical_cpu:
+                logging.warning("Your machine have %d logical CPUs.", logical_cpu)
+                logging.warning("You have %d process in total that more than \
+                                number of your logical CPUs which could let to performance drop.", sum(self.num_process))
+                if sum(self.num_process) > logical_cpu+int(logical_cpu/2):
+                    raise RuntimeError("You have too many processes. Consider combine a few \
+                                       function together before add to Pipeline.")
+            if not isinstance(data, list) and not isinstance(data, Iterator):
+                raise ValueError("Data is not a List nor Iterator.")
+
+            # Defined inner funciton to assisted
+            def worker(input_queue: Queue, output_queue: Queue, func: Callable):
+                while not stop_event.is_set():
+                    try:
+                        batch = input_queue.get(timeout=timeout)
+                    except queue.Empty:
+                        break
+                    result = func(batch)
+                    output_queue.put(result)
+
+            def data_feeder():
+                first_q = self.queues[0]
+                while not stop_event.is_set():
+                    batch = list(islice(data, batch_size))
+                    if not batch:
+                        break
+                    self.count_data += len(batch)
+                    try:
+                        first_q.put(batch, timeout=timeout+int(timeout/2))
+                    except queue.Full:
+                        logging.warning("Data feeding queue are full and exceed timeout.")
+                        logging.warning("Data feeding process is ended before passing all data.")
+                        break
+
+            stop_event = Event()
+            # Function main logic
+            if not self.queues and not self.processes:
+                # create queues input_q -> p1 -> q1 -> p2 -> output_q
+                self.queues.extend([Queue(maxsize=qsize) for _ in range(len(self.steps)+1)])
+                # create process
+                for i, n_process in enumerate(self.num_process):
+                    self.processes.extend([
+                        Process(
+                            target=worker,
+                            args=(self.queues[i], self.queues[i+1], self.steps[i]),
+                            daemon=True
+                        )
+                        for _ in range(n_process)
+                    ])
+                # start process
+                for process in self.processes:
+                    process.start()
+                feed_thread = Thread(target=data_feeder, daemon=True)
+                feed_thread.start()
+
+            while not stop_event.is_set():
+                try:
+                    batch = self.queues[-1].get(timeout=timeout+int(timeout/2))
+                    self.count_return += len(batch)
+                    self.qlogs.append(self.get_queue_status())
+                    yield batch
+                    if self.count_data == self.count_return:
+                        stop_event.set()
+                except queue.Empty:
+                    logging.warning("No more data are passing while exceed timeout time! Consider Finished!")
+                    logging.warning("Input data and Output data are not equal amount!")
+                    stop_event.set()
+
+        except KeyboardInterrupt:
+            logging.error("Main process interrupted! All parallel process terminated!")
+            for process in self.processes:
+                process.terminate()
+        finally:
+            # cleanup
+            logging.info("Process is done in all state.")
+            feed_thread.join()
+            for process in self.processes:
+                process.join()
 
 
 if __name__ == "__main__":

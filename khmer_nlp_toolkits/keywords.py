@@ -41,3 +41,6 @@ INVISIBLE_CHARS = [
     "\U000E0062",  # TAG LETTER B
     "\U000E006E",  # TAG LETTER N
 ]
+
+# Reference from Khmernltk. However, I remove 2 symbols ("៖", "ៗ") and add new logic in my functions.
+SENTENCE_SEPARATOR = ["◌៓", "។", "៕", "៘", "៙", "៚", "៛", "ៜ", "៝", "?", "!"]
