@@ -9,6 +9,7 @@ import subprocess
 import datetime
 from khmer_nlp_toolkits.pipeline import Pipeline
 from khmer_nlp_toolkits.commoncrawl.document_filtering import document_filtering
+from khmer_nlp_toolkits.text.scrape import clean as scrape_clean
 from khmer_nlp_toolkits.commoncrawl.feature_cleaning import run as clean_cc
 from khmer_nlp_toolkits.text.anonymize import run as anonymise
 from khmer_nlp_toolkits.text.clean import run as clean_text
@@ -16,7 +17,7 @@ from khmer_nlp_toolkits.text.normalize import run as normalization
 
 
 
-def main(in_path, out_path):
+def main():
     """
     Main function to execute the cleaning pipeline on Common Crawl data.
     It initializes the pipeline, reads input data from a JSONL file, processes it,
@@ -54,20 +55,13 @@ def main(in_path, out_path):
     # Pipeline setup
     pipeline = Pipeline()
     pipeline.add(document_filtering, quality_type="High", is_wrap=True)
-    # pipeline.add(clean_cc, is_wrap=True)
-    # pipeline.add(anonymise_obj, is_wrap=True)
-    # pipeline.add(clean_text_obj, is_wrap=True)
-    # pipeline.add(normalize_obj, num_process=15, is_wrap=True)
+    pipeline.add(scrape_clean, is_wrap=True)
+    pipeline.add(clean_cc, is_wrap=True)
+    pipeline.add(anonymise_obj, is_wrap=True)
+    pipeline.add(clean_text_obj, is_wrap=True)
+    pipeline.add(normalize_obj, num_process=15, is_wrap=True)
 
-    # Count line for tqdm
-    lines = subprocess.run(["wc", "-l", in_path], capture_output=True)
-    lines = int(lines.stdout.decode("utf-8").split(" ")[0])
-    # run and save
-    with jsonlines.open(in_path, mode="r") as reader, jsonlines.open(out_path, "w") as writer, tqdm.tqdm(total=lines, desc="Process") as pbar:
-        for batch in pipeline.run_parallel(reader.iter(allow_none=True), qsize=10, batch_size=200):
-            writer.write_all(obj for obj in batch if obj is not None)
-            # print(pipeline.get_queue_status())
-            pbar.update(len(batch))
+    return pipeline
 
 
 if __name__ == "__main__":
@@ -75,16 +69,26 @@ if __name__ == "__main__":
     # Pre and Post Pipeline
     # DATA_SOURCE = "/home/m-psi/heangs/workspace/data/scrape_data"
     DATA_SOURCE = "/home/m-psi/heangs/workspace/data/scrape_data"
-    DATA_DESTINATION = "data/high/raw"
+    DATA_DESTINATION = "data/high/clean"
     os.makedirs(DATA_DESTINATION, exist_ok=True)
-    FILE_NAME = sorted(os.listdir(DATA_SOURCE))[21:]
+    FILE_NAME = sorted(os.listdir(DATA_SOURCE))[4:]
 
     filepaths_source = [os.path.join(DATA_SOURCE, f) for f in FILE_NAME]
     filepaths_destination = [os.path.join(DATA_DESTINATION, f) for f in FILE_NAME]
 
+    pipeline = main()
+
     for source, dest in zip(filepaths_source, filepaths_destination):
         start = datetime.datetime.now()
         print(source)
-        main(source, dest)
+        # Count line for tqdm
+        lines = subprocess.run(["wc", "-l", source], capture_output=True)
+        lines = int(lines.stdout.decode("utf-8").split(" ")[0])
+        # run and save
+        with jsonlines.open(source, mode="r") as reader, jsonlines.open(dest, "w") as writer, tqdm.tqdm(total=lines, desc="Process") as pbar:
+            for batch in pipeline.run_parallel(reader.iter(allow_none=True), qsize=10, batch_size=100, timeout=5):
+                writer.write_all(obj for obj in batch if obj is not None)
+                # print(pipeline.get_queue_status())
+                pbar.update(len(batch))
         end = datetime.datetime.now()
         print(f"Duration: {end - start}")

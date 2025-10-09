@@ -1,6 +1,6 @@
 import re
 from typing import List
-from khmer_nlp_toolkits.keywords import SENTENCE_SEPARATOR
+from khmer_nlp_toolkits.utils.keywords import SENTENCE_SEPARATOR
 
 
 PATTERN = r"(?<=[{}])\s*|(?=\d+ ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))

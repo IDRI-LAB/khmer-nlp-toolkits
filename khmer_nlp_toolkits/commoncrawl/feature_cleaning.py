@@ -1,15 +1,7 @@
 """
 Module for apply feature cleaning on commoncrawl data structure.
 """
-import re
-import jsonlines
-import regex
-from typing import Union, List
-from khmer_nlp_toolkits.text.clean import __kh_strip, count_khmer_char
-from khmer_nlp_toolkits.keywords import ALDULT_KW
-from khmer_nlp_toolkits.commoncrawl.quality_warning import check_quality_warning
-
-
+from typing import List
 
 
 def run(data: dict) -> List[str]:
@@ -35,9 +27,6 @@ def run(data: dict) -> List[str]:
     except KeyError as err:
         raise err
     return data
-
-
-
 
 
 def paragraph_clean(content: str):

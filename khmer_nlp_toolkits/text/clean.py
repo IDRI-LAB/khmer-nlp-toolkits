@@ -4,7 +4,7 @@ Module for text cleaning.
 import re
 import regex
 from unicodedata import category
-from khmer_nlp_toolkits.keywords import INVISIBLE_CHARS
+from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
 
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
@@ -23,12 +23,12 @@ def run(text: str) -> list[str]:
     Main feature to clean text.
 
     Parameter
-    ==========
+    =========
     texts: str
         String of text to be clean.
 
     Return
-    =======
+    ======
         String of text after cleanning.
     """
     text = remove_repetitive_punc(text)
@@ -113,8 +113,6 @@ def __handle_linking_word_num(text: str):
     return HANDLE_LINKING_WORD_NUM.sub(r"\1", text)
 
 
-
-
 def __space_with_number(text: str):
     text = SPACE_ARROUND_NUMBER.sub(r" \1 ", text)
     return text
@@ -161,17 +159,17 @@ def add_space_around_bracket(text: str):
 
 
 def count_khmer_char(sent: str):
-        """
-        Count existing Khmer char in context. It count only character in Khmer unicode block 1780-17FF.
+    """
+    Count existing Khmer char in context. It count only character in Khmer unicode block 1780-17FF.
 
-        Parameters
-        ==========
-        sent: str
-            sentence to check
+    Parameters
+    ==========
+    sent: str
+        sentence to check
 
-        Returns
-        =======
-        int
-            Number of Khmer character.
-        """
-        return len(regex.findall(r"\p{khmer}", sent))
+    Returns
+    =======
+    int
+        Number of Khmer character.
+    """
+    return len(regex.findall(r"\p{khmer}", sent))

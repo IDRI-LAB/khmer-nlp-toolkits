@@ -1,6 +1,7 @@
 """
 Pipeline class
 """
+import time
 import logging
 from typing import Callable, Any
 from collections.abc import Iterator
@@ -8,7 +9,10 @@ from collections.abc import Iterator
 import queue
 from itertools import islice
 from threading import Thread
-from multiprocessing import Process, Queue, cpu_count, Event
+from multiprocessing import Process, Queue, cpu_count, Event, Value
+
+
+logging.basicConfig(level=logging.INFO)
 
 
 class Pipeline:
@@ -24,8 +28,6 @@ class Pipeline:
         self.num_process = []
         self.queues = []
         self.processes = []
-        self.count_data = 0
-        self.count_return = 0
         self.qlogs = []
         self.qsize = None
 
@@ -71,6 +73,7 @@ class Pipeline:
                 return [func(obj, **step_params) if obj else None for obj in data]
 
             wrapped.process = wrapped  # Adds the .process() method
+            wrapped.__name__ = func.__name__
             return wrapped
 
         if not callable(step):
@@ -122,7 +125,7 @@ class Pipeline:
             return [0.0] * len(self.queues)
         return [round(sum(qlog)/len(qlogs)/self.qsize*100, 2) for qlog in zip(*qlogs)]
 
-    def run_parallel(self, data: list | Iterator, batch_size: int = 100, qsize: int = 10, timeout: int = 10):
+    def run_parallel(self, data: list | Iterator, batch_size: int = 100, timeout: int = 30, qsize: int = 10):
         """
         Data and State parallel processing function. This function use multiprocesser and threading to execute data
         in parallel. Each state have a number of process to run independently on prarallel when data are available.
@@ -136,12 +139,18 @@ class Pipeline:
         qsize: int
             Batch waiting queue capacity. If the queue full, the process corresponding to that queue will be on halt until
             next state process pickup batch to free queue.
-        timeout: int (second)
-            Time waiting for return data. exceed this the pipeline will stop
+        timeout: int (second), default = 5s
+            Maximum time to wait (in seconds) for data to be returned from the pipeline.
+            If exceed the timeout, the process will end. This is to prevent logic break of Endless loop.
         """
         self.qsize = qsize
+        count_data_in = 0
+        count_data_out = 0
+        # This is parallel controlling signal
+        stop_event = Event()
+        count_finish_worker = Value('i', 0)
         try:
-            # check system available
+            # check system capacity
             logical_cpu = cpu_count()
             if sum(self.num_process) > logical_cpu:
                 logging.warning("Your machine have %d logical CPUs.", logical_cpu)
@@ -157,27 +166,25 @@ class Pipeline:
             def worker(input_queue: Queue, output_queue: Queue, func: Callable):
                 while not stop_event.is_set():
                     try:
-                        batch = input_queue.get(timeout=timeout)
+                        batch = input_queue.get(timeout=0.2)
                     except queue.Empty:
-                        break
+                        continue
                     result = func(batch)
                     output_queue.put(result)
+                # To count the worker that finish
+                with count_finish_worker.get_lock():  # acquire lock
+                    count_finish_worker.value += 1
 
             def data_feeder():
+                nonlocal count_data_in
                 first_q = self.queues[0]
                 while not stop_event.is_set():
                     batch = list(islice(data, batch_size))
                     if not batch:
                         break
-                    self.count_data += len(batch)
-                    try:
-                        first_q.put(batch, timeout=timeout+int(timeout/2))
-                    except queue.Full:
-                        logging.warning("Data feeding queue are full and exceed timeout.")
-                        logging.warning("Data feeding process is ended before passing all data.")
-                        break
+                    count_data_in += len(batch)
+                    first_q.put(batch)
 
-            stop_event = Event()
             # Function main logic
             if not self.queues and not self.processes:
                 # create queues input_q -> p1 -> q1 -> p2 -> output_q
@@ -193,34 +200,48 @@ class Pipeline:
                         for _ in range(n_process)
                     ])
                 # start process
-                for process in self.processes:
-                    process.start()
                 feed_thread = Thread(target=data_feeder, daemon=True)
                 feed_thread.start()
+                for process in self.processes:
+                    process.start()
 
             while not stop_event.is_set():
                 try:
-                    batch = self.queues[-1].get(timeout=timeout+int(timeout/2))
-                    self.count_return += len(batch)
+                    batch = self.queues[-1].get(timeout=timeout)
+                    count_data_out += len(batch)
                     self.qlogs.append(self.get_queue_status())
                     yield batch
-                    if self.count_data == self.count_return:
+                    if count_data_in == count_data_out:
                         stop_event.set()
                 except queue.Empty:
-                    logging.warning("No more data are passing while exceed timeout time! Consider Finished!")
-                    logging.warning("Input data and Output data are not equal amount!")
+                    print(self.get_queue_status())
+                    logging.warning("End process half way!! Exceed waiting time set by timeout (%ss).", timeout)
+                    logging.warning("==> Consider increase timeout or reduce batch_size.")
                     stop_event.set()
 
         except KeyboardInterrupt:
-            logging.error("Main process interrupted! All parallel process terminated!")
+            logging.error("Main process interrupted... All parallel processes terminated!!")
             for process in self.processes:
                 process.terminate()
         finally:
-            # cleanup
-            logging.info("Process is done in all state.")
+            logging.info("Start cleaning up....")
+            # check and clean process, queue
+            while sum(self.get_queue_status()) != 0 or count_finish_worker.value != sum(self.num_process):
+                for que in self.queues:
+                    while not que.empty():
+                        que.get()
+                time.sleep(0.3)
+            logging.info("Clear all remnant data.... start join process!!!")
+            # end process, queue and release resource
             feed_thread.join()
             for process in self.processes:
                 process.join()
+            for que in self.queues:
+                que.close()
+                que.join_thread()
+            self.queues.clear()
+            self.processes.clear()
+            logging.info("Clean up completed!!")
 
 
 if __name__ == "__main__":

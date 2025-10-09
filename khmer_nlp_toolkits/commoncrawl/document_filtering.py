@@ -1,6 +1,6 @@
 import re
 from typing import Literal
-from khmer_nlp_toolkits.keywords import ALDULT_KW
+from khmer_nlp_toolkits.utils.keywords import ALDULT_KW
 
 
 ADULT_URL_FILTER = re.compile(rf"(?:{'|'.join(re.escape(k) for k in ALDULT_KW)})", re.IGNORECASE)
@@ -40,7 +40,7 @@ def classify_doc_quality(len_parag: int, quality_warning: list):
     - A few article is affected from website sracping structure which is include caption of image (end with ៕)
     in the middle of content.
     """
-    if not quality_warning: 
+    if not quality_warning:
         if len_parag <= 2:
             return "High"
         else:

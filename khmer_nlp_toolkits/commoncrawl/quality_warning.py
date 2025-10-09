@@ -43,7 +43,10 @@ def check_quality_warning(context: str):
     if not len(context):
         None
     result = []
-    if is_tiny(context): result.append("tiny")
-    if is_noisy(context): result.append("noisy")
-    if is_short_sentences(context): result.append("short_sentences")
+    if is_tiny(context):
+        result.append("tiny")
+    if is_noisy(context):
+        result.append("noisy")
+    if is_short_sentences(context):
+        result.append("short_sentences")
     return result if result else None
