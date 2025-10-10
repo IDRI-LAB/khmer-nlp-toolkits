@@ -147,7 +147,8 @@ class Pipeline:
         count_data_in = 0
         count_data_out = 0
         # This is parallel controlling signal
-        stop_event = Event()
+        worker_stop = Event()
+        data_feeder_stop = Event()
         count_finish_worker = Value('i', 0)
         try:
             # check system capacity
@@ -164,7 +165,7 @@ class Pipeline:
 
             # Defined inner funciton to assisted
             def worker(input_queue: Queue, output_queue: Queue, func: Callable):
-                while not stop_event.is_set():
+                while not worker_stop.is_set():
                     try:
                         batch = input_queue.get(timeout=0.2)
                     except queue.Empty:
@@ -178,9 +179,10 @@ class Pipeline:
             def data_feeder():
                 nonlocal count_data_in
                 first_q = self.queues[0]
-                while not stop_event.is_set():
+                while not data_feeder_stop.is_set():
                     batch = list(islice(data, batch_size))
                     if not batch:
+                        data_feeder_stop.set()
                         break
                     count_data_in += len(batch)
                     first_q.put(batch)
@@ -205,18 +207,20 @@ class Pipeline:
                 for process in self.processes:
                     process.start()
 
-            while not stop_event.is_set():
+            while not worker_stop.is_set():
                 try:
                     batch = self.queues[-1].get(timeout=timeout)
                     count_data_out += len(batch)
                     self.qlogs.append(self.get_queue_status())
                     yield batch
-                    if count_data_in == count_data_out:
-                        stop_event.set()
+                    if count_data_in == count_data_out and data_feeder_stop.is_set():
+                        print("equal", count_data_out)
+                        worker_stop.set()
                 except queue.Empty:
                     logging.warning("End process half way!! Exceed waiting time set by timeout (%ss).", timeout)
                     logging.warning("==> Consider increase timeout or reduce batch_size.")
-                    stop_event.set()
+                    worker_stop.set()
+                    data_feeder_stop.set()
 
         except KeyboardInterrupt:
             logging.error("Main process interrupted... All parallel processes terminated!!")
