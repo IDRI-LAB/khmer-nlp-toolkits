@@ -12,7 +12,7 @@ from threading import Thread
 from multiprocessing import Process, Queue, cpu_count, Event, Value
 
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 
 class Pipeline:
@@ -214,7 +214,6 @@ class Pipeline:
                     if count_data_in == count_data_out:
                         stop_event.set()
                 except queue.Empty:
-                    print(self.get_queue_status())
                     logging.warning("End process half way!! Exceed waiting time set by timeout (%ss).", timeout)
                     logging.warning("==> Consider increase timeout or reduce batch_size.")
                     stop_event.set()

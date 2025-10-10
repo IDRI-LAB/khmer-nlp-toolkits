@@ -71,7 +71,7 @@ if __name__ == "__main__":
     DATA_SOURCE = "/home/m-psi/heangs/workspace/data/scrape_data"
     DATA_DESTINATION = "data/high/clean"
     os.makedirs(DATA_DESTINATION, exist_ok=True)
-    FILE_NAME = sorted(os.listdir(DATA_SOURCE))[4:]
+    FILE_NAME = sorted(os.listdir(DATA_SOURCE))
 
     filepaths_source = [os.path.join(DATA_SOURCE, f) for f in FILE_NAME]
     filepaths_destination = [os.path.join(DATA_DESTINATION, f) for f in FILE_NAME]
@@ -86,7 +86,7 @@ if __name__ == "__main__":
         lines = int(lines.stdout.decode("utf-8").split(" ")[0])
         # run and save
         with jsonlines.open(source, mode="r") as reader, jsonlines.open(dest, "w") as writer, tqdm.tqdm(total=lines, desc="Process") as pbar:
-            for batch in pipeline.run_parallel(reader.iter(allow_none=True), qsize=10, batch_size=100, timeout=5):
+            for batch in pipeline.run_parallel(reader.iter(allow_none=True), qsize=10, batch_size=50):
                 writer.write_all(obj for obj in batch if obj is not None)
                 # print(pipeline.get_queue_status())
                 pbar.update(len(batch))

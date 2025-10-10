@@ -173,3 +173,5 @@ cython_debug/
 *.ipynb
 backup*
 dedup
+data
+check
