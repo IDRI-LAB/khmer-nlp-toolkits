@@ -7,6 +7,8 @@ import time
 import jsonlines
 import subprocess
 import datetime
+import logging
+from khmer_nlp_toolkits.utils import get_filepath
 from khmer_nlp_toolkits.pipeline import Pipeline
 from khmer_nlp_toolkits.commoncrawl.document_filtering import document_filtering
 from khmer_nlp_toolkits.text.scrape import clean as scrape_clean
@@ -14,8 +16,10 @@ from khmer_nlp_toolkits.commoncrawl.feature_cleaning import run as clean_cc
 from khmer_nlp_toolkits.text.anonymize import run as anonymise
 from khmer_nlp_toolkits.text.clean import run as clean_text
 from khmer_nlp_toolkits.text.normalize import run as normalization
+from khmernltk import word_tokenize
 
 
+# logging.basicConfig(level=logging.INFO)
 
 def main():
     """
@@ -52,6 +56,11 @@ def main():
         obj["content"] = normalization(obj["content"])
         return obj
 
+    def word_segmentation(obj):
+        words = word_tokenize(obj["content"])
+        obj["content"] = " ".join(word for word in words if word != " ")
+        return obj
+
     # Pipeline setup
     pipeline = Pipeline()
     pipeline.add(document_filtering, quality_type="High", is_wrap=True)
@@ -60,6 +69,7 @@ def main():
     pipeline.add(anonymise_obj, is_wrap=True)
     pipeline.add(clean_text_obj, is_wrap=True)
     pipeline.add(normalize_obj, num_process=15, is_wrap=True)
+    pipeline.add(word_segmentation, is_wrap=True, num_process=15)
 
     return pipeline
 
@@ -68,17 +78,13 @@ if __name__ == "__main__":
 
     # Pre and Post Pipeline
     # DATA_SOURCE = "/home/m-psi/heangs/workspace/data/scrape_data"
-    DATA_SOURCE = "/home/m-psi/heangs/workspace/data/scrape_data"
-    DATA_DESTINATION = "data/high/clean"
-    os.makedirs(DATA_DESTINATION, exist_ok=True)
-    FILE_NAME = sorted(os.listdir(DATA_SOURCE))
-
-    filepaths_source = [os.path.join(DATA_SOURCE, f) for f in FILE_NAME]
-    filepaths_destination = [os.path.join(DATA_DESTINATION, f) for f in FILE_NAME]
+    DATA_SOURCE = "data/high/clean"
+    DATA_DESTINATION = "data/high/segment"
+    filepaths = get_filepath(DATA_SOURCE, DATA_DESTINATION)
 
     pipeline = main()
 
-    for source, dest in zip(filepaths_source, filepaths_destination):
+    for source, dest in filepaths:
         start = datetime.datetime.now()
         print(source)
         # Count line for tqdm

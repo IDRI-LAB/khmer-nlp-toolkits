@@ -12,11 +12,13 @@ OLD_HASH = set()
 NEW_HASH = set()
 
 
-def run(batch_data):
+def url_dedup(batch_data):
     batch = []
     for obj in batch_data:
         url = obj["url"] if obj.get("url", False) else obj["warc_headers"]["warc-target-uri"]
-        if not is_url_duplicate(url):
+        is_dup, hash_val = is_url_duplicate(url=url, rt_hash=True)
+        if not is_dup:
+            obj["id"] = hash_val
             batch.append(obj)
         else:
             batch.append(None)
@@ -54,13 +56,13 @@ def write_hash_file(path=HASH_FILE):
 
 def url_hashing(url: str):
     """
-    Hashing URL for comparison with sha256.
+    Hashing URL for comparison with md5.
     """
     url = url.removeprefix("https://").removeprefix("http://").removeprefix("www.")
-    return hashlib.sha256(url.encode('utf-8')).hexdigest()
+    return hashlib.md5(url.encode('utf-8')).hexdigest()
 
 
-def is_url_duplicate(url: str):
+def is_url_duplicate(url: str, rt_hash: bool = False):
     """
     Duplication check function. If URL was seen before, it will return True and vise versa.
     You have to call write_hash_file() after finish running to save record for later dedup or else it will be one time dedup.
@@ -74,9 +76,9 @@ def is_url_duplicate(url: str):
     hash_val = url_hashing(url)
     with THREAD_LOCK:
         if hash_val in OLD_HASH or hash_val in NEW_HASH:
-            return True
+            return True if not rt_hash else (True, hash_val)
         NEW_HASH.add(hash_val)
-    return False
+    return False if not rt_hash else (False, hash_val)
 
 
 if __name__ == "__main__":

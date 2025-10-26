@@ -214,7 +214,6 @@ class Pipeline:
                     self.qlogs.append(self.get_queue_status())
                     yield batch
                     if count_data_in == count_data_out and data_feeder_stop.is_set():
-                        print("equal", count_data_out)
                         worker_stop.set()
                 except queue.Empty:
                     logging.warning("End process half way!! Exceed waiting time set by timeout (%ss).", timeout)
