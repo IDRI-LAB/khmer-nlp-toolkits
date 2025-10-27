@@ -7,7 +7,7 @@ import threading
 
 
 THREAD_LOCK = threading.Lock()
-HASH_FILE = "cache/seen_url.txt"
+HASH_FILE = ".cache/seen_url.txt"
 OLD_HASH = set()
 NEW_HASH = set()
 

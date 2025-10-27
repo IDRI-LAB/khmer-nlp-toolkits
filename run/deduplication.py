@@ -1,9 +1,11 @@
+import __init__
 import datetime
 import jsonlines
+from multiprocessing.pool import Pool
+
 from khmer_nlp_toolkits.utils import get_filepath
 from khmer_nlp_toolkits.deduplicate.document_dedup import LSHashing, simhash_fingerprint, verify_edit_dist
 from khmer_nlp_toolkits.utils import lazy_read_jsonl
-from multiprocessing.pool import Pool
 
 
 def lsh_worker(filepath):
