@@ -8,9 +8,11 @@ URL_PATTERN = re.compile(
     re.IGNORECASE
 )
 EMAIL_PATTERN = re.compile(r'[A-Za-z0-9\.\_\%\+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}')
+TEL_PATTERN = re.compile(r"(\+[\d \-]{8,20}\d)|(0[0-9 \-]{7, 20}\d)")
 
 
-def run(text):
+
+def anonymizer(text):
     """
     Main feature for anonymize data such as entity or identities.
 
@@ -26,8 +28,9 @@ def run(text):
     str
         String after anonymize.
     """
+    text = replace_email(text)  # must be email before url
     text = replace_url(text)
-    text = replace_email(text)
+    text = replace_tel(text)
     # PII Removal
     return text
 
@@ -41,7 +44,8 @@ def replace_url(text: str, replace: str = "[URL]"):
 
 
 def replace_tel(text: str, replace: str = "[TEL]"):
-    pass
+    return TEL_PATTERN.sub(replace, text)
+
 
 
 def replace_email(text: str, replace: str = "[EMAIL]"):

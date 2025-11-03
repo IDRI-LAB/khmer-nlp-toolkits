@@ -1,10 +1,11 @@
 import os
+import tqdm
 import subprocess
 import jsonlines
 
 
 def get_filepath(source: str, destination: str = None):
-    filenames = sorted(os.listdir(source))
+    filenames = sorted([entry.name for entry in os.scandir(source) if entry.is_file()])
     if destination:
         os.makedirs(destination, exist_ok=True)
         return [(os.path.join(source, name), os.path.join(destination, name)) for name in filenames]
@@ -17,14 +18,21 @@ def count_file_line(filepath: str):
     return lines
 
 
-def lazy_read_jsonl(filepath, allow_none=True):
+def lazy_read_jsonl(filepath, allow_none=True, limit: int = None, show_progress: bool = False):
     class LazyReadJsonl:
         def __init__(self, filepath):
             self.index = -1
             self.length = count_file_line(filepath)
+            if limit is not None and self.length > limit:
+                self.length = limit
             def data_generator():
                 with jsonlines.open(filepath, "r") as reader:
-                    for data in reader.iter(allow_none=allow_none):
+                    iterator = reader.iter(allow_none=allow_none)
+                    if show_progress:
+                        iterator = tqdm.tqdm(iterator, total=self.length, desc="Reading", mininterval=0.2)
+                    for data in iterator:
+                        if self.index == limit:
+                            break
                         yield data
             self.generator = data_generator()
 

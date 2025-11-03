@@ -4,7 +4,10 @@ This module is for cleaning specific spider. This function should be use before 
 import re
 
 
-def clean(obj):
+AKP = re.compile(r"[(akp)|(kp)]?.{0,20}ថ្ងៃ.{0,30}?\d{3,4}[\u200b\ \n\-\+\–\—\_]{0,5}", re.IGNORECASE|re.DOTALL)
+
+
+def scrape_cleaner(obj):
     obj["metadata"]["more"] = []
     # special target website
     if obj["metadata"]["spider_name"] == "ipdefenseforum":
@@ -21,8 +24,8 @@ def clean(obj):
     elif obj["metadata"]["spider_name"] == "bizkhmer":
         obj["content"] = re.sub(r"\[caption.*?caption\]", "", obj["content"], flags=re.DOTALL)
     elif obj["metadata"]["spider_name"] == "akp":
-        texts = re.split(r"[-+–]{1,2}", obj["content"], maxsplit=1)
-        if len(texts) > 1 and len(texts[0]) < 70:
+        texts = AKP.split(obj["content"], maxsplit=1)
+        if len(texts) > 1 and len(texts[0]) < 50:
             obj["metadata"]["more"].append(texts[0])
             obj["content"] = texts[1]
     elif obj["metadata"]["spider_name"] == "khmerload":
@@ -41,7 +44,7 @@ def clean(obj):
         obj["content"] = "\n".join(content)
 
     # check beginning of content
-    texts = re.split(r'៖|:', obj["content"], maxsplit=1)
+    texts = re.split(r'[\៖\:]', obj["content"], maxsplit=1)
     if len(texts[0]) < 50:
         obj["metadata"]["more"].append(texts[0])
         obj["content"] = texts[1]

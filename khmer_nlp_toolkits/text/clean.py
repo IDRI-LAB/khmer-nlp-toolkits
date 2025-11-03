@@ -1,8 +1,13 @@
 """
 Module for text cleaning.
+
+# Thing solve by ftfy.fix_text
+# remove few hidden space and Control Unicode
+# all quote ' " ‘ ’ “ ” ‚ „ ‛ ‟ -> '" respectively, except ′ (prime) ″ (Double prime) using for unit or in math
 """
 import re
 import regex
+from ftfy import fix_text
 from unicodedata import category
 from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
 
@@ -12,13 +17,20 @@ SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}\.\,0-9]{2,})')
 SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
-APOSTROPHE = re.compile(r"([^ ])’([^ ])")
 SPACE_AROUND_BRACKET = re.compile(r'([\(\)\[\]\{\}\<\>«»‹›])')
 HANDLE_LINKING_WORD_NUM = re.compile(r"(?<![\-\_]) *([\-\_]) *(?![\-\_])")
 SPACE_ARROUND_NUMBER = re.compile(r"(\d+([\.\,\-\_]?\d*)+)")
+FILTER_CHAR_TYPE = [
+    "Cf", "Cn", "Co", "Cs",
+    "So", "Sk",
+    "Mn", "Me", "Ms",
+    "Lm"
+]
+CHAR_INCLUDE = [(0x0000, 0x00bb), (0x1780, 0x17FF), (0x0370, 0x03FF)]  # Basic latin + latin1-supplement, khmer, greek (for unit)
+EXCEPTION_SET = {chr(cp) for start, end in CHAR_INCLUDE for cp in range(start, end + 1)}
 
 
-def run(text: str) -> list[str]:
+def text_cleaner(text: str) -> list[str]:
     """
     Main feature to clean text.
 
@@ -31,22 +43,15 @@ def run(text: str) -> list[str]:
     ======
         String of text after cleanning.
     """
+    text = text.replace("&nbsp;", " ")
+    text = re.sub(r"[\u2010-\u2015]", "-", text)
+    text = remove_invisible_chars(text)
+    text = fix_text(text, normalization="NFKD")
     text = remove_repetitive_punc(text)
-    # text = handle_apostrophe(text)    # no need to handle
     text = add_space_around_bracket(text)
-    # feature clean.enclosing_symbol_consistency
     text = remove_misc_symbols(text)
     text = space_handler(text)
-    text = remove_invisible_chars(text)
     return text
-
-
-def handle_apostrophe(text: str):
-    """
-    Change misuse of right single quote to apostrophe.
-    Ex: Musée de l’Orangerie -> Musée de l'Orangerie
-    """
-    return APOSTROPHE.sub(r"\1'\2", text)
 
 
 def remove_invisible_chars(text: str):
@@ -61,6 +66,7 @@ def space_handler(text: str):
     Handle space cleaning and manipulation for khmer text.
     """
     text = text.replace("\u200b", "")
+    text = text.replace("\n", "")
     text = __space_after_punc(text, clean=False)
     text = __space_between_km(text, clean=False)
     text = __space_with_number(text)
@@ -121,22 +127,26 @@ def __space_with_number(text: str):
 def remove_misc_symbols(text: str):
     """
     This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji)
-    that are classify by unicodedata (So). Unicodedata category symbol character into 4 types
+    that are classify by unicodedata (So & Sk). Unicodedata categorize symbol character into 4 types
     such as Math (Sm), Currency (Sc), Modifier (Sk), other (So).
 
     Return
     ------
-    str
+    text: str
         String without emoji and symbol emoji.
+    exception: str
+        Unicode character that will not remove.
+        Usage: "abc" => character a, b, c will not remove.
+
+    Noted
+    -----
+    In khmer character unicdoe range 1780-17FF (Khmer), There are no 'Sk'. And 19E0-19FF (Khmer Symbol) are 'So'.
+    Character type: https://www.fileformat.info/info/unicode/category/index.htm
     """
     if not isinstance(text, str):
         raise TypeError("Accept only string.")
-    text = text.replace("&nbsp;", " ")
-    text = text.replace("&gt;", ">")
-    text = text.replace("&lt;", "<")
-    text = text.replace("&amp;", "&")
     text = VARIATION_SELECTORS.sub("", text)
-    text = [char for char in text if category(char) != "So"]
+    text = [char for char in text if char in EXCEPTION_SET or category(char) not in FILTER_CHAR_TYPE]
     return __kh_strip("".join(text))
 
 

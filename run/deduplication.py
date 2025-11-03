@@ -8,15 +8,24 @@ from khmer_nlp_toolkits.deduplicate.document_dedup import LSHashing, simhash_fin
 from khmer_nlp_toolkits.utils import lazy_read_jsonl
 
 
-def lsh_worker(filepath):
-    print(filepath)
+def lsh_worker(batch):
     temp_lsh = LSHashing(64, 8)
-    for obj in lazy_read_jsonl(filepath):
+    for obj in batch:
         if not obj:
             continue
         temp_lsh.indexing(simhash_fingerprint(obj["content"]), obj["id"])
     return temp_lsh
 
+
+def data_parser(filepath: str, n_batch=1000):
+    batch = []
+    for obj in lazy_read_jsonl(filepath, show_progress=True):
+        if not obj:
+            continue
+        batch.append(obj)
+        if len(batch) == n_batch:
+            yield batch
+            batch = []
 
 # Varible
 DATA_DIR = "data/high/segment"
@@ -29,7 +38,7 @@ filepaths = get_filepath(DATA_DIR)
 # Parallel indexing
 start = datetime.datetime.now()
 with Pool(processes=25) as pool:
-    for temp_lsh in pool.imap_unordered(lsh_worker, filepaths):
+    for temp_lsh in pool.imap_unordered(lsh_worker, data_parser(filepaths[0])):
         lsh.combine_lsh(temp_lsh)
 end = datetime.datetime.now()
 print(f"Indexing time = {end-start}")
