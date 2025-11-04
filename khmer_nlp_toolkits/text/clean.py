@@ -67,6 +67,7 @@ def space_handler(text: str):
     """
     text = text.replace("\u200b", "")
     text = text.replace("\n", "")
+    text = text.replace("\t", " ")
     text = __space_after_punc(text, clean=False)
     text = __space_between_km(text, clean=False)
     text = __space_with_number(text)

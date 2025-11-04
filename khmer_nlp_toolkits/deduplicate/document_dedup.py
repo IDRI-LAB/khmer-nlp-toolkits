@@ -219,7 +219,6 @@ def verify_edit_dist(pair_path: str, datapath: str, save_file:str=None, threshol
                 continue
             if obj["id"] in unique_key:
                 db[obj["id"]] = {
-                    "spider_name": obj["metadata"]["spider_name"],
                     "url": obj["url"],
                     "content": obj["content"]
                 }

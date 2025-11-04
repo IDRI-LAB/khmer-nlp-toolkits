@@ -64,7 +64,7 @@ print(f"Verify pair time = {end-start}")
 
 # remove dup data
 start = datetime.datetime.now()
-filepaths = get_filepath("data/high/segment", "data/high/doc_dedup")
+filepaths = get_filepath("data/high/segment", "data/high/dedup")
 for src, des in filepaths:
     with jsonlines.open(des, "w") as writer:
         for obj in lazy_read_jsonl(src):
