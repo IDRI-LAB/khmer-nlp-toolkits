@@ -44,3 +44,11 @@ def paragraph_segment(text: str) -> List[str]:
     if "" in paragraphs:
         return [para for para in paragraphs if para]
     return paragraphs
+
+
+def word_segment(text: str):
+    """
+    khmer-nltk word tokenizer function called.
+    """
+    # remove log from khmernltk
+    pass

@@ -14,7 +14,7 @@ from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
 SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}\.\,0-9]{2,})')
-SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:]+)")
+SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:,\.\-\_]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
 SPACE_AROUND_BRACKET = re.compile(r'([\(\)\[\]\{\}\<\>«»‹›])')
@@ -26,7 +26,7 @@ FILTER_CHAR_TYPE = [
     "Mn", "Me", "Ms",
     "Lm"
 ]
-CHAR_INCLUDE = [(0x0000, 0x00bb), (0x1780, 0x17FF), (0x0370, 0x03FF)]  # Basic latin + latin1-supplement, khmer, greek (for unit)
+CHAR_INCLUDE = [(0x0020, 0x007E), (0x00A1, 0x00BB), (0x1780, 0x17FF), (0x0370, 0x03FF)]  # Basic latin + latin1-supplement, khmer, greek (for unit)
 EXCEPTION_SET = {chr(cp) for start, end in CHAR_INCLUDE for cp in range(start, end + 1)}
 
 
@@ -43,13 +43,13 @@ def text_cleaner(text: str) -> list[str]:
     ======
         String of text after cleanning.
     """
-    text = text.replace("&nbsp;", " ")
-    text = re.sub(r"[\u2010-\u2015]", "-", text)
     text = remove_invisible_chars(text)
+    text = replace_by_space(text)
+    text = re.sub(r"[\u2010-\u2015]", "-", text)
     text = fix_text(text, normalization="NFKD")
+    text = remove_misc_symbols(text)
     text = remove_repetitive_punc(text)
     text = add_space_around_bracket(text)
-    text = remove_misc_symbols(text)
     text = space_handler(text)
     return text
 
@@ -65,16 +65,20 @@ def space_handler(text: str):
     """
     Handle space cleaning and manipulation for khmer text.
     """
-    text = text.replace("\u200b", "")
-    text = text.replace("\n", "")
-    text = text.replace("\t", " ")
     text = __space_after_punc(text, clean=False)
     text = __space_between_km(text, clean=False)
     text = __space_with_number(text)
-    text = __handle_linking_word_num(text)
+    # text = __handle_linking_word_num(text)
     text = __remove_repitive_whitespace(text)
     text = __kh_strip(text)
     return text
+
+
+def replace_by_space(text: str):
+    """
+    Replace \s and &nbsp; to a space.
+    """
+    return re.sub(r"\s|&nbsp;", " ", text)
 
 
 def __kh_strip(text: str):
@@ -106,8 +110,8 @@ def __space_after_punc(text: str, clean: bool = True):
     """
     # Can not check look ahead with regex, so use replace to work around instead.
     if not clean:
-        return SPACE_AFTER_PUNC.sub(r"\1 ", text)
-    return SPACE_AFTER_PUNC.sub(r"\1 ", text).replace("  ", " ").strip()
+        return SPACE_AFTER_PUNC.sub(r" \1 ", text)
+    return SPACE_AFTER_PUNC.sub(r" \1 ", text).replace("  ", " ").strip()
 
 
 def __handle_linking_word_num(text: str):
@@ -156,9 +160,9 @@ def remove_repetitive_punc(text: str):
     Replace consecutive mixed punctuation with only one occurrence of each.
     """
     # First, we find groups of punctuation and replace them.
-    text = re.sub(r'([!?.,:;])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
+    text = re.sub(r'([!?.,:;\-\=\*\'\"])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
     # Then, remove extra punctuation if there are multiple distinct ones
-    text = re.sub(r'([!?.,:;])\1*([!?.,:;])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
+    text = re.sub(r'([!?.,:;\-\=\*\'\"])\1*([!?.,:;\-\=\*\'\"])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
     return text
 
 

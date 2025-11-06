@@ -1,4 +1,5 @@
 import re
+from khmer_nlp_toolkits.text.clean import remove_invisible_chars
 
 
 URL_PATTERN = re.compile(
@@ -12,7 +13,7 @@ TEL_PATTERN = re.compile(r"(\+[\d \-]{8,20}\d)|(0[0-9 \-]{7, 20}\d)")
 
 
 
-def anonymizer(text):
+def anonymizer(text: str):
     """
     Main feature for anonymize data such as entity or identities.
 
@@ -28,6 +29,7 @@ def anonymizer(text):
     str
         String after anonymize.
     """
+    text = remove_invisible_chars(text)
     text = replace_email(text)  # must be email before url
     text = replace_url(text)
     text = replace_tel(text)
@@ -40,16 +42,16 @@ def replace_url(text: str, replace: str = "[URL]"):
     Replace any link in string with the placeholder. if the placeholder not provided, the url
     will be replace with empty string.
     """
-    return URL_PATTERN.sub(replace, text)
+    return URL_PATTERN.sub(f" {replace} ", text)
 
 
 def replace_tel(text: str, replace: str = "[TEL]"):
-    return TEL_PATTERN.sub(replace, text)
+    return TEL_PATTERN.sub(f" {replace} ", text)
 
 
 
-def replace_email(text: str, replace: str = "[EMAIL]"):
-    return EMAIL_PATTERN.sub(replace, text)
+def replace_email(text: str, replace: str = "[EML]"):
+    return EMAIL_PATTERN.sub(f" {replace} ", text)
 
 
 if __name__ == "__main__":

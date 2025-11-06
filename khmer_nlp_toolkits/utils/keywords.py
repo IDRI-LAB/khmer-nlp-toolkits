@@ -33,7 +33,7 @@ INVISIBLE_CHARS = [
     "\u200D",  # ZERO WIDTH JOINER
     "\u180E",  # MONGOLIAN VOWEL SEPARATOR
     "\u2061",  # FUNCTION APPLICATION
-    "\u00a0",  # Unicode non-breaking space (NBSP)
+    # "\u00a0",  # Unicode non-breaking space (NBSP) # This are space that needed to convert to \u0020 (apply in clean.replace_by_space, it is part of \s)
     "\U000E007F",  # CANCEL TAG
     "\U000E0067",  # TAG LETTER G
     "\U000E0065",  # TAG LETTER E
