@@ -14,7 +14,7 @@ from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
 
 REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
 SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}\.\,0-9]{2,})')
-SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:,\.\-\_]+)")
+SPACE_AFTER_PUNC = re.compile(r"([%៖។៕!?;:,#\.\-\_\/\\]+)")
 VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
 INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
 SPACE_AROUND_BRACKET = re.compile(r'([\(\)\[\]\{\}\<\>«»‹›])')
@@ -160,9 +160,9 @@ def remove_repetitive_punc(text: str):
     Replace consecutive mixed punctuation with only one occurrence of each.
     """
     # First, we find groups of punctuation and replace them.
-    text = re.sub(r'([!?.,:;\-\=\*\'\"])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
+    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
     # Then, remove extra punctuation if there are multiple distinct ones
-    text = re.sub(r'([!?.,:;\-\=\*\'\"])\1*([!?.,:;\-\=\*\'\"])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
+    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1*([!?.,:;\_\-\=\*\'\"])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
     return text
 
 

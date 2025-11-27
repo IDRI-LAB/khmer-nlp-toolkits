@@ -214,7 +214,7 @@ def verify_edit_dist(pair_path: str, datapath: str, save_file:str=None, threshol
     db = LMDBDict(DB_CACHE, "w")
     filepaths = get_filepath(datapath)
     for filepath in filepaths:
-        for obj in lazy_read_jsonl(filepath):
+        for obj in lazy_read_jsonl(filepath, show_progress=True):
             if not obj:
                 continue
             if obj["id"] in unique_key:

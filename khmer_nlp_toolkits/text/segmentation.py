@@ -48,7 +48,8 @@ def paragraph_segment(text: str) -> List[str]:
 
 def word_segment(text: str):
     """
-    khmer-nltk word tokenizer function called.
+    word tokenizer function called.
     """
-    # remove log from khmernltk
+    # Could be from khmer-nltk (remove log from khmernltk)
+    # Or cadt-segment (download and keep in segment dir in first level of project)
     pass

@@ -56,18 +56,24 @@ print(f"Get pair time = {end-start}")
 start = datetime.datetime.now()
 removal = verify_edit_dist(
     pair_path=".cache/dup_pairs.txt",
-    datapath="data/high/segment"
+    datapath="data/high/segment_com"
 )
 end = datetime.datetime.now()
 print(f"Verify pair time = {end-start}")
 
 
+with open("to_remove.txt", 'w') as file:
+    file.write("\n".join(removal))
+
+# with open("to_remove.txt", "r") as file:
+#     removal = set(map(str.strip, file.readlines()))
+
 # remove dup data
 start = datetime.datetime.now()
-filepaths = get_filepath("data/high/segment", "data/high/dedup")
+filepaths = get_filepath("data/high/lang_mask", "data/high/dedup_noseg")
 for src, des in filepaths:
     with jsonlines.open(des, "w") as writer:
-        for obj in lazy_read_jsonl(src):
+        for obj in lazy_read_jsonl(src, show_progress=True):
             if obj is None:
                 continue
             if obj["id"] in removal:

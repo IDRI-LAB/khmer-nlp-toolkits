@@ -3,7 +3,7 @@ Pipeline class
 """
 import time
 import logging
-from typing import Callable, Any
+from typing import Callable, Any, Union
 from collections.abc import Iterator
 
 import queue
@@ -125,7 +125,7 @@ class Pipeline:
             return [0.0] * len(self.queues)
         return [round(sum(qlog)/len(qlogs)/self.qsize*100, 2) for qlog in zip(*qlogs)]
 
-    def run_parallel(self, data: list | Iterator, batch_size: int = 100, timeout: int = 30, qsize: int = 10):
+    def run_parallel(self, data: Union[list, Iterator], batch_size: int = 100, timeout: int = 30, qsize: int = 10):
         """
         Data and State parallel processing function. This function use multiprocesser and threading to execute data
         in parallel. Each state have a number of process to run independently on prarallel when data are available.
