@@ -18,7 +18,7 @@ from khmer_nlp_toolkits.text.normalize import nomalizer
 from khmer_nlp_toolkits.text.mask_lang import lang_masking
 from khmernltk import word_tokenize
 from segment import Tokenizer
-tokenizer = Tokenizer("model/model.bin")
+tokenizer = Tokenizer("segment/model/morpheme_model.bin")
 
 # logging.basicConfig(level=logging.INFO)
 
