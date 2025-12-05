@@ -16,9 +16,7 @@ from khmer_nlp_toolkits.text.anonymize import anonymizer
 from khmer_nlp_toolkits.text.clean import text_cleaner
 from khmer_nlp_toolkits.text.normalize import nomalizer
 from khmer_nlp_toolkits.text.mask_lang import lang_masking
-from khmernltk import word_tokenize
-from segment import Tokenizer
-tokenizer = Tokenizer("segment/model/morpheme_model.bin")
+from khmer_nlp_toolkits.text.segmentation import word_segment
 
 # logging.basicConfig(level=logging.INFO)
 
@@ -59,13 +57,12 @@ def main():
         obj["content"] = nomalizer(obj["content"])
         return obj
 
-    def word_segmentation(obj):
-        words = word_tokenize(obj["content"])
-        obj["content"] = " ".join(word for word in words if word != " ")
+    def word_segmentation_compound(obj):
+        obj["content"] = word_segment(obj["content"], "com")
         return obj
 
     def word_segmentation_morpheme(obj):
-        obj["content"] = tokenizer.tokenize(obj["content"])
+        obj["content"] = word_segment(obj["content"], "mor")
         return obj
 
     def obj_lang_masking(obj):

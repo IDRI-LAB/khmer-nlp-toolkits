@@ -1,9 +1,12 @@
 import re
-from typing import List
+from typing import List, Literal
 from khmer_nlp_toolkits.utils.keywords import SENTENCE_SEPARATOR
+from khmer_nlp_toolkits.utils.segment import Tokenizer
+from khmernltk import word_tokenize
 
 
 PATTERN = r"(?<=[{}])\s*|(?=\d+ ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))
+tokenizer = Tokenizer("khmer_nlp_toolkits/utils/segment/model/morpheme_model.bin")
 
 
 def sentence_segment(text: str) -> List[str]:
@@ -46,10 +49,13 @@ def paragraph_segment(text: str) -> List[str]:
     return paragraphs
 
 
-def word_segment(text: str):
+def word_segment(text: str, word_type: Literal["com", "mor"] = "com"):
     """
     word tokenizer function called.
     """
     # Could be from khmer-nltk (remove log from khmernltk)
     # Or cadt-segment (download and keep in segment dir in first level of project)
-    pass
+    if word_type == "mor":
+        return tokenizer.tokenize(text)
+    words = word_tokenize(text)
+    return " ".join(word for word in words if word != " ")

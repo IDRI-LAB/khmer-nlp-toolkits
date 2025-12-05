@@ -1,7 +1,7 @@
 import pickle
 import re
 
-from segment import get_char_type, sent2features, UNKNOWN, ZERO_WIDTH_SPACE, NUMBER
+from khmer_nlp_toolkits.utils.segment import get_char_type, sent2features, UNKNOWN, ZERO_WIDTH_SPACE, NUMBER
 
 
 class Tokenizer(object):
