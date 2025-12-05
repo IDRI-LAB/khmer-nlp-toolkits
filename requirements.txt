@@ -3,3 +3,4 @@ regex==2024.11.6
 jsonlines==4.0.0
 ftfy==6.2.3
 tqdm==4.67.1
+dotenv==0.9.9
