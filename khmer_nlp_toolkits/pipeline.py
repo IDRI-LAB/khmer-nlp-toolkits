@@ -154,9 +154,11 @@ class Pipeline:
             # check system capacity
             logical_cpu = cpu_count()
             if sum(self.num_process) > logical_cpu:
+                logging.warning("====================================================")
                 logging.warning("Your machine have %d logical CPUs.", logical_cpu)
-                logging.warning("You have %d process in total that more than \
-                                number of your logical CPUs which could let to performance drop.", sum(self.num_process))
+                logging.warning("You setup %d processes in total that is more than number of your logical CPUs.", sum(self.num_process))
+                logging.warning("This could lead to performance drop, stuck or crash (CPU overload).")
+                logging.warning("====================================================")
                 if sum(self.num_process) > logical_cpu+int(logical_cpu/2):
                     raise RuntimeError("You have too many processes. Consider combine a few \
                                        function together before add to Pipeline.")
