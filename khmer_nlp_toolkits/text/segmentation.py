@@ -5,7 +5,7 @@ from khmer_nlp_toolkits.utils.segment import Tokenizer
 from khmernltk import word_tokenize
 
 
-PATTERN = r"(?<=[{}])\s*|(?=\d+ ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))
+PATTERN = r"(?<=[{}])\s*|(?=\b\d{{1,3}} ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))
 tokenizer = Tokenizer("khmer_nlp_toolkits/utils/segment/model/morpheme_model.bin")
 
 
