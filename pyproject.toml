@@ -21,4 +21,6 @@ packages = { find = { } }
 include-package-data = true
 
 [tool.setuptools.package-data]
-khmer_nlp_toolkits = ["utils/segment/model/*.bin"]
+khmer_nlp_toolkits = [
+    "**/*.bin"
+]
