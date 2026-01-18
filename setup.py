@@ -7,7 +7,7 @@ setup(
     include_package_data=True,
     package_data={
         "khmer_nlp_toolkits": [
-            "khmer_nlp_toolkits/utils/segment/model/*.bin"
+            "utils/segment/model/*.bin"
         ],
     },
 
