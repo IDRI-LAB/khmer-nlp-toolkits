@@ -162,9 +162,9 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         gen_text = generate_text_style(num_str[:frac_index], style)
         gen_text.append(["ចុច"])
         zero_count = 0
-        for n in num_str[frac_index+1:]: 
+        for n in num_str[frac_index+1:]:
             if n == "0":
-                zero_count+=1
+                zero_count += 1
         gen_text.append(["សូន្យ"] * zero_count)
         gen_text.extend(generate_text_style(num_str[frac_index+1+zero_count:], style))
         gen_text = [text for i in gen_text for text in i]
@@ -172,10 +172,10 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
             return gen_text
         return "".join(gen_text)
 
+
 if __name__ == "__main__":
-    print(num2text(0.005023456786,"3", is_split=True))
+    print(num2text(0.005023456786, "3", is_split=True))
     print(num2text(0.005023456786, is_split=True))
-    print(num2text(5023456786,"3", is_split=True))
+    print(num2text(5023456786, "3", is_split=True))
     print(num2text(5023456786, is_split=True))
     print(num2text(1_102_006_200_054, "3"))
-
