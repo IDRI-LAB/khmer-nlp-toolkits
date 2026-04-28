@@ -50,7 +50,7 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         The style of reading number that will use to convert to text.
         "normal" mean read number one digit at a time with their value range.
         Ex: 100123 => "មួយសែនមួយរយម្ភៃបី"
-        "3" mean read number 3 digit at a time (read in thousand).
+        "3" mean read number 3 digit at a time (read in thousand mode).
         Ex: 100123 => "មួយរយពាន់មួយរយម្ភៃបី"
     is_split: bool, default=False
         If True, the return will be a list of text in each digit.
@@ -65,10 +65,12 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         raise ValueError(f"style must be one of ['normal', '3'] but given {style}")
 
     def generate_text_style(num_str, style: str):
-
+        """
+        Reading style handler.
+        """
         def split_num_str(num_str: list):
             # find num of bucket
-            buc_threshold = sorted([10000, 12, 9, 6, 4, 0], reverse=True)
+            buc_threshold = sorted([10000, 12, 9, 6, 3, 0], reverse=True)
             group_num_str = []
             for maxv, minv in zip(buc_threshold[:-1], buc_threshold[1:]):
                 group_num_str.append([num for num in num_str if minv < len(num) <= maxv])
@@ -82,27 +84,27 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
                     if len(group) == 0:
                         continue
                     if len(group[0]) >= 13:
-                        text.append(generate_text_normal([str(int(int(num)/10**12)) for num in group]))
+                        text.append(generate_text_normal([num[:-12] for num in group]))
                         text.append([DIGIT_LEVEL[13]])
                     elif len(group[0]) >= 10:
-                        text.append(generate_text_normal([str(int(int(num)/10**9)) for num in group]))
+                        text.append(generate_text_normal([num[:-9] for num in group]))
                         text.append([DIGIT_LEVEL[10]])
                     elif len(group[0]) >= 7:
-                        text.append(generate_text_normal([str(int(int(num)/10**6)) for num in group]))
+                        text.append(generate_text_normal([num[:-6] for num in group]))
                         text.append([DIGIT_LEVEL[7]])
                     elif len(group[0]) >= 4 and style == "3":
-                        text.append(generate_text_normal([str(int(int(num)/10**3)) for num in group]))
+                        text.append(generate_text_normal([num[:-3] for num in group]))
                         text.append([DIGIT_LEVEL[4]])
                     else:
                         text.append(generate_text_normal(group))
             return text
-            # elif style == "3":
-            #     grouped_num_str = split_num_str(num_str, 3)
-            #     pass
 
         return generate(num_str, style)
 
     def generate_text_normal(num_str):
+        """
+        Generate number to text.
+        """
         text = []
         for ele in num_str:
             if ele == ".":
@@ -112,7 +114,7 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
             elif len(ele) == 2:
                 text.append(TWO_DIGITS[ele[0]])
             else:
-                text.append(ONE_DIGIT[ele[0]] + DIGIT_LEVEL[len(ele)])
+                text.extend([ONE_DIGIT[ele[0]], DIGIT_LEVEL[len(ele)]])
         return text
 
     def __divided_num(num: Union[int, float]):
@@ -147,6 +149,7 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
 
         raise TypeError(f"Value must be int or float. Given {type(num)}")
 
+    # start
     num_str = __divided_num(num)
     if "." not in num_str:
         gen_text = generate_text_style(num_str, style)
@@ -154,7 +157,25 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         if is_split:
             return gen_text
         return "".join(gen_text)
+    else:
+        frac_index = num_str.index(".")
+        gen_text = generate_text_style(num_str[:frac_index], style)
+        gen_text.append(["ចុច"])
+        zero_count = 0
+        for n in num_str[frac_index+1:]:
+            if n == "0":
+                zero_count += 1
+        gen_text.append(["សូន្យ"] * zero_count)
+        gen_text.extend(generate_text_style(num_str[frac_index+1+zero_count:], style))
+        gen_text = [text for i in gen_text for text in i]
+        if is_split:
+            return gen_text
+        return "".join(gen_text)
 
 
 if __name__ == "__main__":
-    print(num2text(100123, "3", is_split=True))
+    print(num2text(0.005023456786, "3", is_split=True))
+    print(num2text(0.005023456786, is_split=True))
+    print(num2text(5023456786, "3", is_split=True))
+    print(num2text(5023456786, is_split=True))
+    print(num2text(1_102_006_200_054, "3"))
