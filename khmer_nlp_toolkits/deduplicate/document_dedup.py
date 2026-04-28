@@ -4,10 +4,10 @@ import pickle
 import jsonlines
 import numpy as np
 from tqdm import tqdm
-from typing import Literal, Any
+from typing import Literal
 from ngram import NGram
 from simhash import Simhash
-from itertools import combinations, islice
+from itertools import combinations
 from collections import Counter, defaultdict
 from rapidfuzz.distance import Levenshtein
 from multiprocessing import Pool
@@ -51,17 +51,31 @@ def hash_mmh3(x: str):
 
 def simhash_fingerprint(text, n: int = 2, rt_type: Literal["bit", "vec"] = None):
     """
-    
+    Simhash function to produce a fingerprint to identify near duplicate.
+
+    Parameters
+    ==========
+    text: str
+        Text to hash.
+    n: int, default = 2
+        ngram value to pair.
+    rt_type: Literal["bit", "vec"], default = None
+        returning type of hashing value. if not specify will be return hashing object.
+
+    Return
+    ======
+    hashing value of simhash according to rt_type.
     """
     tokens = text.split(" ")
     ngram = NGram(N=n)
     weights = Counter(" ".join(gram) for gram in ngram.ngrams(tokens))
     hash_obj = Simhash(weights.items(), hashfunc=hash_mmh3)
-    if rt_type == "bit": 
+    if rt_type == "bit":
         return bin(hash_obj.value)[2:].zfill(64)
     elif rt_type == "vec":
         return [int(bit) for bit in bin(hash_obj.value)[2:].zfill(64)]
     return hash_obj.value
+
 
 def hamming_dist(x: int, y: int, rt_similarity: bool = False):
     """
@@ -93,15 +107,15 @@ class LSHashing():
             raise ValueError("input dimension can not smaller than bitlen")
         self.bitlen = bitlen
         self.input_dim = input_dim
-        self.cluster = {i:defaultdict(set) for i in range(int(input_dim/bitlen))}
+        self.cluster = {i: defaultdict(set) for i in range(int(input_dim/bitlen))}
 
     def indexing(self, fingerprint, identity: str):
         if isinstance(fingerprint, str):
             if len(fingerprint) != self.input_dim:
-                raise ValueError(f"Fingerprint len is not equal to input_dim")
+                raise ValueError("Fingerprint len is not equal to input_dim")
             fingerprint = int(fingerprint, base=2)
         elif isinstance(fingerprint, int) and fingerprint.bit_length() > self.input_dim:
-            raise ValueError(f"Fingerprint bit length is bigger that input_dim")
+            raise ValueError("Fingerprint bit length is bigger that input_dim")
 
         doc = str(identity) + "--" + str(fingerprint)
         mask = (1 << self.bitlen) - 1
@@ -146,7 +160,7 @@ class LSHashing():
         for [id1, fp1], [id2, fp2] in combinations(bucket, 2):
             if hamming_dist(fp1, fp2, rt_similarity=True) < threshold:
                 continue
-            bucket_pair.add(id1+"-"+id2 if id1>id2 else id2+"-"+id1)
+            bucket_pair.add(id1+"-"+id2 if id1 > id2 else id2+"-"+id1)
         return bucket_pair
 
     def _bucket_feeder(self, band_idx: int = None):
@@ -191,7 +205,9 @@ class LSHashing():
         dup_pair = set()
         total_bucket = sum([len(self.cluster[band]) for band in self.cluster])
         with Pool(processes=nprocess) as pool:
-            for res in tqdm(pool.imap_unordered(self._bucket_dedup, self._bucket_feeder(band_idx)), total=total_bucket, ncols=70):
+            for res in tqdm(pool.imap_unordered(self._bucket_dedup, self._bucket_feeder(band_idx)),
+                            total=total_bucket,
+                            ncols=70):
                 dup_pair.update(res)
                 save_step += 1
                 if save_file and save_step % 10 == 0:
@@ -204,7 +220,7 @@ class LSHashing():
         return dup_pair
 
 
-def verify_edit_dist(pair_path: str, datapath: str, save_file:str=None, threshold: float = 0.8):
+def verify_edit_dist(pair_path: str, datapath: str, save_file: str = None, threshold: float = 0.8):
     # get unique id from pair to get actual data.
     unique_key = set()
     with open(pair_path, "r") as file:
@@ -241,7 +257,6 @@ def verify_edit_dist(pair_path: str, datapath: str, save_file:str=None, threshol
 
 
 if __name__ == "__main__":
-    import jsonlines
     # ################
     # # Example SimHash FingerPrint
     # ################

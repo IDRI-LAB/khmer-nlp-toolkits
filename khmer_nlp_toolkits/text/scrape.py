@@ -4,7 +4,7 @@ This module is for cleaning specific spider. This function should be use before 
 import re
 
 
-AKP = re.compile(r"[(akp)|(kp)]?.{0,20}ថ្ងៃ.{0,30}?\d{3,4}[\u200b\ \n\-\+\–\—\_]{0,5}", re.IGNORECASE|re.DOTALL)
+AKP = re.compile(r"[(akp)|(kp)]?.{0,20}ថ្ងៃ.{0,30}?\d{3,4}[\u200b\ \n\-\+\–\—\_]{0,5}", re.IGNORECASE | re.DOTALL)
 
 
 def scrape_cleaner(obj):

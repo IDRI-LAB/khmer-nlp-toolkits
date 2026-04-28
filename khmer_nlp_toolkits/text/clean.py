@@ -26,7 +26,8 @@ FILTER_CHAR_TYPE = [
     "Mn", "Me", "Ms",
     "Lm"
 ]
-CHAR_INCLUDE = [(0x0020, 0x007E), (0x00A1, 0x00BB), (0x1780, 0x17FF), (0x0370, 0x03FF)]  # Basic latin + latin1-supplement, khmer, greek (for unit)
+# Basic latin + latin1-supplement, khmer, greek (for unit)
+CHAR_INCLUDE = [(0x0020, 0x007E), (0x00A1, 0x00BB), (0x1780, 0x17FF), (0x0370, 0x03FF)]
 EXCEPTION_SET = {chr(cp) for start, end in CHAR_INCLUDE for cp in range(start, end + 1)}
 
 
@@ -76,7 +77,7 @@ def space_handler(text: str):
 
 def replace_by_space(text: str):
     """
-    Replace \s and &nbsp; to a space.
+    Replace \\s and &nbsp; to a space.
     """
     return re.sub(r"\s|&nbsp;", " ", text)
 
@@ -162,7 +163,8 @@ def remove_repetitive_punc(text: str):
     # First, we find groups of punctuation and replace them.
     text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
     # Then, remove extra punctuation if there are multiple distinct ones
-    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1*([!?.,:;\_\-\=\*\'\"])\1*', r'\1\2', text)  # Keep only one of each mixed punctuation
+    # Keep only one of each mixed punctuation
+    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1*([!?.,:;\_\-\=\*\'\"])\1*', r'\1\2', text)
     return text
 
 

@@ -3,18 +3,18 @@ from collections import Counter
 
 from tqdm import tqdm
 
-CONSONANT           = ('[ក-អ]', 'C')
-VOWEL               = ('[ា-ៈ]', 'V')
-IND_VOWEL           = ('[ឤឥឦឧឩឳឰឬឫឭឮឯឱឲឪ]', 'IV')
-UPPER_SIGN          = ('[៉-៑]', 'US')
-ATAK_NUMBER         = ('[៰-៹]', 'AN')
-LUNAR_NUMBER        = ('[᧠-᧿]', 'LN')
-SUBSCRIPT           = ('[្]', 'SUB')
-END_SIGN            = ('[៓-៝]', 'END')
-ZERO_WIDTH_SPACE    = ('\u200b', 'ZS')
-NUMBER              = ('[០-៩0-9]', 'NS')
-LATIN               = ('[a-zA-ZÀ-ÿ]', 'NS')
-UNKNOWN             = ('', 'UNK')
+CONSONANT = ('[ក-អ]', 'C')
+VOWEL = ('[ា-ៈ]', 'V')
+IND_VOWEL = ('[ឤឥឦឧឩឳឰឬឫឭឮឯឱឲឪ]', 'IV')
+UPPER_SIGN = ('[៉-៑]', 'US')
+ATAK_NUMBER = ('[៰-៹]', 'AN')
+LUNAR_NUMBER = ('[᧠-᧿]', 'LN')
+SUBSCRIPT = ('[្]', 'SUB')
+END_SIGN = ('[៓-៝]', 'END')
+ZERO_WIDTH_SPACE = ('\u200b', 'ZS')
+NUMBER = ('[០-៩0-9]', 'NS')
+LATIN = ('[a-zA-ZÀ-ÿ]', 'NS')
+UNKNOWN = ('', 'UNK')
 
 _CHAR_TYPES = [
     CONSONANT,
@@ -31,8 +31,8 @@ _CHAR_TYPES = [
     UNKNOWN
 ]
 
-#### char type
 
+# char type
 def get_char_type(prev_char: str, char: str, next_char: str):
     # number
     if (char in [',', '.']) and bool(re.match(NUMBER[0], prev_char)) and bool(re.match(NUMBER[0], next_char)):
@@ -46,8 +46,8 @@ def get_char_type(prev_char: str, char: str, next_char: str):
 
     return char_type if char_type is not None else UNKNOWN[1]
 
-#### crf feature
 
+# crf feature
 def char2features(sent, i):
     features = {
         'char': sent[i][0],
@@ -114,17 +114,20 @@ def char2features(sent, i):
 
     return features
 
+
 def sent2features(sent):
     return [char2features(sent, i) for i in range(len(sent))]
 
+
 def sent2chars(sent):
     return [e[0] for e in sent]
+
 
 def sent2types(sent):
     return [e[1] for e in sent]
 
 
-#### other
+# other
 
 def export_vocab(corpus_files, output_file, vocab_size=None, reverse_sort=True, export_wcount=True,
                  in_filters=[], out_filters=[]):

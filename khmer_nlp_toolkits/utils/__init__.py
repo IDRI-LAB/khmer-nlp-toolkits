@@ -25,6 +25,7 @@ def lazy_read_jsonl(filepath, allow_none=True, limit: int = None, show_progress:
             self.length = count_file_line(filepath)
             if limit is not None and self.length > limit:
                 self.length = limit
+
             def data_generator():
                 with jsonlines.open(filepath, "r") as reader:
                     iterator = reader.iter(allow_none=allow_none)

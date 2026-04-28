@@ -21,7 +21,7 @@ class Tokenizer(object):
         sent = re.sub(r'\u200b', '', sent)
         sent = re.sub(r'\s+', ' ', sent)
         sent = re.sub(r'\s', '\u200b', sent)
-        
+
         # additional preprocessing
         sent = self.preprocess_(sent)
 
@@ -41,10 +41,10 @@ class Tokenizer(object):
         sent = sent.strip()
         sent = re.sub(r'\u200b', ' ', sent)
         sent = re.sub(r'\s+', ' ', sent)
-        
+
         # additional postprocessing
         sent = self.postprocess_(sent)
-        
+
         return sent
 
     def tokenize(self, sents):

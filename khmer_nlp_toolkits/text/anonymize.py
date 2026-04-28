@@ -12,7 +12,6 @@ EMAIL_PATTERN = re.compile(r'[A-Za-z0-9\.\_\%\+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}
 TEL_PATTERN = re.compile(r"(\+[\d \-]{8,20}\d)|(0[0-9 \-]{7, 20}\d)")
 
 
-
 def anonymizer(text: str):
     """
     Main feature for anonymize data such as entity or identities.
@@ -47,7 +46,6 @@ def replace_url(text: str, replace: str = "[URL]"):
 
 def replace_tel(text: str, replace: str = "[TEL]"):
     return TEL_PATTERN.sub(f" {replace} ", text)
-
 
 
 def replace_email(text: str, replace: str = "[EML]"):

@@ -10,7 +10,7 @@ TOKEN = ENV["TELE_TOKEN"]
 CHAT_ID = ENV["TELE_CHAT_ID"]
 
 
-def sent_msg(msg, script_name = ""):
+def sent_msg(msg, script_name: str = ""):
     """
     log message in console and sent to telegram channel.
 
@@ -37,7 +37,7 @@ def sent_msg(msg, script_name = ""):
 if __name__ == "__main__":
     message = (
         "Report: Test msg!!\n"
-        f"- Items processed: \n"
-        f"- Errors: \n"
+        "- Items processed: \n"
+        "- Errors: \n"
     )
     sent_msg(message)

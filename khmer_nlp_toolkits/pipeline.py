@@ -156,7 +156,8 @@ class Pipeline:
             if sum(self.num_process) > logical_cpu:
                 logging.warning("====================================================")
                 logging.warning("Your machine have %d logical CPUs.", logical_cpu)
-                logging.warning("You setup %d processes in total that is more than number of your logical CPUs.", sum(self.num_process))
+                logging.warning("You setup %d processes in total that is more than number of your logical CPUs.",
+                                sum(self.num_process))
                 logging.warning("This could lead to performance drop, stuck or crash (CPU overload).")
                 logging.warning("====================================================")
                 if sum(self.num_process) > logical_cpu+int(logical_cpu/2):
