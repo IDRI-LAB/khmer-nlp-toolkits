@@ -1,6 +1,8 @@
 """
 Support func for text module.
 """
+
+
 def unicode_escape(text: str):
     """
     Escape unicode.
