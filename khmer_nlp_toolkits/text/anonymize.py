@@ -1,3 +1,6 @@
+"""
+Anonymize module.
+"""
 import re
 from khmer_nlp_toolkits.text.clean import remove_invisible_chars
 
@@ -45,14 +48,20 @@ def replace_url(text: str, replace: str = "[URL]"):
 
 
 def replace_tel(text: str, replace: str = "[TEL]"):
+    """
+    Replace telephone pattern.
+    """
     return TEL_PATTERN.sub(f" {replace} ", text)
 
 
 def replace_email(text: str, replace: str = "[EML]"):
+    """
+    Replace email pattern.
+    """
     return EMAIL_PATTERN.sub(f" {replace} ", text)
 
 
 if __name__ == "__main__":
-    text = "hi sdf.sok.sao@eic2.edue2.kh, howe acer@ag.m jsldf"
-    # text = "sok.sao@gmail.com "
-    print(replace_email(text))
+    TEXT = "hi sdf.sok.sao@eic2.edue2.kh, howe acer@ag.m jsldf"
+    # TEXT = "sok.sao@gmail.com "
+    print(replace_email(TEXT))

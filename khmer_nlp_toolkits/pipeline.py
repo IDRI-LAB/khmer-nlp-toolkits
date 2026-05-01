@@ -125,6 +125,7 @@ class Pipeline:
             return [0.0] * len(self.queues)
         return [round(sum(qlog)/len(qlogs)/self.qsize*100, 2) for qlog in zip(*qlogs)]
 
+    # pylint: disable=all
     def run_parallel(self, data: Union[list, Iterator], batch_size: int = 100, timeout: int = 30, qsize: int = 10):
         """
         Data and State parallel processing function. This function use multiprocesser and threading to execute data
@@ -247,6 +248,7 @@ class Pipeline:
             self.queues.clear()
             self.processes.clear()
             logging.info("Clean up completed!!")
+    # pylint: enable=all
 
 
 if __name__ == "__main__":

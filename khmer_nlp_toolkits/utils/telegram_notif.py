@@ -35,9 +35,9 @@ def sent_msg(msg, script_name: str = ""):
 
 
 if __name__ == "__main__":
-    message = (
+    MESSAGE = (
         "Report: Test msg!!\n"
         "- Items processed: \n"
         "- Errors: \n"
     )
-    sent_msg(message)
+    sent_msg(MESSAGE)

@@ -13,6 +13,9 @@ NEW_HASH = set()
 
 
 def url_dedup(batch_data):
+    """
+    Url deduplication func.
+    """
     batch = []
     for obj in batch_data:
         url = obj["url"] if obj.get("url", False) else obj["warc_headers"]["warc-target-uri"]

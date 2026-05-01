@@ -1,10 +1,33 @@
+"""
+Utility module.
+"""
 import os
-import tqdm
 import subprocess
+
+import tqdm
 import jsonlines
 
 
 def get_filepath(source: str, destination: str = None):
+    """
+    Retrieves and sorts file paths from a source directory, optionally mapping them to a destination.
+
+    If a destination is provided, it ensures the directory exists and returns a list
+    of tuples containing (source_path, destination_path). Otherwise, it returns
+    a list of full paths to the files in the source directory.
+
+    Args:
+        source: str
+            The directory path to scan for files.
+        destination: str, optional
+            The directory path where files are intended to be mapped or moved. Defaults to None.
+
+    Returns:
+        list:
+            A list of strings (source paths) if destination is None.
+        list[tuple]:
+            A list of (source_path, destination_path) pairs if destination is provided.
+    """
     filenames = sorted([entry.name for entry in os.scandir(source) if entry.is_file()])
     if destination:
         os.makedirs(destination, exist_ok=True)
@@ -12,14 +35,23 @@ def get_filepath(source: str, destination: str = None):
     return [os.path.join(source, name) for name in filenames]
 
 
-def count_file_line(filepath: str):
-    lines = subprocess.run(["wc", "-l", filepath], capture_output=True)
-    lines = int(lines.stdout.decode("utf-8").split(" ")[0])
+def count_file_line(filepath: str) -> int:
+    """
+    Count line in file using subprocess. Better for big file.
+    """
+    lines = subprocess.run(["wc", "-l", filepath], capture_output=True, text=True, check=True)
+    lines = int(lines.stdout.split(" ")[0])
     return lines
 
 
 def lazy_read_jsonl(filepath, allow_none=True, limit: int = None, show_progress: bool = False):
+    """
+    Lazy read json from jsonline file. Consume data line-by-line with generator when called.
+    """
     class LazyReadJsonl:
+        """
+        Wrapper class for generator cosume and metadata provider.
+        """
         def __init__(self, filepath):
             self.index = -1
             self.length = count_file_line(filepath)

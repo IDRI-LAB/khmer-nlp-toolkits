@@ -6,9 +6,11 @@ Module for text cleaning.
 # all quote ' " ‘ ’ “ ” ‚ „ ‛ ‟ -> '" respectively, except ′ (prime) ″ (Double prime) using for unit or in math
 """
 import re
+from unicodedata import category
+
 import regex
 from ftfy import fix_text
-from unicodedata import category
+
 from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
 
 

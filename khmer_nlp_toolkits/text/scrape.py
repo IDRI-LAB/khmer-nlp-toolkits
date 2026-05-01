@@ -1,6 +1,9 @@
 """
 This module is for cleaning specific spider. This function should be use before text clean.
+
+*** TO BE REMOVE SOON. (#issue 14)***
 """
+# pylint: skip-file
 import re
 
 
@@ -8,10 +11,13 @@ AKP = re.compile(r"[(akp)|(kp)]?.{0,20}ថ្ងៃ.{0,30}?\d{3,4}[\u200b\ \n\-\
 
 
 def scrape_cleaner(obj):
+    """
+    Function to clean some specific characteristic of web article.
+    """
     obj["metadata"]["more"] = []
     # special target website
     if obj["metadata"]["spider_name"] == "ipdefenseforum":
-        obj["content"] = obj["content"].replace("ទស្សនាវដ្តី FORUM បានផ្អាកការបកប្រែអត្ថបទប្រចាំថ្ងៃសម្រាប់គេហទំព័រជាភាសាខ្មែរ។ សូមមើលភាសាដទៃទៀតសម្រាប់ខ្លឹមសារប្រចាំថ្ងៃ។", "")  # noqa: E501
+        obj["content"] = obj["content"].replace("ទស្សនាវដ្តី FORUM បានផ្អាកការបកប្រែអត្ថបទប្រចាំថ្ងៃសម្រាប់គេហទំព័រជាភាសាខ្មែរ។ សូមមើលភាសាដទៃទៀតសម្រាប់ខ្លឹមសារប្រចាំថ្ងៃ។", "")  # noqa: E501 pylint: disable=line-too-long
         texts = obj["content"].split("\n", maxsplit=1)
         if len(texts[0]) < 100:
             obj["metadata"]["more"].append(texts[0])

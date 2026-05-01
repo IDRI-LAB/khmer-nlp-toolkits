@@ -1,8 +1,13 @@
+"""
+Segmentation module.
+"""
 import re
 from typing import List, Literal
-from khmer_nlp_toolkits.utils.keywords import SENTENCE_SEPARATOR
-from khmer_nlp_toolkits.utils.segment import Tokenizer
+
 from khmernltk import word_tokenize
+
+from khmer_nlp_toolkits.utils.keywords import SENTENCE_SEPARATOR
+from khmer_nlp_toolkits.utils.segment.tokenizer import Tokenizer
 
 
 PATTERN = r"(?<=[{}])\s*|(?=\b\d{{1,3}} ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))

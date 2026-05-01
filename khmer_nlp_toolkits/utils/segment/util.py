@@ -1,3 +1,6 @@
+"""
+Support feature of word segmentation.
+"""
 import re
 from collections import Counter
 
@@ -34,6 +37,9 @@ _CHAR_TYPES = [
 
 # char type
 def get_char_type(prev_char: str, char: str, next_char: str):
+    """
+    Get character type.
+    """
     # number
     if (char in [',', '.']) and bool(re.match(NUMBER[0], prev_char)) and bool(re.match(NUMBER[0], next_char)):
         return NUMBER[1]
@@ -49,6 +55,9 @@ def get_char_type(prev_char: str, char: str, next_char: str):
 
 # crf feature
 def char2features(sent, i):
+    """
+    Featuer extraction from char for crf.
+    """
     features = {
         'char': sent[i][0],
         'type': sent[i][1]
@@ -116,23 +125,39 @@ def char2features(sent, i):
 
 
 def sent2features(sent):
+    """
+    Sentence to feature.
+    """
     return [char2features(sent, i) for i in range(len(sent))]
 
 
 def sent2chars(sent):
+    """
+    Get a list of character from sentence.
+    """
     return [e[0] for e in sent]
 
 
 def sent2types(sent):
+    """
+    Get a list of type for each character in sentence.
+    """
     return [e[1] for e in sent]
 
 
 # other
-
+# pylint: disable=too-many-locals
 def export_vocab(corpus_files, output_file, vocab_size=None, reverse_sort=True, export_wcount=True,
-                 in_filters=[], out_filters=[]):
+                 in_filters=None, out_filters=None):
+    """
+    Save vocab to file.
+    """
     vocab_counter = Counter()
-
+    # validate
+    if in_filters is None:
+        in_filters = []
+    if out_filters is None:
+        out_filters = []
     # read files
     for file in corpus_files:
         print('Read train file: %s' % file)
@@ -169,8 +194,8 @@ def export_vocab(corpus_files, output_file, vocab_size=None, reverse_sort=True, 
     with open(output_file, 'w') as writer:
         lexicon = sorted(vocab_counter.most_common(vocab_size), key=lambda item: item[1], reverse=reverse_sort)
 
-        for word, n in lexicon:
+        for word, count in lexicon:
             if export_wcount is True:
-                writer.write('%s %s\n' % (word, n))
+                writer.write('%s %s\n' % (word, count))
             else:
                 writer.write('%s\n' % word)

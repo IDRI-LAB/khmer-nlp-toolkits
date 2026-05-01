@@ -1,3 +1,6 @@
+"""
+Language Masking module.
+"""
 import regex
 
 
