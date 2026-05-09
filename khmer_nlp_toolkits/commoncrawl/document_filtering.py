@@ -3,6 +3,7 @@ Document filtering module.
 """
 import re
 from typing import Literal
+
 from khmer_nlp_toolkits.utils.keywords import ALDULT_KW
 from khmer_nlp_toolkits.commoncrawl.quality_warning import WARNING_FLAGSET
 

@@ -2,6 +2,7 @@
 Anonymize module.
 """
 import re
+
 from khmer_nlp_toolkits.text.clean import remove_invisible_chars
 
 
@@ -12,7 +13,7 @@ URL_PATTERN = re.compile(
     re.IGNORECASE
 )
 EMAIL_PATTERN = re.compile(r'[A-Za-z0-9\.\_\%\+\-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}')
-TEL_PATTERN = re.compile(r"(\+[\d \-]{8,20}\d)|(0[0-9 \-]{7, 20}\d)")
+TEL_PATTERN = re.compile(r"([\+\(][\d \-\(\)]{8,20}\d)|(0[0-9 \-]{7,20}\d)")
 
 
 def anonymizer(text: str):
@@ -41,27 +42,21 @@ def anonymizer(text: str):
 
 def replace_url(text: str, replace: str = "[URL]"):
     """
-    Replace any link in string with the placeholder. if the placeholder not provided, the url
-    will be replace with empty string.
+    Replace any link in string with the placeholder. if the placeholder not provided,
+    the url will be replace with default value.
     """
-    return URL_PATTERN.sub(f" {replace} ", text)
+    return URL_PATTERN.sub(f"{replace}", text)
 
 
 def replace_tel(text: str, replace: str = "[TEL]"):
     """
     Replace telephone pattern.
     """
-    return TEL_PATTERN.sub(f" {replace} ", text)
+    return TEL_PATTERN.sub(f"{replace}", text)
 
 
 def replace_email(text: str, replace: str = "[EML]"):
     """
     Replace email pattern.
     """
-    return EMAIL_PATTERN.sub(f" {replace} ", text)
-
-
-if __name__ == "__main__":
-    TEXT = "hi sdf.sok.sao@eic2.edue2.kh, howe acer@ag.m jsldf"
-    # TEXT = "sok.sao@gmail.com "
-    print(replace_email(TEXT))
+    return EMAIL_PATTERN.sub(f"{replace}", text)
