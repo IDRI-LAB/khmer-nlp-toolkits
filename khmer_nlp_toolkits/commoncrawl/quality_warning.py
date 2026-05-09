@@ -63,6 +63,15 @@ def _is_footer(context_line: list[str]):
     return _is_short_sentences(context_line[-bound:])
 
 
+WARNING_FLAGSET = {
+    "tiny": _is_tiny,
+    "noisy": _is_noisy,
+    "header": _is_header,
+    "footer": _is_footer,
+    "short_sentences": _is_short_sentences
+}
+
+
 def check_quality_warning(context: str):
     """
     Get all quality warning from the context.
@@ -93,15 +102,12 @@ def check_quality_warning(context: str):
     lines = context.split("\n")
 
     result = []
-    if _is_noisy(context):
-        result.append("noisy")
-    if _is_tiny(lines):
-        result.append("tiny")
-    if _is_short_sentences(lines):
-        result.append("short_sentences")
-    if _is_header(lines):
-        result.append("header")
-    if _is_footer(lines):
-        result.append("footer")
+    for flag, flag_func in WARNING_FLAGSET.items():
+        if flag == "noisy":
+            if flag_func(context):
+                result.append(flag)
+            continue
+        if flag_func(lines):
+            result.append(flag)
 
-    return result if result else None
+    return result

@@ -31,7 +31,7 @@ FIXTURE_DIR = Path(__file__).parent / "fixtures/quality_warning"
     (15, ['footer']),
     (16, ['footer']),
     (17, ['noisy', 'footer']),
-    (18, None),
+    (18, []),
     (19, ['tiny']),
     (20, ['noisy', 'footer'])
 ])
@@ -42,7 +42,7 @@ def test_check_quality_warning(context_path, exp_qua_output):
     with open(f"{FIXTURE_DIR}/context{context_path}.txt", "r") as reader:
         context = reader.read()
         output = qw.check_quality_warning(context)
-        assert output == exp_qua_output
+        assert set(output) == set(exp_qua_output)
 
 
 def test_check_quality_warning_type_error():
