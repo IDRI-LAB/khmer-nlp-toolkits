@@ -44,4 +44,4 @@ INVISIBLE_CHARS = [
 ]
 
 # Reference from Khmernltk. However, I remove 2 symbols ("៖", "ៗ") and add new logic in my functions.
-SENTENCE_SEPARATOR = ["◌៓", "។", "៕", "៘", "៙", "៚", "៛", "ៜ", "៝", "?", "!"]
+SENTENCE_SEPARATOR = ["◌៓", "។", "៕", "៘", "៙", "៚", "៛", "ៜ", "៝", "?", "!", "\n"]
