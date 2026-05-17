@@ -2,6 +2,7 @@
 # Copyright (c) 2021-2024, SIL Global.
 # Licensed under MIT license: https://opensource.org/licenses/MIT
 # Git: https://github.com/sillsdev/khmer-character-specification/blob/master/python/scripts/khnormal
+# pylint: skip-file
 
 import enum, re, regex
 

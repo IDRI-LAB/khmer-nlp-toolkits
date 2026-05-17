@@ -27,11 +27,14 @@ Space handler
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
     (["\u179f\u17bd\u200b\u179f\u17d2\u178a\u17b8\u0020"], "\u179f\u17bd\u179f\u17d2\u178a\u17b8"),
     (["សួស្ដីhello"], "សួស្ដី hello"),
+    (["helloសួស្ដី"], "hello សួស្ដី"),
+    (["សួ​ស្ដី helloសួស្ដី "], "សួស្ដី hello សួស្ដី"),
     (["សួ​ស្ដី helloសួស្ដី "], "សួស្ដី hello សួស្ដី"),
     (["សួ​ស្ដី hello សួ​ស្ដី"], "សួស្ដី hello សួស្ដី"),
-    (["Hello  how are you?"], "Hello how are you?"),
-    (["Hello ​how are  you?"], "Hello how are you?"),
-    (["\u200bHello how are  you? \u200b"], "Hello how are you?"),
+    (["Hello  how are you?"], "Hello how are you ?"),
+    (["Hello ​how are  you?"], "Hello how are you ?"),
+    (["Hi!Hello ​how are  you?"], "Hi ! Hello how are you ?"),
+    (["\u200bHello how are  you? \u200b"], "Hello how are you ?"),
 ])
 def test_space_handler(input_str, output_str):
     assert clean.space_handler(*input_str) == output_str
@@ -80,3 +83,26 @@ Rmove invisible character.
 ])
 def test_remove_invisible_chars(input_str, output_str):
     assert clean.remove_invisible_chars(input_str) == output_str
+
+
+
+"""
+text_cleaner.
+"""
+@pytest.mark.parametrize("input_str, output_str", [
+    ("Hello\u200bWorld", "HelloWorld"),
+    ("Hello&nbsp;World", "Hello World"),
+    ("Hello—World", "Hello - World"),
+    ("   Hello     World   ", "Hello World"),
+    (
+        "\u200b&nbsp;Hello\u2014\u2014World!!!??      ខ្មែរ   123\u200b&nbsp;",
+        "Hello - World !? ខ្មែរ 123",
+    ),
+    (
+        ("🎂🎈Happy Birthday! 🎂🎈\u200b&nbsp;Hello\u2014\u2014World!!!??"
+        "      ខ្មែរ   123\u200b&nbsp;"),
+        "Happy Birthday ! Hello - World !? ខ្មែរ 123",
+    )
+])
+def test_remove_invisible_chars(input_str, output_str):
+    assert clean.text_cleaner(input_str) == output_str
