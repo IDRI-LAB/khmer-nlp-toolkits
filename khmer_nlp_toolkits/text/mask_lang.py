@@ -12,6 +12,7 @@ MASK = regex.compile(rf"[^\p{{S}}{EN_RANGE}{KM_RANGE}{GREEK_RANGE}]+")
 
 def lang_masking(text: str):
     """
-    Masking unknown/unwant language.
+    Masking unknown/unwant language with exceptionsuch
+    as english and basic greek symbol.
     """
-    return MASK.sub(" [UNK] ", text)
+    return MASK.sub("[UNK]", text)

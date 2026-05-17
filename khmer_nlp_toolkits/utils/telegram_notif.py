@@ -6,8 +6,8 @@ import requests
 from dotenv import dotenv_values
 
 ENV = dotenv_values()
-TOKEN = ENV["TELE_TOKEN"]
-CHAT_ID = ENV["TELE_CHAT_ID"]
+TOKEN = ENV.get("TELE_TOKEN")
+CHAT_ID = ENV.get("TELE_CHAT_ID")
 
 
 def sent_msg(msg, script_name: str = ""):

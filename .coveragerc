@@ -2,7 +2,9 @@
 omit = 
     __init__.py,
     main.py,
-    khnormal.py
+    khnormal.py,
+    khmer_nlp_toolkits/utils/segment/*,
+    khmer_nlp_toolkits/deduplicate/*
 
 [report]
 exclude_lines =
