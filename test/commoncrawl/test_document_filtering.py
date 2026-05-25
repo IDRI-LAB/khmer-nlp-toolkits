@@ -32,7 +32,7 @@ def test_classify_doc_quality(exp_input, exp_output):
     assert df.classify_doc_quality(exp_input) == exp_output
 
 
-def test_classify_doc_quality():
+def test_classify_doc_quality_input_validate():
     with pytest.raises(TypeError, match="quality_warning must be list of string."):
         df.classify_doc_quality("tiny")
     with pytest.raises(
