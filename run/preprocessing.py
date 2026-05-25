@@ -10,7 +10,7 @@ import logging
 
 from khmer_nlp_toolkits.utils import get_filepath, lazy_read_jsonl
 from khmer_nlp_toolkits.pipeline import Pipeline
-from khmer_nlp_toolkits.commoncrawl.document_filtering import document_filtering
+from khmer_nlp_toolkits.commoncrawl.doc_filtering import document_filtering
 from khmer_nlp_toolkits.text.scrape import scrape_cleaner
 from khmer_nlp_toolkits.text.anonymize import anonymizer
 from khmer_nlp_toolkits.text.clean import text_cleaner

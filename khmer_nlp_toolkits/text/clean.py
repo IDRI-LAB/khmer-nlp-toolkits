@@ -20,7 +20,6 @@ __all__ = [
     "remove_misc_symbols",
     "remove_repetitive_punc",
     "space_handler",
-    "count_khmer_char"
 ]
 
 
@@ -45,7 +44,9 @@ EXCEPTION_SET = {chr(cp) for start, end in CHAR_INCLUDE for cp in range(start, e
 
 def text_cleaner(text: str) -> list[str]:
     """
-    Main feature to clean text.
+    Main feature to clean text. Clean noisy text by cleaning invisible characters,
+    duplicated spaces, repeated punctuation, formatting artifacts and more.
+    The objective was to get the clean and structured corpus format.
 
     Parameter
     =========
@@ -76,9 +77,6 @@ def remove_misc_symbols(text: str):
     ------
     text: str
         String without emoji and symbol emoji.
-    exception: str
-        Unicode character that will not remove.
-        Usage: "abc" => character a, b, c will not remove.
 
     Noted
     -----
@@ -102,23 +100,6 @@ def remove_repetitive_punc(text: str):
     # Keep only one of each mixed punctuation
     text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1*([!?.,:;\_\-\=\*\'\"])\1*', r'\1\2', text)
     return text
-
-
-def count_khmer_char(sent: str):
-    """
-    Count existing Khmer char in context. It count only character in Khmer unicode block 1780-17FF.
-
-    Parameters
-    ==========
-    sent: str
-        sentence to check
-
-    Returns
-    =======
-    int
-        Number of Khmer character.
-    """
-    return len(regex.findall(r"\p{khmer}", sent))
 
 
 def remove_invisible_chars(text: str):

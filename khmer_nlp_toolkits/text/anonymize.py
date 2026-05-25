@@ -6,6 +6,14 @@ import re
 from khmer_nlp_toolkits.text.clean import remove_invisible_chars
 
 
+__all__ = [
+    "anonymizer",
+    "replace_url",
+    "replace_tel",
+    "replace_email"
+]
+
+
 URL_PATTERN = re.compile(
     r'http\S+|www\.\S+|\b(?:[a-zA-Z0-9-]+\.)+'  # scheme or www. with subdomains and domain
     r'[A-Za-z]{2,}(?::\d+)?'                    # TLD (2+ chars) + optional port

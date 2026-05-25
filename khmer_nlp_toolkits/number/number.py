@@ -38,6 +38,7 @@ DIGIT_LEVEL = {
 }
 
 
+# pylint: disable=R0915
 def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", is_split: bool = False):
     """
     Generate number to text in various style for khmer lanugage.
@@ -157,20 +158,19 @@ def num2text(num: Union[int, float], style: Literal["normal", "3"] = "normal", i
         if is_split:
             return gen_text
         return "".join(gen_text)
-    else:
-        frac_index = num_str.index(".")
-        gen_text = generate_text_style(num_str[:frac_index], style)
-        gen_text.append(["ចុច"])
-        zero_count = 0
-        for n in num_str[frac_index+1:]:
-            if n == "0":
-                zero_count += 1
-        gen_text.append(["សូន្យ"] * zero_count)
-        gen_text.extend(generate_text_style(num_str[frac_index+1+zero_count:], style))
-        gen_text = [text for i in gen_text for text in i]
-        if is_split:
-            return gen_text
-        return "".join(gen_text)
+    frac_index = num_str.index(".")
+    gen_text = generate_text_style(num_str[:frac_index], style)
+    gen_text.append(["ចុច"])
+    zero_count = 0
+    for _n in num_str[frac_index+1:]:
+        if _n == "0":
+            zero_count += 1
+    gen_text.append(["សូន្យ"] * zero_count)
+    gen_text.extend(generate_text_style(num_str[frac_index+1+zero_count:], style))
+    gen_text = [text for i in gen_text for text in i]
+    if is_split:
+        return gen_text
+    return "".join(gen_text)
 
 
 if __name__ == "__main__":

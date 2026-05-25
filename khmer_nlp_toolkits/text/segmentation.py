@@ -2,13 +2,25 @@
 Segmentation module.
 """
 import re
-from typing import List, Literal
+import logging
+from typing import List, Literal, Union
 
 from khmernltk import word_tokenize
 
 from khmer_nlp_toolkits.utils.keywords import SENTENCE_SEPARATOR
 from khmer_nlp_toolkits.utils.segment.tokenizer import Tokenizer
 from khmer_nlp_toolkits.utils.segment.kcc_split import seg_kcc
+
+
+logging.getLogger("khmer-nltk").setLevel(logging.ERROR)
+
+
+__all__ = [
+    "sentence_segment",
+    "paragraph_segment",
+    "word_segment",
+    "kcc_segment"
+]
 
 
 # This version split with number listing: ex: 1. 1) 12. however had problem with (2) => (\n2)
@@ -56,19 +68,48 @@ def paragraph_segment(text: str) -> List[str]:
     return paragraphs
 
 
-def word_segment(text: str, word_type: Literal["com", "mor"] = "com"):
+def word_segment(
+        text: str,
+        word_type: Literal["com", "mor"] = "com",
+        rt_type: Literal["str", 'list'] = "str"
+) -> Union[str, list]:
     """
     word tokenizer function called.
+
+    Parameters
+    ==========
+    text: str
+        Input text.
+    word_type: enum[str], default = 'com'
+        Segmentation type.
+        - 'com' stand for Compound word level.
+        - 'mor' stand for Morpheme word level.
+    rt_type: enum[str], default = 'str'
+        Output format to given.
+        - 'str' will return a sentence with space as word boundary.
+        - 'list' will return list of word unit.
+
+    Return
+    ======
+    Union[str, list]
+        - String of sentence with space as word boundary.
+        - List of string as a word unit.
     """
     if word_type not in ["com", "mor"]:
         raise ValueError("The word type must be 'com' or 'mor'.")
+    if rt_type not in ["str", "list"]:
+        raise ValueError("The word type must be 'str' or 'list'.")
 
-    # Could be from khmer-nltk (remove log from khmernltk)
-    # Or cadt-segment (download and keep in segment dir in first level of project)
     if word_type == "mor":
-        return tokenizer.tokenize(text)
+        res = tokenizer.tokenize(text)
+        if rt_type == "list":
+            return res.split(" ")
+        return res
     words = word_tokenize(text)
-    return " ".join(word for word in words if word != " ")
+    res = [word for word in words if word != " "]
+    if rt_type == "list":
+        return res
+    return " ".join(res)
 
 
 def kcc_segment(text: str):
