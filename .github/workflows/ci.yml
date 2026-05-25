@@ -1,0 +1,46 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - dev
+      - master  # or any other branches you want to run the tests on
+  pull_request:
+    branches:
+      - dev
+      - master  # or any other branches for pull requests
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'  # Specify the version you need
+
+    # Install dependencies for static tests (flake8 and pylint)
+    - name: Install dependencies for static tests
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements-test.txt
+        pip install -r requirements.txt
+
+    # Run flake8 (linting)
+    - name: Run flake8 (linting)
+      run: |
+        flake8 khmer_nlp_toolkits/
+
+    # Run pylint (static analysis)
+    - name: Run pylint (static analysis)
+      run: |
+        pylint khmer_nlp_toolkits/
+
+    # Run pytest (unit tests)
+    - name: Run pytest (unit tests)
+      run: |
+        pytest --cov=khmer_nlp_toolkits --cov-report=term-missing --cov-fail-under=80 test/

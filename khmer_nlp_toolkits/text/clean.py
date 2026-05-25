@@ -1,0 +1,196 @@
+"""
+Module for text cleaning.
+
+# Thing solve by ftfy.fix_text
+# remove few hidden space and Control Unicode
+# all quote ' " ‘ ’ “ ” ‚ „ ‛ ‟ -> '" respectively, except ′ (prime) ″ (Double prime) using for unit or in math
+"""
+import re
+from unicodedata import category
+
+import regex
+from ftfy import fix_text
+
+from khmer_nlp_toolkits.utils.keywords import INVISIBLE_CHARS
+
+
+__all__ = [
+    "text_cleaner",
+    "remove_invisible_chars",
+    "remove_misc_symbols",
+    "remove_repetitive_punc",
+    "space_handler",
+]
+
+
+REPETITIVE_WHITESPACE = re.compile(r"[\s\u200b]{2,}")
+SPACE_BETWEEN_KM = regex.compile(r'([\p{Script=Khmer}\.\,0-9]{2,})')
+SPACE_AROUND_PUNC = re.compile(r"([%៖។៕!?;:,#\.\-\_\/\\]+)")
+VARIATION_SELECTORS = re.compile(r'[\uFE00-\uFE0F]')
+INV_CHARS = re.compile(rf"{'|'.join(INVISIBLE_CHARS)}")
+SPACE_AROUND_BRACKET = re.compile(r'([\(\)\[\]\{\}\<\>«»‹›])')
+HANDLE_LINKING_WORD_NUM = re.compile(r"(?<![\-\_]) *([\-\_]) *(?![\-\_])")
+SPACE_ARROUND_NUMBER = re.compile(r"(\d+([\.\,\-\_]?\d*)+)")
+FILTER_CHAR_TYPE = [
+    "Cf", "Cn", "Co", "Cs",
+    "So", "Sk",
+    "Mn", "Me", "Ms",
+    "Lm"
+]
+# Basic latin + latin1-supplement, khmer, greek (for unit)
+CHAR_INCLUDE = [(0x0020, 0x007E), (0x00A1, 0x00BB), (0x1780, 0x17FF), (0x0370, 0x03FF)]
+EXCEPTION_SET = {chr(cp) for start, end in CHAR_INCLUDE for cp in range(start, end + 1)}
+
+
+def text_cleaner(text: str) -> list[str]:
+    """
+    Main feature to clean text. Clean noisy text by cleaning invisible characters,
+    duplicated spaces, repeated punctuation, formatting artifacts and more.
+    The objective was to get the clean and structured corpus format.
+
+    Parameter
+    =========
+    texts: str
+        String of text to be clean.
+
+    Return
+    ======
+        String of text after cleanning.
+    """
+    text = remove_invisible_chars(text)
+    text = _html_space_replacement(text)
+    text = re.sub(r"[\u2010-\u2015]", "-", text)
+    text = fix_text(text, normalization="NFKD")
+    text = remove_misc_symbols(text)
+    text = remove_repetitive_punc(text)
+    text = _space_handler(text)
+    return text
+
+
+def remove_misc_symbols(text: str):
+    """
+    This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji)
+    that are classify by unicodedata (So & Sk). Unicodedata categorize symbol character into 4 types
+    such as Math (Sm), Currency (Sc), Modifier (Sk), other (So).
+
+    Return
+    ------
+    text: str
+        String without emoji and symbol emoji.
+
+    Noted
+    -----
+    In khmer character unicdoe range 1780-17FF (Khmer), There are no 'Sk'. And 19E0-19FF (Khmer Symbol) are 'So'.
+    Character type: https://www.fileformat.info/info/unicode/category/index.htm
+    """
+    if not isinstance(text, str):
+        raise TypeError("Accept only string.")
+    text = VARIATION_SELECTORS.sub("", text)
+    text = [char for char in text if char in EXCEPTION_SET or category(char) not in FILTER_CHAR_TYPE]
+    return _kh_strip("".join(text))
+
+
+def remove_repetitive_punc(text: str):
+    """
+    Replace consecutive mixed punctuation with only one occurrence of each.
+    """
+    # First, we find groups of punctuation and replace them.
+    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1+', r'\1', text)  # Collapse repeated punctuation (e.g., !!! becomes !)
+    # Then, remove extra punctuation if there are multiple distinct ones
+    # Keep only one of each mixed punctuation
+    text = re.sub(r'([!?.,:;\_\-\=\*\'\"])\1*([!?.,:;\_\-\=\*\'\"])\1*', r'\1\2', text)
+    return text
+
+
+def remove_invisible_chars(text: str):
+    """
+    Remove 29 invisible character from the text.
+    """
+    return re.sub(INV_CHARS, "", text)
+
+
+def space_handler(text: str):
+    """
+    Handle space cleaning and manipulation for khmer text.
+    """
+    text = remove_invisible_chars(text)
+    text = _space_handler(text)
+    return text
+
+
+def _space_handler(text: str):
+    """
+    Private space handling helper function.
+    """
+    text = _space_around_bracket(text)
+    text = _space_around_punc(text, clean=False)
+    text = _space_between_km(text, clean=False)
+    text = _space_with_number(text)
+    # text = _handle_linking_word_num(text)
+    text = _remove_repitive_whitespace(text)
+    text = _kh_strip(text)
+    return text
+
+
+def _html_space_replacement(text: str):
+    """
+    Replace \\s and &nbsp; to a space.
+    """
+    return re.sub(r"\s|&nbsp;", " ", text)
+
+
+def _kh_strip(text: str):
+    """
+    Custom strip to remove include \u200b. Normal strip function are not consider \u200b in their function.
+    """
+    return text.strip(" \t\n\r\v\f\u200b")
+
+
+def _remove_repitive_whitespace(text: str):
+    """
+    Remove any repetitive space with just one space.
+    """
+    return REPETITIVE_WHITESPACE.sub(" ", text)
+
+
+def _space_between_km(text: str, clean: bool = True):
+    """
+    Add space between khmer and other language.
+    """
+    if not clean:
+        return SPACE_BETWEEN_KM.sub(r" \1 ", text)
+    return SPACE_BETWEEN_KM.sub(r" \1 ", text).replace("  ", " ").strip()
+
+
+def _space_around_punc(text: str, clean: bool = True):
+    """
+    Add space around punctuation if there aren't exist any whitespace after it.
+    """
+    # Can not check look ahead with regex, so use replace to work around instead.
+    if not clean:
+        return SPACE_AROUND_PUNC.sub(r" \1 ", text)
+    return SPACE_AROUND_PUNC.sub(r" \1 ", text).replace("  ", " ").strip()
+
+
+def _handle_linking_word_num(text: str):
+    """
+    It is handle only hypen and underscore.
+    Ex: "123 _ 123" -> "123_123"
+    Ex: "mother - in - law" -> "mother-in-law"
+    But not "123 -- 123" !-> "123--123"
+    """
+    return HANDLE_LINKING_WORD_NUM.sub(r"\1", text)
+
+
+def _space_with_number(text: str):
+    text = SPACE_ARROUND_NUMBER.sub(r" \1 ", text)
+    return text
+
+
+def _space_around_bracket(text: str, clean: bool = True):
+    """
+    Add space around open and close bracket.
+    """
+    if not clean:
+        return SPACE_AROUND_BRACKET.sub(r" \1 ", text)
+    return SPACE_AROUND_BRACKET.sub(r" \1 ", text).replace("  ", " ").strip()

@@ -1,0 +1,13 @@
+[run]
+omit = 
+    __init__.py,
+    main.py,
+    khnormal.py,
+    khmer_nlp_toolkits/utils/segment/*,
+    khmer_nlp_toolkits/deduplicate/*
+
+[report]
+exclude_lines =
+    if __name__ == "__main__":
+    def run
+    def __str__

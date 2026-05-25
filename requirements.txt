@@ -1,0 +1,14 @@
+# This is dependency packages required for deploy phase
+regex==2024.11.6
+jsonlines==4.0.0
+ftfy==6.2.3
+tqdm==4.67.1
+dotenv==0.9.9
+requests==2.33.1
+numpy==2.2.6
+mmh3==5.2.1
+ngram==4.0.3
+simhash==2.1.2
+RapidFuzz==3.14.5
+lmdbdict==0.2.2
+khmer-nltk==1.6
