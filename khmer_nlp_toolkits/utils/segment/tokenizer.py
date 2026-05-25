@@ -72,8 +72,7 @@ class Tokenizer:
         results = []
         for sent_, label_ in zip(sents, labels):
             result = ''
-
-            for i, (char, char_type) in enumerate(sent_):
+            for i, (char, char_type, _) in enumerate(sent_):
                 next_char_type = sent_[i + 1][1] if i < len(sent_) - 1 else UNKNOWN[1]
                 label = label_[i]
 

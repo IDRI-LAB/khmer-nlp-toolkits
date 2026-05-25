@@ -5,6 +5,12 @@ from unicodedata import normalize
 from khmer_nlp_toolkits.utils.khnormal import khnormal
 
 
+__all__ = [
+    "nomalizer",
+    "khnormal"
+]
+
+
 def nomalizer(text: str) -> list[str]:
     """
     Main feature to clean text.

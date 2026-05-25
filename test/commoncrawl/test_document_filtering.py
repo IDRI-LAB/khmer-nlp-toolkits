@@ -2,13 +2,12 @@
 Module for test document filtering module.
 """
 import pytest
-from unittest.mock import patch, MagicMock, mock_open
-from khmer_nlp_toolkits.commoncrawl import document_filtering as df
+from khmer_nlp_toolkits.commoncrawl import doc_filtering as df
 
 
 @pytest.mark.parametrize("exp_input, exp_output", [
-    ("https://www.amloud.de/google-amp-slen.php?hl=km&s=https%3A%2F%2Fpornewap.com%2Ffuck-video%2Fmom-fucking-toy", True),
-    ("https://km.phimsexnh.caa/category", True),
+    ("https://www.example.com/google-amp-slen.php?hl=km&s=https%3A%2F%2Fpornewap.com%2Ffuck-video%2Fmom-fucking-toy", True),
+    ("https://example.phimsexnh.testing/category", True),
     ("https://bizkhmer.com/articles/18357", False),
     ("https://www.cambopay.com.kh/km-kh/%E1%9E%94%E1%9E%91%E1%9E%96%E1%9E%B7%E1%9E%9F%E1%9F", False)
 ])

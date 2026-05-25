@@ -144,6 +144,9 @@ class Pipeline:
             Maximum time to wait (in seconds) for data to be returned from the pipeline.
             If exceed the timeout, the process will end. This is to prevent logic break of Endless loop.
         """
+        if isinstance(data, list):
+            data = iter(data)
+
         self.qsize = qsize
         count_data_in = 0
         count_data_out = 0

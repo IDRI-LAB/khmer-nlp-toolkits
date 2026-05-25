@@ -21,6 +21,9 @@ def sent_msg(msg, script_name: str = ""):
     script_name: str
         Script title.
     """
+    if not TOKEN or not CHAT_ID:
+        raise ValueError("The telegram CHAT_ID and TOKEN have not been setup in .env file yet.")
+
     if script_name:
         msg = (
             f"<u><b>SCRIPT: {script_name}</b></u>\n\n"
