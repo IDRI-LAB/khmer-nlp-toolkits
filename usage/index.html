@@ -1,0 +1,1585 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Khmer NLP tools for Python">
+      
+      
+      
+        <link rel="canonical" href="https://your-domain-or-pages-url/usage/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Usage - Khmer NLP Toolkits</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#usage-guidelines" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Khmer NLP Toolkits" class="md-header__button md-logo" aria-label="Khmer NLP Toolkits" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Khmer NLP Toolkits
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Usage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Khmer NLP Toolkits" class="md-nav__button md-logo" aria-label="Khmer NLP Toolkits" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Khmer NLP Toolkits
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="usage-guidelines">Usage Guidelines</h1>
+<p>This document contains detailed usage examples for Khmer NLP Toolkits.</p>
+<hr />
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#text-processing">Text Processing</a></li>
+<li><a href="#anonymize">Anonymize</a></li>
+<li><a href="#normalize">Normalize</a></li>
+<li><a href="#clean">Clean</a></li>
+<li>
+<p><a href="#segmentation">Segmentation</a></p>
+</li>
+<li>
+<p><a href="#number-processing">Number Processing</a></p>
+</li>
+<li>
+<p><a href="#commoncrawl-processing">Commoncrawl Processing</a></p>
+</li>
+<li>
+<p><a href="#deduplication">Deduplication</a></p>
+</li>
+<li>
+<p><a href="#transliteration">Transliteration</a></p>
+</li>
+<li>
+<p><a href="#utility-functions">Utilities</a></p>
+</li>
+</ul>
+<hr />
+<h1 id="text-processing">Text Processing</h1>
+<h2 id="anonymize">Anonymize</h2>
+<p>Replace entity or sensitive information such as phone numbers, emails, URLs or other PII with placeholder tokens.</p>
+<h3 id="available-functions">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>anonymizer</code></td>
+<td>Completed anonymize pipeline to replace sensitive information with placeholder tokens.</td>
+</tr>
+<tr>
+<td><code>replace_email</code></td>
+<td>Replace email addresses in text.</td>
+</tr>
+<tr>
+<td><code>replace_tel</code></td>
+<td>Replace telephone numbers in text.</td>
+</tr>
+<tr>
+<td><code>replace_url</code></td>
+<td>Replace URLs in text.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details">Function Details</h3>
+<details>
+<summary><strong><code>anonymizer()</code></strong></summary>
+
+Replace entity and sensitive information with its placeholder token. Currently support only Phone numbers, Emails, URLs.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Anonymized text. |
+
+
+<strong>Example</strong>
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.anonymize import anonymizer
+
+print(anonymizer(&quot;You can contact us by phone at +855 12 345 678, email us at support@example.com, or visit our website at https://www.example.com anytime.&quot;))
+# You can contact us by phone at [TEL], email us at [EML], or visit our website at [URL] anytime.
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>replace_url()</code></strong></summary>
+
+Replace all url addresses in text with placeholder token.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+| `replace` | `str` | Replace placeholder. |
+
+| Type | Description |
+|---|---|
+| `str` | Anonymized text. |
+
+
+<strong>Example</strong>:
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.anonymize import replace_url
+
+print(replace_url(&quot;visit our website at https://www.example.com, or our telegram channel t.me/example anytime.&quot;))
+# visit our website at [URL] or our telegram channel [URL] anytime.
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>replace_email()</code></strong></summary>
+
+Replace all email addresses in text with placeholder token.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+| `replace` | `str` | Replace placeholder. |
+
+| Type | Description |
+|---|---|
+| `str` | Anonymized text. |
+
+
+<strong>Example</strong>:
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.anonymize import replace_email
+
+print(replace_email(&quot;Send the doc to alice@example.com and bob@test.org by tmr.&quot;))
+# Send the doc to [EML] and [EML] by tmr.
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>replace_tel()</code></strong></summary>
+
+Replace all telephone number in text with placeholder token.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+| `replace` | `str` | Replace placeholder. |
+
+| Type | Description |
+|---|---|
+| `str` | Anonymized text. |
+
+
+<strong>Example</strong>:
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.anonymize import replace_tel
+
+print(replace_tel(&quot;Home: 011-222-3333, Work: 044-555-6666.&quot;, &quot;[tel]&quot;))
+# Home: [tel], Work: [tel].
+</code></pre>
+
+---
+</details>
+
+<h2 id="normalize">Normalize</h2>
+<p>Utilities for Khmer text normalization.</p>
+<h3 id="available-functions_1">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>khnormal</code></td>
+<td>NormKhmer unicode disorder normalization function.</td>
+</tr>
+<tr>
+<td><code>normalizer</code></td>
+<td>Normalize text using Unicode NFKD, lowercase conversion, and Khmer normalization.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-detials">Function Detials</h3>
+<details>
+<summary><strong><code>khnormal()</code></strong></summary>
+
+Khmer unicode encoding disorder normalization function. we use normalization script provided by [Hosken et al](#ref-2).
+
+ Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Normaized text. |
+
+
+<strong>Example</strong>:
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.normalize import khnormal
+
+text1 = &quot;ធ្វើ&quot;  # \u1792\u17d2\u179c\u17be
+text2 = &quot;ធ្វេី&quot;  # \u1792\u17d2\u179c\u17c1\u17b8
+text3 = khnormal(text2)
+
+print(text1 == text2)
+# False
+print(text3 == text1)
+# True
+print(text3 == text2)
+# False
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>Normalizer()</code></strong></summary>
+
+Normalizer function for both English and Khmer text. It normalize English character with
+NFKD and lowercase follow by `khnormal()` for Khmer text.
+
+**Noted:** NFDK are normalize in decomposition. It covert format character to the base character (ex: ＴＥＸＴ -> TEXT) and break composition character into base character and accents character (ex: à -> a + \u0300, é -> e + \u0301). This accents character will be remove in clean function.
+
+Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Normaized text. |
+
+
+<strong>Example</strong>:
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.normalize import nomalizer
+
+
+text = &quot;Ｔhis is à tést ＴＥＸＴ for normalizer. ពាក្យធ្វេីនិងពាក្យស្រ្តីជាឧទាហរណ៍កុ្នងភាសាខែ្មរ។&quot;
+output = nomalizer(text)
+
+print(output)
+# this is à tést text for normalizer. ពាក្យធ្វើនិងពាក្យស្ត្រីជាឧទាហរណ៍ក្នុងភាសាខ្មែរ។
+# OLD TEXT: \uff34\u0068\u0069\u0073\u0020\u0069\u0073\u0020\u00e0\u0020\u0074\u00e9\u0073\u0074\u0020\uff34\uff25\uff38\uff34\u0020\u0066\u006f\u0072\u0020\u006e\u006f\u0072\u006d\u0061\u006c\u0069\u007a\u0065\u0072\u002e\u0020\u1796\u17b6\u1780\u17d2\u1799\u1792\u17d2\u179c\u17c1\u17b8\u1793\u17b7\u1784\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u179a\u17d2\u178f\u17b8\u1787\u17b6\u17a7\u1791\u17b6\u17a0\u179a\u178e\u17cd\u1780\u17bb\u17d2\u1793\u1784\u1797\u17b6\u179f\u17b6\u1781\u17c2\u17d2\u1798\u179a\u17d4
+# NEW TEXT: \u0074\u0068\u0069\u0073\u0020\u0069\u0073\u0020\u0061\u0300\u0020\u0074\u0065\u0301\u0073\u0074\u0020\u0074\u0065\u0078\u0074\u0020\u0066\u006f\u0072\u0020\u006e\u006f\u0072\u006d\u0061\u006c\u0069\u007a\u0065\u0072\u002e\u0020\u1796\u17b6\u1780\u17d2\u1799\u1792\u17d2\u179c\u17be\u1793\u17b7\u1784\u1796\u17b6\u1780\u17d2\u1799\u179f\u17d2\u178f\u17d2\u179a\u17b8\u1787\u17b6\u17a7\u1791\u17b6\u17a0\u179a\u178e\u17cd\u1780\u17d2\u1793\u17bb\u1784\u1797\u17b6\u179f\u17b6\u1781\u17d2\u1798\u17c2\u179a\u17d4
+</code></pre>
+
+---
+</details>
+
+<h2 id="clean">Clean</h2>
+<p>Utilities  for text cleaning.</p>
+<h3 id="available-functions_2">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text_cleaner</code></td>
+<td>Full option funciton for clean noisy text.</td>
+</tr>
+<tr>
+<td><code>remove_invisible_chars</code></td>
+<td>Remove invisible unicode characters.</td>
+</tr>
+<tr>
+<td><code>remove_misc_symbols</code></td>
+<td>This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji).</td>
+</tr>
+<tr>
+<td><code>remove_repetitive_punc</code></td>
+<td>Remove/Normalize repeated punctuation symbols.</td>
+</tr>
+<tr>
+<td><code>space_handler</code></td>
+<td>Handle space cleaning and manipulation for khmer text.</td>
+</tr>
+<tr>
+<td><code>count_khmer_char</code></td>
+<td>Normalize dash symbols into standard format.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_1">Function Details</h3>
+<details>
+<summary><strong><code>text_cleaner()</code></strong></summary>
+
+Clean noisy text by cleaning invisible characters, duplicated spaces, repeated punctuation, formatting artifacts and more. The objective was to get the clean and structured corpus format.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Cleaned text. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.clean import text_cleaner
+
+print(text_cleaner(
+    &quot;\u200b&amp;nbsp;Hello\u2014\u2014World!!!??      ខ្មែរ   123\u200b&amp;nbsp;&quot;
+))
+# Hello - World !? ខ្មែរ 123
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>remove_invisible_chars()</code></strong></summary>
+
+Remove invisible unicode characters such as zero-width spaces and formatting artifacts. This unicode range was inspired by [Kaing et al.](#ref-1).
+
+
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Cleaned text without invisible characters. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.clean import remove_invisible_chars
+
+print(remove_invisible_chars(&quot;He\u2060llo\u200bWorld&quot;))
+# HelloWorld
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>remove_misc_symbols()</code></strong></summary>
+
+This function will remove any miscellaneous symbols (monochrome emoji and colorful emoji)
+that are classify by unicodedata (So & Sk). Unicodedata categorize symbol character into 4 types
+such as Math (Sm), Currency (Sc), Modifier (Sk), other (So).
+
+**Noted:** In khmer character unicdoe range 1780-17FF (Khmer), There are no 'Sk'. And 19E0-19FF (Khmer Symbol) are 'So'.
+Character type: https://www.fileformat.info/info/unicode/category/index.htm
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Text without miscellaneouse characters or symbols. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.clean import remove_misc_symbols
+
+print(remove_misc_symbols(&quot;🎂🎈Happy Birthday! 🎂🎈&quot;))
+# Happy Birthday!
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>remove_repetitive_punc()</code></strong></summary>
+
+Remove/Normalize repeated punctuation symbols into cleaner formatting by keeping only one of its kind.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Text with normalized punctuation. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.clean import remove_repetitive_punc
+
+print(remove_repetitive_punc(&quot;Hello!!!????&quot;))
+# Hello!?
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>space_handler()</code></strong></summary>
+
+Handle space cleaning and manipulation for khmer text.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `str` | Text with formated space. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.clean import space_handler
+
+print(space_handler(&quot;សួ​ស្ដីis hello.(សួស្ដីalso mean Hi)&quot;))
+# សួស្ដី is hello . ( សួស្ដី also mean Hi )
+</code></pre>
+
+---
+</details>
+
+<h2 id="segmentation">Segmentation</h2>
+<p>Utilities for Khmer text segmentation.</p>
+<h3 id="available-functions_3">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sentence_segment</code></td>
+<td>Segment text into sentences.</td>
+</tr>
+<tr>
+<td><code>word_segment</code></td>
+<td>Segment Khmer text into words.</td>
+</tr>
+<tr>
+<td><code>kcc_segment</code></td>
+<td>Segment Khmer text into khmer character clustering (kcc).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_2">Function Details</h3>
+<details>
+<summary><strong><code>sentence_segment()</code></strong></summary>
+
+Segment text into sentence-level units.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `list[str]` | List of segmented sentences. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.segmentation import sentence_segment
+
+text = &quot;ខ្ញុំស្រឡាញ់ភាសាខ្មែរ។ នេះគឺជាការសាកល្បង។&quot;
+
+print(sentence_segment(text))
+# [&quot;ខ្ញុំស្រឡាញ់ភាសាខ្មែរ។&quot;, &quot;នេះគឺជាការសាកល្បង។&quot;]
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>word_segment()</code></strong></summary>
+
+Segment Khmer text into word-level tokens. Two type of segment available 'com' for compound level segmenation and 'mor' for morpheme level segmentation.
+
+**Note:** It called [*Khmer-NLTK*](#ref-3) API for Compound segmenation, while using model from [*Khmer-NLP-Tools*](#ref-4) for Morpheme segmentation.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+| `word_type` | `enum['com', 'mor']` | Segmentation type. Default = "com"|
+| `rt_type` | `enum['str', 'list']` | Output type. Default = "str"|
+
+| Type | Description |
+|---|---|
+| `str \| list[str]` | Result of segmented words. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.segmentation import word_segment
+
+text = &quot;នៅយប់ថ្ងៃទី៣១ ខែមីនា ឆ្នាំ២០២១នេះ វ៉ាក់សាំងកូវីដ១៩ ស៊ីណូហ្វាម ចំនួន ៧០ម៉ឺនដូស ជាជំនួយដ៏ ស្មោះសរបស់រដ្ឋាភិបាលចិន បានមកដល់កម្ពុជាហើយ។&quot;
+
+
+print(word_segment(text, word_type=&quot;com&quot;))
+# នៅ យប់ ថ្ងៃទី ៣១ ខែមីនា ឆ្នាំ ២០២១ នេះ វ៉ាក់សាំង កូវីដ១៩ ស៊ីណូ ហ្វាម ចំនួន ៧០ ម៉ឺន ដូស ជា ជំនួយ ដ៏ ស្មោះស របស់ រដ្ឋាភិបាល ចិន បាន មកដល់ កម្ពុជា ហើយ ។
+print(word_segment(text, word_type=&quot;mor&quot;))
+# នៅ យប់ ថ្ងៃ ទី ៣១ ខែ មីនា ឆ្នាំ ២០២១ នេះ វ៉ាក់សាំង កូវីដ ១៩ ស៊ីណូ ហ្វាម ចំនួន ៧០ ម៉ឺន ដូស ជា ជំនួយ ដ៏ ស្មោះ ស របស់ រដ្ឋាភិបាល ចិន បាន មក ដល់ កម្ពុជា ហើយ ។
+print(word_segment(text, rt_type='list'))
+# ['នៅ', 'យប់', 'ថ្ងៃទី', '៣១', 'ខែមីនា', 'ឆ្នាំ', '២០២១', 'នេះ', 'វ៉ាក់សាំង', 'កូវីដ១៩', 'ស៊ីណូ', 'ហ្វាម', 'ចំនួន', '៧០', 'ម៉ឺន', 'ដូស', 'ជា', 'ជំនួយ', 'ដ៏', 'ស្មោះស', 'របស់', 'រដ្ឋាភិបាល', 'ចិន', 'បាន', 'មកដល់', 'កម្ពុជា', 'ហើយ', '។']
+
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>kcc_segment()</code></strong></summary>
+
+Segment text into kcc-level units.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input text. |
+
+| Type | Description |
+|---|---|
+| `list[str]` | List of kcc token. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.text.segmentation import kcc_segment
+
+text = &quot;ខ្ញុំស្រឡាញ់ភាសាខ្មែរ។&quot;
+
+print(kcc_segment(text))
+# ['ខ្ញុំ', 'ស្រ', 'ឡា', 'ញ់', 'ភា', 'សា', 'ខ្មែ', 'រ', '។']
+</code></pre>
+
+---
+</details>
+
+<p><br></p>
+<h1 id="number-processing">Number Processing</h1>
+<h3 id="available-functions_4">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>num2text</code></td>
+<td>Convert int/decimal number to Khmer word representation.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_3">Function Details</h3>
+<details>
+<summary><strong><code>num2text()</code></strong></summary>
+
+Convert int/decimal number to Khmer word representation.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `num` | `Union[int, float]` | Number to convert to text. |
+| `style` | `Literal["normal", "3"] = "normal"` | The style of reading number that will use to convert to text. |
+| `is_split` | `bool = False` | If True, the return will be a list of text in each digit. |
+
+| Type | Description |
+|---|---|
+| `Union["str", "list[str]"]` | Output of Khmer transcripted text. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.number import num2text
+
+print(num2text(100123))
+# មួយសែនមួយរយម្ភៃបី
+print(num2text(100123, style=&quot;3&quot;))
+# មួយរយពាន់មួយរយម្ភៃបី
+print(num2text(100123, is_split=True))
+# ['មួយ', 'សែន', 'មួយ', 'រយ', 'ម្ភៃ', 'បី']
+
+print(num2text(10.0123))
+# ដប់ចុចសូន្យមួយរយម្ភៃបី
+print(num2text(1231.34))
+# មួយពាន់ពីររយសាមសិបមួយចុចសាមសិបបួន
+</code></pre>
+
+---
+</details>
+
+<p><br></p>
+<h1 id="commoncrawl-processing">Commoncrawl Processing</h1>
+<p>Provides feature to work with the scrapping/crawling content.
+It could be serve as first stage data checking and grouping for further processing.</p>
+<h3 id="available-functions_5">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>quality_warning</code></td>
+<td>Web crawling context quality checking.</td>
+</tr>
+<tr>
+<td><code>document_filtering</code></td>
+<td>Classify warning into 3 levels of quality and filtered.</td>
+</tr>
+<tr>
+<td><code>is_adult_url_filter</code></td>
+<td>Classify URL as adult URL or not.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_4">Function Details</h3>
+<details>
+<summary><strong><code>quality_warning()</code></strong></summary>
+
+Web crawling context quality checking. Get all quality warning from the context.
+
+**Noted:** There are predefined five warning flags.
+- noisy: Ratio of Khmer_char/total_char > 0.5
+- tiny: Contain less than or equal to 5 lines
+- short_sentence: count of line with less then 100 char/total lines > 0.5
+- header: top 20% of lines are short_sentence
+- footer: bottom 20% of lines is short_sentence
+
+| Parameter | Type | Description |
+|---|---|---|
+| `context` | `str` | Text for checking. |
+
+| Return Type | Description |
+|---|---|
+| `list[str]` | List of warning flags. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.commoncrawl import check_quality_warning
+
+text = &quot;&quot;&quot;លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ៖ កម្ពុជាគង់តែស្គាល់ភាពរុងរឿងដូចសិង្ហបុរី បើរក្សាបានសន្តិភាព ស្ថិរភាព និងប្រឹងប្រែងអភិវឌ្ឍសេដ្ឋកិច្ច (Video inside)
+Search ...
+FRESH NEWS+ Home Local World Business KnowledgeAnalysis Youtube English Chinese (中文)
+លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ៖ កម្ពុជាគង់តែស្គាល់ភាពរុងរឿងដូចសិង្ហបុរី បើរក្សាបានសន្តិភាព ស្ថិរភាព និងប្រឹងប្រែងអភិវឌ្ឍសេដ្ឋកិច្ច (Video inside)
+2024-06-19 07:08pm
+(ភ្នំពេញ)៖ លោក តាន់ ហ្សង់ហ្វ្រង់ស្វ័រ រដ្ឋមន្ត្រីប្រតិភូអមនាយករដ្ឋមន្ត្រី បានលើកឡើងថា កម្ពុជាគង់តែស្គាល់ភាពរុងរឿងដូចសិង្ហបុរីសព្វថ្ងៃ ប្រសិនបើរក្សាបានសន្តិភាព ស្ថិរភាព និងប្រឹងប្រែងអភិវឌ្ឍសេដ្ឋកិច្ចទៅមុខជាបន្តបន្ទាប់។&quot;&quot;&quot;
+
+print(check_quality_warning(text))
+# ['header', 'footer', 'short_sentences']
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>is_adult_url_filter()</code></strong></summary>
+
+Check if the url are appropriate content.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | `str` | url string to check for keyword. |
+
+| Return Type | Description |
+|---|---|
+| `bool` | True if the url content keyword, vise versa. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.commoncrawl.doc_filtering import is_adult_url_filter
+
+print(is_adult_url_filter(&quot;https://bizkhmer.com/articles/18357&quot;))
+# false
+print(is_adult_url_filter(&quot;https://example.phimsexnh.testing/category&quot;))
+# true
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>document_filtering()</code></strong></summary>
+
+Classify and filter those not match in quality.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `obj` | `dict` | Document dict object. |
+| `quality_type` | `Literal["High", "Medium", "Low"] = "High"` | Quality level to keep. |
+
+| Return Type | Description |
+|---|---|
+| `bool` | True if the url content keyword, vise versa. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.commoncrawl.doc_filtering import is_adult_url_filter
+
+print(is_adult_url_filter(&quot;https://bizkhmer.com/articles/18357&quot;))
+# false
+print(is_adult_url_filter(&quot;https://example.phimsexnh.testing/category&quot;))
+# true
+</code></pre>
+
+---
+</details>
+
+<p><br></p>
+<h1 id="deduplication">Deduplication</h1>
+<p>Deduplication utilities and similarity matching tools for removing
+duplicate records, filtering redundant samples, and maintaining
+dataset quality.</p>
+<h2 id="url-deduplicator">URL Deduplicator</h2>
+<p>This module is for work with big data to avoid heavy check of exact match. 
+It also support parallel running process.</p>
+<p><strong>Note:</strong> This module will be update to class/object base operation in the next version.</p>
+<h3 id="available-functions_6">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>is_url_duplicate</code></td>
+<td>Remove exact duplicate records based on identical url hashing.</td>
+</tr>
+<tr>
+<td><code>load_hashes_file</code></td>
+<td>Load stored URL hash fingerprints from a hash index file into memory.</td>
+</tr>
+<tr>
+<td><code>write_hash_file</code></td>
+<td>Persist URL hash fingerprints to a hash index file for future deduplication checks.</td>
+</tr>
+</tbody>
+</table>
+<!-- | `is_url_duplicate` | Detect near-duplicate entries using text similarity matching. |
+| `MinHashDeduplicator` | Efficient large-scale deduplication using MinHash signatures. |
+| `SemanticDeduplicator` | Remove semantically similar samples using embedding similarity. |
+| `deduplicate_dataset` | Execute dataset-wide deduplication pipeline with configurable strategy. |
+| `compute_similarity` | Compute similarity score between two records or documents. |
+| `filter_duplicates` | Filter duplicated entries from iterable datasets or file sources. |
+| `generate_signature` | Generate hash or fingerprint signatures for dataset records. | -->
+
+<h3 id="function-details_5">Function Details</h3>
+<details>
+<summary><strong><code>is_url_duplicate()</code></strong></summary>
+
+Check for duplication. if url not found, indexing it.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `url` | `str` | URL string. |
+| `rt_hash` | `bool = False` | if true return url hash. |
+
+| Return Type | Description |
+|---|---|
+| `bool` | True if the URL already seen before, false if URL have not seen yet. |
+| `set(bool, url_hash)` | return set of URL seen status and its hash value. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.deduplicate.url_dedup import is_url_duplicate
+
+list_urls = [
+    &quot;example.com&quot;,
+    &quot;example1.com&quot;,
+    &quot;example.com&quot;
+]
+
+for url in list_urls:
+    print(is_url_duplicate(url))
+# False
+# False
+# True
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>load_hashes_file()</code></strong></summary>
+
+Load previous URL run footprint.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `path` | `str` | URL footprint cache. set default to '.cache/seen_url.txt' if not specify. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.deduplicate.url_dedup import is_url_duplicate, load_hashes_file
+
+load_hashes_file()
+
+list_urls = [
+    &quot;example.com&quot;,
+    &quot;example1.com&quot;,
+    &quot;example.com&quot;
+]
+
+for url in list_urls:
+    print(is_url_duplicate(url))
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>write_hash_file()</code></strong></summary>
+
+Save URL footprint for later check or run.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `path` | `str` | URL footprint cache. set default to '.cache/seen_url.txt' if not specify. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.deduplicate.url_dedup import write_hash_file
+
+
+list_urls = [
+    &quot;example.com&quot;,
+    &quot;example1.com&quot;,
+    &quot;example.com&quot;
+]
+
+for url in list_urls:
+    print(is_url_duplicate(url))
+
+write_hash_file()
+</code></pre>
+
+---
+</details>
+
+<h2 id="document-deduplicator">Document Deduplicator</h2>
+<p>This module are for identifying any exact match duplicated text or near duplicated text working with big data.</p>
+<p><strong>NOTE:</strong> Detail usage will be update later.</p>
+<p><br></p>
+<h1 id="transliteration">Transliteration</h1>
+<p>Transliteration means converting text from one writing system (script) into another script while preserving pronunciation.
+It is useful for project such as ASR and TTS to convert borrow words from English or French.</p>
+<h3 id="available-functions_7">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>romanizer</code></td>
+<td>Convert Khmer name or word to Roman.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_6">Function Details</h3>
+</details>
+<details>
+<summary><strong><code>romanizer()</code></strong></summary>
+
+Convert Khmer name or word to Roman.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `names` | `Union[str, list[str]]` | String of name or list of names. |
+
+| Return Type | Description |
+|---|---|
+| `Union[str, list[str]]` | String of romanized name or list of romanized names. |
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.deduplicate.url_dedup import write_hash_file
+
+
+list_urls = [
+    &quot;example.com&quot;,
+    &quot;example1.com&quot;,
+    &quot;example.com&quot;
+]
+
+for url in list_urls:
+    print(is_url_duplicate(url))
+
+write_hash_file()
+</code></pre>
+
+---
+</details>
+
+<p><br></p>
+<h1 id="utility-functions">Utility Functions</h1>
+<p>Utility helpers and workflow tools for dataset processing,
+file handling, and pipeline execution.</p>
+<h3 id="available-functions_8">Available Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pipeline</code></td>
+<td>Pipelines class execute processing in sequential or parallel mode.</td>
+</tr>
+<tr>
+<td><code>lazy_read_jsonl</code></td>
+<td>Lazily read <code>.jsonl</code> files line-by-line without load the whole data.</td>
+</tr>
+<tr>
+<td><code>count_file_line</code></td>
+<td>Count the number of lines in a file.</td>
+</tr>
+<tr>
+<td><code>get_filepath</code></td>
+<td>Retrieve absolute file paths from directories.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="function-details_7">Function Details</h3>
+<details>
+<summary><strong><code>Pipeline</code></strong></summary>
+
+Pipeline class for building sequential processing workflows.
+
+This class allows chaining multiple functions into a reusable
+end-to-end execution pipeline.
+
+- Functions are executed sequentially.
+- Output from the previous function is passed into the next function.
+- Additional keyword arguments can be attached to each pipeline step.
+- Useful for NLP preprocessing and custom text workflows.
+
+
+**Initialization**
+
+
+<pre><code class="language-python">Pipeline()
+</code></pre>
+
+
+---
+**Class Methods**
+
+| Method | Description |
+|---|---|
+| `add()` | Add processing function into pipeline in order. |
+| `run()` | Execute all pipeline tasks sequentially. |
+| `run_parallel()` | Execute all pipeline tasks sequentially with data parallel running. |
+| `get_queue_status()` | [For parallel run] Return current queue capacity status.<ul><li>Pipeline: <code>in_q -> s1 -> q1 -> s2 -> q2 -> s3 -> out_q</code> (4 queues total)</li><li>Example result: <code>[10, 10, 9, 0]</code> (<code>qsize=10</code>)</li><li>Most batches are stuck at step 3 (<code>s3</code>) because it processes slower than other steps.</li></ul> |
+
+**Class Method Details**
+
+<details>
+<summary><strong><code>add()</code></strong></summary>
+Add a processing function into the pipeline.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `step` | `Callable` | Processing function to append into pipeline. |
+| `desc` | `str \| None` | Optional pipeline step description. |
+| `step_params` | `Any` | Keyword arguments pre-passed into the function during execution. |
+| `num_process` | `int = 1` | [For parallel run] Number of parallel processer config to spawn solely to run/perform this setup step. Increase this number for the step that do heavy work and take a lot of time for each batch running. |
+| `is_wrap` | `bool = False` | [For parallel run] Set to true to wraped func in loop to execute as a batch. If False the data will pass to function directly. |
+
+---
+
+<pre><code class="language-python">from khmer_nlp_toolkits.pipeline import Pipeline
+
+
+# Example custom function
+def func_a(text: str, is_upper: bool = False) -&gt; str:
+    return text.upper() if is_upper else text.lower()
+
+def func_b(text: str, times: int = 1) -&gt; str:
+    return text * times
+
+# Create the pipeline
+pipeline = Pipeline()
+
+# Add functions into pipeline
+pipeline.add(func_a, is_upper=True, desc=&quot;lower or upper text.&quot;)
+pipeline.add(func_b, times=3)
+
+# List functions inside pipeline
+print(str(pipeline))
+# ==============================
+# All function flow in pipeline.
+# ==============================
+# 1. func_a(is_upper=True)
+#   lower or upper text.
+# 2. func_b(times=3)
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>run()</code></strong></summary>
+Execute all pipeline functions sequentially.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `data` | `Any` | Input pipeline data. |
+
+| Return Type | Description |
+|---|---|
+| `Any` | Result of last step in pipeline. |
+
+---
+
+<pre><code class="language-python">from khmer_nlp_toolkits.pipeline import Pipeline
+
+
+# Example custom function
+def func_a(text: str, is_upper: bool = False) -&gt; str:
+    return text.upper() if is_upper else text.lower()
+
+def func_b(text: str, times: int = 1) -&gt; str:
+    return text * times
+
+# Create the pipeline
+pipeline = Pipeline()
+
+# Add functions into pipeline
+pipeline.add(func_a, is_upper=True, desc=&quot;lower or upper text.&quot;)
+pipeline.add(func_b, times=3)
+
+# Run pipeline in linear
+INPUT_TEXT = &quot;hello world&quot;
+
+output_text = pipeline.run(INPUT_TEXT)
+
+print(output_text)
+# HELLO WORLDHELLO WORLDHELLO WORLD
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>run_parallel()</code></strong></summary>
+Data and State parallel processing function. This function use multiprocesser and threading to execute data in parallel. Each state have a number of process to run independently on prarallel when data are available.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `data` | `Union[list, Iterator]` | Data to process. It must be a list or Iterator, since the data being processed in chuck of batch_size. |
+| `batch_size` | `int = 100` | Number of data being processed per batch at a time. |
+| `timeout` | `int = 30` | Maximum time to wait (in seconds) for data to be returned from the pipeline. If exceed the timeout, the process will end. This is to prevent logic break of Endless loop for waiting. |
+| `qsize` | `int = 10` | Queue capacity. One queue slot equal to one batch data. If the queue full, the process corresponding to that queue will be on halt until next state process pickup batch to free queue. |
+
+| Return Type | Description |
+|---|---|
+| `Any` | Result of last step in pipeline. |
+---
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.pipeline import Pipeline
+
+# Example custom function
+def func_a(text: str, is_upper: bool = False) -&gt; str:
+    return text.upper() if is_upper else text.lower()
+
+def func_b(text: str, times: int = 1) -&gt; str:
+    return text * times
+
+# Create the pipeline
+pipeline = Pipeline()
+
+# Add functions into pipeline
+pipeline.add(func_a, is_wrap=True, is_upper=True, desc=&quot;lower or upper text.&quot;)
+pipeline.add(func_b, is_wrap=True, times=2, num_process=1)    # there are 2 workers to do this job. Meaning 2 batches data are being process in parallel. 
+
+# Run pipeline in linear
+INPUT_TEXT = [&quot;hello&quot;, &quot;world&quot;, &quot;Hi&quot;, &quot;Bonjour&quot;, &quot;Alo&quot;]
+
+# Consume data as soon as the batch finish.
+for result in pipeline.run_parallel(INPUT_TEXT, batch_size=2):
+    print(result)
+# ['HELLOHELLO', 'WORLDWORLD']
+# ['HIHI', 'BONJOURBONJOUR']
+# ['ALOALO']
+
+# Waiting until all data are finished.
+print(list(pipeline.run_parallel(INPUT_TEXT, batch_size=2)))
+# [['HELLOHELLO', 'WORLDWORLD'], ['HIHI', 'BONJOURBONJOUR'], ['ALOALO']]
+</code></pre>
+
+</details>
+
+---
+</details>
+
+<details>
+<summary><strong><code>lazy_read_jsonl()</code></strong></summary>
+
+Lazy read json from jsonline file. Consume data line-by-line with generator when called.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `filepath` | `str` | Jsonl file path. |
+| `allow_none` | `bool = True` | Allow none object to pass through without raising error. |
+| `limit` | `int = none` | Cut-off reading when the amount are meet. |
+| `show_progress` | `bool = False` | Show tqdm progress bar. |
+
+| Return Type | Description |
+|---|---|
+| `iteration` | Iteration object that can be consume. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.utils import lazy_read_jsonl
+
+# Direct consume
+for obj in lazy_read_jsonl(FILE_PATH):
+    print(obj)
+
+reader = lazy_read_jsonl(FILE_PATH)
+print(next(reader))
+# print result of first obj
+print(len(reader))
+# Given the remaining amount of data after consume.
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>count_file_line()</code></strong></summary>
+
+Given the total line within a file. This function does not read data from file, it use sub-process to execute linux command for memory efficient count.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `filepath` | `str` | Jsonl file path. |
+
+| Return Type | Description |
+|---|---|
+| `int` | Total number of lines. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.utils import count_file_line
+
+count = count_file_line(FILE_PATH)
+
+print(count)
+# Total number of lines
+</code></pre>
+
+---
+</details>
+
+<details>
+<summary><strong><code>get_filepath()</code></strong></summary>
+
+Retrieves and sorts relative file paths from a source directory, optionally mapping them to a destination.
+
+If a destination is provided, it ensures the directory exists and returns a list
+of tuples containing (source_path, destination_path). Otherwise, it returns
+a list of full paths to the files in the source directory.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `source` | `str` | The directory path to scan for files. |
+| `destination` | `str, optional` | The directory path where files are intended to be mapped or moved. Defaults to None.. |
+
+| Return Type | Description |
+|---|---|
+| `list` | A list of strings (source paths) if destination is None. |
+| `list[tuple]` | A list of (source_path, destination_path) pairs if destination is provided. |
+
+
+<strong>Example</strong>
+
+
+<pre><code class="language-python">from khmer_nlp_toolkits.utils import get_filepath
+
+# filepath = get_filepath(FILE_PATH)
+filepath = get_filepath(&quot;docs/&quot;)
+print(filepath)
+# ['doc/file1.jsonl', 'doc/file2.jsonl', ...]
+
+filepath = get_filepath(&quot;docs/&quot;, &quot;abc/abc&quot;)
+print(filepath)
+# [
+#   ('doc/file1.jsonl', 'abc/abc/file1.jsonl'),
+#   ('dir/file2.jsonl', 'abc/abc/file2.jsonl'),
+#   ...
+# ]
+</code></pre>
+
+---
+</details>
+
+<p><br></p>
+<h1 id="references">References</h1>
+<p><a id="ref-1"></a>
+<a href="https://aclanthology.org/2025.coling-main.87/">[1]</a> Hour Kaing, Raj Dabre, Haiyue Song, Van-Hien Tran, Hideki Tanaka, and Masao Utiyama. 2025. PrahokBART: A Pre-trained Sequence-to-Sequence Model for Khmer Natural Language Generation. In Proceedings of the 31st International Conference on Computational Linguistics, pages 1309–1322, Abu Dhabi, UAE. Association for Computational Linguistics.</p>
+<p><a id="ref-2"></a>
+<a href="https://www.unicode.org/L2/L2022/22290-khmer-encoding.pdf">[2]</a> Martin Hosken, Norbert Lindenberg, and Makara Sok. 2022. Khmer encoding structure. Technical report, The Unicode Technical Committee.</p>
+<p><a id="ref-3"></a>
+[3] Hoang, P. V. (2020). Khmer Natural Language Processing Toolkit. GitHub repository. https://github.com/VietHoang1512/khmer-nltk</p>
+<p><a id="ref-4"></a>
+[4] Vichet Chea, Ye Kyaw Thu, Chenchen Ding, Masao Utiyama, Andrew Finch, and Eiichiro Sumita. Khmer word segmentation using conditional random fields. Khmer Natural Language Processing, 2015</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
