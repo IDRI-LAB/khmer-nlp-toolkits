@@ -48,29 +48,29 @@ print(text_cleaner(
 
 Khmer NLP Toolkits provides modular utilities and NLP components for Khmer language processing.
 
-### Commoncrawl [🔗](docs/usage.md)
+### Commoncrawl [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
 - Content Quality Warning
 - Document Quality Filtering
 - Adult Content Filtering
 
-### Text Processing [🔗](docs/usage.md)
+### Text Processing [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
 - Text Anonymization
 - Text Normalization
 - Text Cleaning
 - Segmentation
 
-### Number Processing [🔗](docs/usage.md)
+### Number Processing [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
 - number conversion to text
 
-### Deduplication [🔗](docs/usage.md)
+### Deduplication [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
 - URL deduplication
 - Content Deduplication
 
-### Utilities [🔗](docs/usage.md)
+### Utilities [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
 - End2End Pipeline
 - File Utilities Features
