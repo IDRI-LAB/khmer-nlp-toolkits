@@ -4,11 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "khmer_nlp_toolkits"
-version = "0.2.0"
+version = "0.2.1"
 description = "Khmer NLP toolkits"
 readme = "README.md"
 requires-python = ">=3.10"
 dynamic = ["dependencies"]
+
+[project.urls]
+Homepage = "https://github.com/IDRI-LAB/khmer-nlp-toolkits"
+Documentation = "https://IDRI-LAB.github.io/khmer-nlp-toolkits/"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
