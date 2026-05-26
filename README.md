@@ -98,7 +98,7 @@ Contributions, issues, and feature requests are welcome. Feel free to open a pul
 - [ ] NER
 - [ ] Semantic Similarity
 - [ ] Text2Num
-- [ ] etc.khmer_nlp_toolkits/transliterate/romanize.py
+- [ ] etc.
 
 
 <br>
