@@ -4,6 +4,7 @@ Segmentation module.
 import re
 import logging
 from typing import List, Literal, Union
+from functools import lru_cache
 
 from khmernltk import word_tokenize
 
@@ -26,7 +27,12 @@ __all__ = [
 # This version split with number listing: ex: 1. 1) 12. however had problem with (2) => (\n2)
 # PATTERN = r"(?<=[{}])\s*|(?=\b\d{{1,3}} ?[\)\.][^\S])".format("".join(SENTENCE_SEPARATOR))
 PATTERN = r"(?<=[{}])\s*".format("".join(SENTENCE_SEPARATOR))
-tokenizer = Tokenizer("khmer_nlp_toolkits/utils/segment/model/morpheme_model.bin")
+MORPHEM_MODEL_PATH = "khmer_nlp_toolkits/utils/segment/model/morpheme_model.bin"
+
+
+@lru_cache(maxsize=1)
+def _load_tokenizer():
+    return Tokenizer(MORPHEM_MODEL_PATH)
 
 
 def sentence_segment(text: str) -> List[str]:
@@ -101,7 +107,7 @@ def word_segment(
         raise ValueError("The word type must be 'str' or 'list'.")
 
     if word_type == "mor":
-        res = tokenizer.tokenize(text)
+        res = _load_tokenizer().tokenize(text)
         if rt_type == "list":
             return res.split(" ")
         return res

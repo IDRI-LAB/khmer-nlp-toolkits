@@ -11,6 +11,7 @@ The project is designed to make Khmer NLP easier for:
 
 It aims to provide a unified, lightweight, and extensible toolkit for common Khmer language processing tasks.
 
+<br>
 
 # Installation
 ### Requirements
@@ -21,6 +22,7 @@ It aims to provide a unified, lightweight, and extensible toolkit for common Khm
 pip install khmer_nlp_toolkits
 ```
 
+<br>
 
 # Quick Start
 ```python
@@ -40,6 +42,7 @@ print(text_cleaner(
 # "Hello - World !? ខ្មែរ 123"
 ```
 
+<br>
 
 # Features
 
@@ -72,6 +75,7 @@ Khmer NLP Toolkits provides modular utilities and NLP components for Khmer langu
 - End2End Pipeline
 - File Utilities Features
 
+<br>
 
 # Vision
 
@@ -83,12 +87,21 @@ We hope this project can contribute to:
 - NLP research accessibility
 - Open-source AI infrastructure for Khmer
 
+<br>
 
 # Contributing
 
-Contributions, issues, and feature requests are welcome.
+Contributions, issues, and feature requests are welcome. Feel free to open a pull request or discussion.
 
-Feel free to open a pull request or discussion.
+### Planned Features
+- [ ] Khmerize
+- [ ] NER
+- [ ] Semantic Similarity
+- [ ] Text2Num
+- [ ] etc.khmer_nlp_toolkits/transliterate/romanize.py
+
+
+<br>
 
 # Contributors
 
@@ -96,7 +109,24 @@ Feel free to open a pull request or discussion.
 - [Natt KORAT](https://nattkorat.github.io/)
 - [Chily RAN](https://github.com/ChilyRan)
 
+<br>
 
 # License
 
 This project is licensed under the MIT License.
+
+<br>
+
+# References
+<a id="ref-1"></a>
+[[1]](https://aclanthology.org/2025.coling-main.87/) Hour Kaing, Raj Dabre, Haiyue Song, Van-Hien Tran, Hideki Tanaka, and Masao Utiyama. 2025. PrahokBART: A Pre-trained Sequence-to-Sequence Model for Khmer Natural Language Generation. In Proceedings of the 31st International Conference on Computational Linguistics, pages 1309–1322, Abu Dhabi, UAE. Association for Computational Linguistics.
+
+<a id="ref-2"></a>
+[[2]](https://www.unicode.org/L2/L2022/22290-khmer-encoding.pdf) Martin Hosken, Norbert Lindenberg, and Makara Sok. 2022. Khmer encoding structure. Technical report, The Unicode Technical Committee.
+
+<a id="ref-3"></a>
+[3] Hoang, P. V. (2020). Khmer Natural Language Processing Toolkit. GitHub repository. https://github.com/VietHoang1512/khmer-nltk
+
+<a id="ref-4"></a>
+[4] Vichet Chea, Ye Kyaw Thu, Chenchen Ding, Masao Utiyama, Andrew Finch, and Eiichiro Sumita. Khmer word segmentation using conditional random fields. Khmer Natural Language Processing, 2015
+
