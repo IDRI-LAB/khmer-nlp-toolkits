@@ -4,7 +4,8 @@ omit =
     main.py,
     khnormal.py,
     khmer_nlp_toolkits/utils/segment/*,
-    khmer_nlp_toolkits/deduplicate/*
+    khmer_nlp_toolkits/deduplicate/*,
+    khmer_nlp_toolkits/transliterate/romanize.py
 
 [report]
 exclude_lines =

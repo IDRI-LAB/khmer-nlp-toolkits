@@ -39,7 +39,7 @@ def test_input_word_segmentation():
 
 
 def test_word_segment_call_correct_func(mocker):
-    mock1 = mocker.patch("khmer_nlp_toolkits.text.segmentation.tokenizer.tokenize")
+    mock1 = mocker.patch("khmer_nlp_toolkits.text.segmentation._load_tokenizer")
     mock2 = mocker.patch("khmer_nlp_toolkits.text.segmentation.word_tokenize")
 
     seg.word_segment("Hello", "mor")

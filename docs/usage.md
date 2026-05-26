@@ -17,6 +17,8 @@ This document contains detailed usage examples for Khmer NLP Toolkits.
 
 - [Deduplication](#deduplication)
 
+- [Transliteration](#transliteration)
+
 - [Utilities](#utility-functions)
 
 ---
@@ -765,6 +767,57 @@ This module are for identifying any exact match duplicated text or near duplicat
 
 <br>
 
+# Transliteration
+
+Transliteration means converting text from one writing system (script) into another script while preserving pronunciation.
+It is useful for project such as ASR and TTS to convert borrow words from English or French.
+
+### Available Functions
+
+| Function | Description |
+|---|---|
+| `romanizer` | Convert Khmer name or word to Roman. |
+
+### Function Details
+
+</details>
+
+<details>
+<summary><strong><code>romanizer()</code></strong></summary>
+
+Convert Khmer name or word to Roman.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `names` | `Union[str, list[str]]` | String of name or list of names. |
+
+| Return Type | Description |
+|---|---|
+| `Union[str, list[str]]` | String of romanized name or list of romanized names. |
+
+<strong>Example</strong>
+
+```python
+from khmer_nlp_toolkits.deduplicate.url_dedup import write_hash_file
+
+
+list_urls = [
+    "example.com",
+    "example1.com",
+    "example.com"
+]
+
+for url in list_urls:
+    print(is_url_duplicate(url))
+
+write_hash_file()
+```
+---
+</details>
+
+
+<br>
+
 # Utility Functions
 
 Utility helpers and workflow tools for dataset processing,
@@ -1056,7 +1109,7 @@ print(filepath)
 </details>
 
 
-
+<br>
 
 # References
 <a id="ref-1"></a>
