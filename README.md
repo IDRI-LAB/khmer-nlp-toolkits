@@ -11,6 +11,10 @@ The project is designed to make Khmer NLP easier for:
 
 It aims to provide a unified, lightweight, and extensible toolkit for common Khmer language processing tasks.
 
+📖 [Documentation](https://IDRI-LAB.github.io/khmer-nlp-toolkits/) |
+💻 [GitHub](https://github.com/IDRI-LAB/khmer-nlp-toolkits) |
+📦 [PyPI](https://pypi.org/project/khmer-nlp-toolkits/) 
+
 <br>
 
 # Installation
@@ -98,7 +102,7 @@ Contributions, issues, and feature requests are welcome. Feel free to open a pul
 - [ ] NER
 - [ ] Semantic Similarity
 - [ ] Text2Num
-- [ ] etc.khmer_nlp_toolkits/transliterate/romanize.py
+- [ ] etc.
 
 
 <br>

@@ -1,0 +1,19 @@
+site_name: My Docs
+site_name: Khmer NLP Toolkits
+site_description: Khmer NLP tools for Python
+site_url: https://your-domain-or-pages-url/
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - include-markdown
+
+markdown_extensions:
+  - pymdownx.tasklist:
+      custom_checkbox: false
+
+nav:
+  - Home: index.md
+  - Usage: usage.md
