@@ -3,6 +3,7 @@ Segmentation module.
 """
 import re
 import logging
+from pathlib import Path
 from typing import List, Literal, Union
 from functools import lru_cache
 
@@ -32,7 +33,7 @@ MORPHEM_MODEL_PATH = "khmer_nlp_toolkits/utils/segment/model/morpheme_model.bin"
 
 @lru_cache(maxsize=1)
 def _load_tokenizer():
-    return Tokenizer(MORPHEM_MODEL_PATH)
+    return Tokenizer(Path(__file__).parent.parent.parent.joinpath(MORPHEM_MODEL_PATH))
 
 
 def sentence_segment(text: str) -> List[str]:
