@@ -93,19 +93,60 @@ We hope this project can contribute to:
 
 <br>
 
+
 # Contributing
 
-Contributions, issues, and feature requests are welcome. Feel free to open a pull request or discussion.
+Contributions, issues, and feature requests are welcome. Feel free to open an issue, discussion, or pull request.
 
-### Planned Features
-- [ ] Khmerize
-- [ ] NER
-- [ ] Semantic Similarity
-- [ ] Text2Num
-- [ ] etc.
+## Contributing Workflow
 
+1. Fork the repository.
+
+2. Create a new branch for your feature or bug fix.
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. Make your changes and add tests if applicable.
+
+4. Ensure code style and documentation are updated.
+
+5. Commit your changes with a clear commit message.
+
+   ```bash
+   git commit -m "feat: add Khmer sentence tokenizer"
+   ```
+
+6. Push your branch to your fork.
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. Open a Pull Request and provide:
+
+   * A clear description of the changes.
+   * The motivation for the contribution.
+   * Examples or benchmarks (if applicable).
+
+## Contribution Guidelines
+
+* Follow the existing project structure and coding style.
+* Write clear and descriptive commit messages.
+* Update documentation when adding or modifying features.
+* Discuss large changes in an issue before implementation.
+
+## Planned Features
+
+* [ ] Khmerize
+* [ ] NER
+* [ ] Semantic Similarity
+* [ ] Text2Num
+* [ ] etc.
 
 <br>
+
 
 # Contributors
 
