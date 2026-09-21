@@ -12,3 +12,4 @@ simhash==2.1.2
 RapidFuzz==3.14.5
 lmdbdict==0.2.2
 khmer-nltk==1.6
+sosap==0.4.3; python_version >= "3.11"

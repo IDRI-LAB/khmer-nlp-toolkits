@@ -19,6 +19,8 @@ This document contains detailed usage examples for Khmer NLP Toolkits.
 
 - [Transliteration](#transliteration)
 
+- [G2P](#grapheme-to-phoneme-g2p)
+
 - [Utilities](#utility-functions)
 
 ---
@@ -811,6 +813,115 @@ for url in list_urls:
     print(is_url_duplicate(url))
 
 write_hash_file()
+```
+---
+</details>
+
+
+<br>
+
+# Grapheme-to-Phoneme (G2P)
+
+G2P converts Khmer words or text into phoneme sequences. It is useful as a front-end for TTS, ASR lexicons and forced alignment.
+Three phoneme targets are available: `ipa` (International Phonetic Alphabet), `latin` (Latin-script phonetic spelling) and `tts` (TTS front-end phoneme set).
+
+> **Requirement:** inference runs in-process on [sosap](https://github.com/seanghay/sosap), a pure-Rust Phonetisaurus
+> implementation with prebuilt wheels for Linux, macOS and Windows. `sosap` needs **Python 3.11+**; on Python 3.10 it is not
+> installed and g2p functions raise a `RuntimeError` asking for a newer Python.
+
+### Available Functions
+
+| Function | Description |
+|---|---|
+| `g2p` | Convert Khmer text to phonemes (word segmentation + number reading included). |
+| `g2p_word` | Convert a single Khmer word to phonemes. |
+| `g2p_words` | Convert a batch of Khmer words to phonemes. |
+
+### Function Details
+
+<details>
+<summary><strong><code>g2p()</code></strong></summary>
+
+Segment the text into words, then convert each Khmer word to phonemes. Non-Khmer tokens (Latin words, punctuation) are kept as they are.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `text` | `str` | Input Khmer text. |
+| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+| `rt_type` | `Literal["str", "list"]` | `"str"` returns one string, `"list"` returns `(token, phonemes)` pairs. Default `"str"`. |
+| `word_sep` | `str` | Word boundary marker when `rt_type="str"`. Default `" \| "`. |
+| `expand_numbers` | `bool` | Read numbers as Khmer words before conversion. Default `True`. |
+
+| Return Type | Description |
+|---|---|
+| `Union[str, List[Tuple[str, List[str]]]]` | Phonemes of the text. |
+
+<strong>Example</strong>
+
+```python
+from khmer_nlp_toolkits.g2p import g2p
+
+print(g2p("ភាសាខ្មែរ"))
+# pʰ iɜ s aː | kʰ m aɛ
+
+print(g2p("ភាសាខ្មែរ", target="latin"))
+# ph ie s a | kh m ae
+
+print(g2p("ភាសាខ្មែរ", target="tts", word_sep=" "))
+# PH ia S aa: KH M ea:
+
+print(g2p("ភាសាខ្មែរ", rt_type="list"))
+# [('ភាសា', ['pʰ', 'iɜ', 's', 'aː']), ('ខ្មែរ', ['kʰ', 'm', 'aɛ'])]
+```
+---
+</details>
+
+<details>
+<summary><strong><code>g2p_word()</code></strong></summary>
+
+Convert one Khmer word to phonemes.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `word` | `str` | A Khmer word. |
+| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+
+| Return Type | Description |
+|---|---|
+| `List[str]` | Phoneme sequence. |
+
+<strong>Example</strong>
+
+```python
+from khmer_nlp_toolkits.g2p import g2p_word
+
+print(g2p_word("ខ្មែរ"))
+# ['kʰ', 'm', 'aɛ']
+```
+---
+</details>
+
+<details>
+<summary><strong><code>g2p_words()</code></strong></summary>
+
+Convert a list of Khmer words. Results are cached, so repeated words are free. Entries that are not Khmer words (digits, punctuation, Latin) return `[]`.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `words` | `List[str]` | Khmer words without whitespace. |
+| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+
+| Return Type | Description |
+|---|---|
+| `List[List[str]]` | Phoneme sequence per word. |
+
+<strong>Example</strong>
+
+```python
+from khmer_nlp_toolkits.g2p import g2p_words
+
+print(g2p_words(["ភាសា", "ខ្មែរ"], target="latin"))
+# [['ph', 'ie', 's', 'a'], ['kh', 'm', 'ae']]
 ```
 ---
 </details>
