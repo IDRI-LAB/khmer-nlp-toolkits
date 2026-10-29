@@ -823,7 +823,7 @@ write_hash_file()
 # Grapheme-to-Phoneme (G2P)
 
 G2P converts Khmer words or text into phoneme sequences. It is useful as a front-end for TTS, ASR lexicons and forced alignment.
-Three phoneme targets are available: `ipa` (International Phonetic Alphabet), `latin` (Latin-script phonetic spelling) and `tts` (TTS front-end phoneme set).
+Three phoneme targets are available: `ipa` (International Phonetic Alphabet), `latin` (Latin-script phonetic spelling) and `tts-v1` (TTS front-end phoneme set).
 
 > **Requirement:** inference runs in-process on [sosap](https://github.com/seanghay/sosap), a pure-Rust Phonetisaurus
 > implementation with prebuilt wheels for Linux, macOS and Windows. `sosap` needs **Python 3.11+**; on Python 3.10 it is not
@@ -847,7 +847,7 @@ Segment the text into words, then convert each Khmer word to phonemes. Non-Khmer
 | Parameter | Type | Description |
 |---|---|---|
 | `text` | `str` | Input Khmer text. |
-| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+| `target` | `Literal["ipa", "latin", "tts-v1"]` | Phoneme target. Default `"ipa"`. |
 | `rt_type` | `Literal["str", "list"]` | `"str"` returns one string, `"list"` returns `(token, phonemes)` pairs. Default `"str"`. |
 | `word_sep` | `str` | Word boundary marker when `rt_type="str"`. Default `" \| "`. |
 | `expand_numbers` | `bool` | Read numbers as Khmer words before conversion. Default `True`. |
@@ -867,7 +867,7 @@ print(g2p("ភាសាខ្មែរ"))
 print(g2p("ភាសាខ្មែរ", target="latin"))
 # ph ie s a | kh m ae
 
-print(g2p("ភាសាខ្មែរ", target="tts", word_sep=" "))
+print(g2p("ភាសាខ្មែរ", target="tts-v1", word_sep=" "))
 # PH ia S aa: KH M ea:
 
 print(g2p("ភាសាខ្មែរ", rt_type="list"))
@@ -884,7 +884,7 @@ Convert one Khmer word to phonemes.
 | Parameter | Type | Description |
 |---|---|---|
 | `word` | `str` | A Khmer word. |
-| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+| `target` | `Literal["ipa", "latin", "tts-v1"]` | Phoneme target. Default `"ipa"`. |
 
 | Return Type | Description |
 |---|---|
@@ -909,7 +909,7 @@ Convert a list of Khmer words. Results are cached, so repeated words are free. E
 | Parameter | Type | Description |
 |---|---|---|
 | `words` | `List[str]` | Khmer words without whitespace. |
-| `target` | `Literal["ipa", "latin", "tts"]` | Phoneme target. Default `"ipa"`. |
+| `target` | `Literal["ipa", "latin", "tts-v1"]` | Phoneme target. Default `"ipa"`. |
 
 | Return Type | Description |
 |---|---|

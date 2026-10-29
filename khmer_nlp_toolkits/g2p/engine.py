@@ -6,7 +6,7 @@ Convert Khmer words or text into phoneme sequences. The pronunciation models are
 
 - ``ipa``:   International Phonetic Alphabet.
 - ``latin``: Latin-script phonetic spelling.
-- ``tts``:   Phoneme set used by the TTS front-end.
+- ``tts-v1``:   Phoneme set used by the TTS front-end.
 
 Inference is done in-process by `sosap <https://github.com/seanghay/sosap>`_, a pure-Rust Phonetisaurus
 implementation with prebuilt wheels for Linux, macOS and Windows. ``sosap`` requires Python 3.11+, so
@@ -24,7 +24,7 @@ from khmer_nlp_toolkits.text.segmentation import word_segment
 
 __all__ = ["g2p", "g2p_word", "g2p_words", "TARGETS"]
 
-TARGETS = ("ipa", "latin", "tts")
+TARGETS = ("ipa", "latin", "tts-v1")
 MODEL_DIR = Path(__file__).parent / "model"
 
 # Khmer consonants, independent/dependent vowels and signs. Excludes Khmer digits and punctuation.
@@ -78,7 +78,7 @@ def _predict(words: List[str], target: str) -> Dict[str, List[str]]:
     return {word: [phoneme for phoneme in model.phoneticize(word) if phoneme] for word in words}
 
 
-def g2p_words(words: List[str], target: Literal["ipa", "latin", "tts"] = "ipa") -> List[List[str]]:
+def g2p_words(words: List[str], target: Literal["ipa", "latin", "tts-v1"] = "ipa") -> List[List[str]]:
     """
     Convert a batch of Khmer words to phonemes. Duplicate words are decoded once
     and results are cached.
@@ -87,7 +87,7 @@ def g2p_words(words: List[str], target: Literal["ipa", "latin", "tts"] = "ipa") 
     ==========
     words: List[str]
         Khmer words. Each word must not contain whitespace.
-    target: Literal["ipa", "latin", "tts"], default = "ipa"
+    target: Literal["ipa", "latin", "tts-v1"], default = "ipa"
         Phoneme target.
 
     Return
@@ -111,7 +111,7 @@ def g2p_words(words: List[str], target: Literal["ipa", "latin", "tts"] = "ipa") 
     return [list(_CACHE.get((w, target), [])) for w in words]
 
 
-def g2p_word(word: str, target: Literal["ipa", "latin", "tts"] = "ipa") -> List[str]:
+def g2p_word(word: str, target: Literal["ipa", "latin", "tts-v1"] = "ipa") -> List[str]:
     """
     Convert one Khmer word to phonemes.
 
@@ -119,7 +119,7 @@ def g2p_word(word: str, target: Literal["ipa", "latin", "tts"] = "ipa") -> List[
     ==========
     word: str
         A Khmer word.
-    target: Literal["ipa", "latin", "tts"], default = "ipa"
+    target: Literal["ipa", "latin", "tts-v1"], default = "ipa"
         Phoneme target.
 
     Return
@@ -144,7 +144,7 @@ def _tokenize(text: str, expand_numbers: bool) -> List[str]:
 
 def g2p(
         text: str,
-        target: Literal["ipa", "latin", "tts"] = "ipa",
+        target: Literal["ipa", "latin", "tts-v1"] = "ipa",
         rt_type: Literal["str", "list"] = "str",
         word_sep: str = " | ",
         expand_numbers: bool = False
@@ -157,7 +157,7 @@ def g2p(
     ==========
     text: str
         Input Khmer text.
-    target: Literal["ipa", "latin", "tts"], default = "ipa"
+    target: Literal["ipa", "latin", "tts-v1"], default = "ipa"
         Phoneme target.
     rt_type: Literal["str", "list"], default = "str"
         - 'str' return phonemes of a word joined by space and words joined by ``word_sep``.

@@ -69,7 +69,7 @@ def test_non_khmer_words_skip_model(fake_predict):
 
 def test_cache_is_per_target(fake_predict):
     g2p_word("កា", "ipa")
-    g2p_word("កា", "tts")
+    g2p_word("កា", "tts-v1")
     assert fake_predict.call_count == 2
 
 
@@ -133,7 +133,7 @@ def test_predict_drops_empty_phonemes(mocker):
 def test_model_loaded_once_per_target():
     engine._load_model.cache_clear()
     assert engine._load_model("ipa") is engine._load_model("ipa")
-    assert engine._load_model("ipa") is not engine._load_model("tts")
+    assert engine._load_model("ipa") is not engine._load_model("tts-v1")
 
 
 """
@@ -143,7 +143,7 @@ End-to-end with the packaged models.
 @pytest.mark.parametrize("target, expected", [
     ("ipa", ["kʰ", "m", "aɛ"]),
     ("latin", ["kh", "m", "ae"]),
-    ("tts", ["KH", "M", "ea:"]),
+    ("tts-v1", ["KH", "M", "ea:"]),
 ])
 def test_word_all_targets(target, expected):
     assert g2p_word("ខ្មែរ", target) == expected
@@ -156,14 +156,14 @@ def test_text_end_to_end():
 
 
 def test_targets_constant():
-    assert TARGETS == ("ipa", "latin", "tts")
+    assert TARGETS == ("ipa", "latin", "tts-v1")
 
 
 @requires_sosap
-def test_no_empty_phonemes_in_tts_output():
+def test_no_empty_phonemes_in_tts_v1_output():
     # Without filtering, the TTS model emits '' as a trailing phoneme for words like this.
-    assert "" not in g2p_word("បង្គួរ", "tts")
-    assert g2p_word("បង្គួរ", "tts") == ["B", "a", "NG", "K", "uor"]
+    assert "" not in g2p_word("បង្គួរ", "tts-v1")
+    assert g2p_word("បង្គួរ", "tts-v1") == ["B", "a", "NG", "K", "uor"]
 
 
 @requires_sosap
