@@ -829,6 +829,15 @@ Three phoneme targets are available: `ipa` (International Phonetic Alphabet), `l
 > implementation with prebuilt wheels for Linux, macOS and Windows. `sosap` needs **Python 3.11+**; on Python 3.10 it is not
 > installed and g2p functions raise a `RuntimeError` asking for a newer Python.
 
+### Choosing a target
+
+`ipa` and `latin` are the same underlying phoneme inventory (58 symbols) in two notations — pick whichever is
+more readable for your use case. `tts-v1` is a different, separately-trained model (67 symbols): uppercase
+consonants / lowercase vowels with `:` for vowel length, plus non-phonemic markers (`sil`, `pm`, `pt`, `qm`, ...)
+used for silence/pause breaks in a specific TTS front-end. It is versioned (`-v1`) because its exact synthesizer
+compatibility hasn't been confirmed beyond that one pipeline — don't assume it matches a different TTS system
+without checking.
+
 ### Available Functions
 
 | Function | Description |
@@ -850,7 +859,7 @@ Segment the text into words, then convert each Khmer word to phonemes. Non-Khmer
 | `target` | `Literal["ipa", "latin", "tts-v1"]` | Phoneme target. Default `"ipa"`. |
 | `rt_type` | `Literal["str", "list"]` | `"str"` returns one string, `"list"` returns `(token, phonemes)` pairs. Default `"str"`. |
 | `word_sep` | `str` | Word boundary marker when `rt_type="str"`. Default `" \| "`. |
-| `expand_numbers` | `bool` | Read numbers as Khmer words before conversion. Default `True`. |
+| `expand_numbers` | `bool` | Read numbers as Khmer words before conversion. Default `False`. |
 
 | Return Type | Description |
 |---|---|

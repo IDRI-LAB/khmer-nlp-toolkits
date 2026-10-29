@@ -4,9 +4,11 @@ Grapheme-to-Phoneme (G2P) module.
 Convert Khmer words or text into phoneme sequences. The pronunciation models are Phonetisaurus
 (OpenFst joint n-gram) models, available for three phoneme targets:
 
-- ``ipa``:   International Phonetic Alphabet.
-- ``latin``: Latin-script phonetic spelling.
-- ``tts-v1``:   Phoneme set used by the TTS front-end.
+- ``ipa``: International Phonetic Alphabet.
+- ``latin``: Latin-script phonetic spelling, readable without IPA knowledge.
+- ``tts-v1``: A separate, richer label set (consonants/vowels plus pause and silence
+  markers) matching one specific TTS front-end's convention. It is not a re-spelling of
+  ``ipa``/``latin`` and is not guaranteed to match any other TTS system's phoneme set.
 
 Inference is done in-process by `sosap <https://github.com/seanghay/sosap>`_, a pure-Rust Phonetisaurus
 implementation with prebuilt wheels for Linux, macOS and Windows. ``sosap`` requires Python 3.11+, so

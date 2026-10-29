@@ -71,7 +71,7 @@ Khmer NLP Toolkits provides modular utilities and NLP components for Khmer langu
 
 ### Grapheme-to-Phoneme (G2P) [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
-- Khmer text / word to phonemes (IPA, Latin, TTS)
+- Khmer text / word to phonemes (IPA, Latin, and a TTS front-end label set)
 
 ### Deduplication [🔗](https://github.com/IDRI-LAB/khmer-nlp-toolkits/blob/dev/docs/usage.md)
 
